@@ -51,7 +51,7 @@ function zAdresu() {
   if (poprzedni !== app.ekran) EKRANY[poprzedni]?.poOpuszczeniu?.(app);
   zamknijArkusz();
   rysuj();
-  if (poprzedni !== app.ekran) window.scrollTo(0, 0);
+  if (poprzedni !== app.ekran) document.getElementById("ekran").scrollTop = 0;
 }
 
 // Jedna obsługa kliknięć dla całej apki: element z data-akcja wywołuje funkcję ekranu o tej nazwie.

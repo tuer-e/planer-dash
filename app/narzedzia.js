@@ -105,7 +105,7 @@ export function pokazArkusz(html) {
   const a = arkusz();
   a.innerHTML = `<div role="dialog" aria-modal="true">${html}</div>`;
   a.hidden = false;
-  a.querySelector("button, a, input")?.focus();
+  a.querySelector("button, a, input")?.focus({ preventScroll: true });
 }
 
 export function zamknijArkusz() {

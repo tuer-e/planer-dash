@@ -20,6 +20,9 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; }
+/* Strona sama się nie przewija — przewija się tylko treść (main). Dzięki temu na iPhonie dolny pasek
+   z zakładkami stoi w miejscu i nie podskakuje razem ze „sprężynowaniem” ekranu. */
+html, body { height: 100%; overflow: hidden; }
 body {
   margin: 0;
   background: var(--tlo);
@@ -43,10 +46,13 @@ body::before {
   background: var(--tlo);
   z-index: 6;
 }
+main > * { flex-shrink: 0; }
 main {
-  max-width: 560px;
-  margin: 0 auto;
-  padding: calc(env(safe-area-inset-top) + 28px) 24px calc(env(safe-area-inset-bottom) + 96px);
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: calc(env(safe-area-inset-top) + 28px) max(24px, calc((100vw - 512px) / 2)) calc(env(safe-area-inset-bottom) + 96px);
   display: flex;
   flex-direction: column;
   gap: 36px;
@@ -218,7 +224,10 @@ label.pole input[aria-invalid="true"] { border-color: var(--tekst2); }
   z-index: 10;
 }
 .arkusz[hidden] { display: none; }
+.arkusz { touch-action: none; }
 .arkusz > div {
+  touch-action: pan-y;
+  overscroll-behavior: contain;
   background: var(--powierzchnia);
   border-radius: 20px 20px 0 0;
   padding: 26px 24px calc(env(safe-area-inset-bottom) + 24px);
