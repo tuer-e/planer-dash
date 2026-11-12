@@ -54,12 +54,20 @@ main {
   overflow-y: auto;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
-  padding: calc(env(safe-area-inset-top) + 28px) max(24px, calc((100vw - 512px) / 2)) calc(var(--dol, env(safe-area-inset-bottom)) + 96px);
+  padding: calc(env(safe-area-inset-top) + 28px) max(24px, calc((100vw - 512px) / 2)) 0;
   display: flex;
   flex-direction: column;
   gap: 36px;
   outline: none;
 }
+/* Safari na iPhonie pomija dolny margines przewijanej treści, więc ostatnie przyciski chowały się pod paskiem.
+   Zamiast marginesu na końcu treści leży pusty klocek o wysokości paska z zapasem. */
+main::after {
+  content: "";
+  flex-shrink: 0;
+  height: calc(var(--dol, env(safe-area-inset-bottom)) + 28px);
+}
+body.gotowanie-poziomo main::after { height: 0; }
 
 /* --- Typografia --- */
 h1 {
@@ -205,11 +213,12 @@ label.pole input[aria-invalid="true"] { border-color: var(--tekst2); }
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   background: var(--tlo);
-  padding-bottom: var(--dol, env(safe-area-inset-bottom));
+  /* Napisy bliżej kreski na dole, jak w aplikacjach iPhone'a: pasek jest niższy i mniej zasłania. */
+  padding-bottom: max(6px, calc(var(--dol, env(safe-area-inset-bottom)) - 14px));
   z-index: 5;
 }
 .nawigacja a {
-  min-height: 56px;
+  min-height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -236,7 +245,7 @@ label.pole input[aria-invalid="true"] { border-color: var(--tekst2); }
   overscroll-behavior: contain;
   background: var(--powierzchnia);
   border-radius: 20px 20px 0 0;
-  padding: 26px 24px calc(var(--dol, env(safe-area-inset-bottom)) + 24px);
+  padding: 26px 24px 0;
   max-height: 88vh;
   overflow-y: auto;
   display: flex;
@@ -247,10 +256,12 @@ label.pole input[aria-invalid="true"] { border-color: var(--tekst2); }
   margin: 0 auto;
 }
 
+.arkusz > div::after { content: ""; flex-shrink: 0; height: calc(var(--dol, env(safe-area-inset-bottom)) + 8px); }
+
 .powiadomienie {
   position: fixed;
   left: 16px; right: 16px;
-  bottom: calc(var(--dol, env(safe-area-inset-bottom)) + 70px);
+  bottom: calc(var(--dol, env(safe-area-inset-bottom)) + 56px);
   margin: 0 auto;
   max-width: 520px;
   padding: 14px 18px;
