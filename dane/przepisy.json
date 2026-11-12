@@ -1,0 +1,6929 @@
+{
+  "_opis": [
+    "Baza przepisów (własne przepisy w wersji DASH). Składnik = [id produktu, gramy na cały przepis, miara domowa].",
+    "porcje: na ile porcji jest przepis (planer przelicza składniki na tyle porcji, ile potrzeba).",
+    "na_zapas: nadaje się do poniedziałkowego gotowania. trwalosc_dni: ile dni ugotowane danie wytrzyma w lodówce.",
+    "mrozi_sie: porcje można zamrozić (dalsze dni tygodnia jedziesz z zamrażarki).",
+    "bez_garnkow: tylko składanie, bez gotowania i zmywania garnków — jedyne dania poza poniedziałkiem.",
+    "na_zimno: da się zjeść bez odgrzewania. Bez dosalania — smak dają zioła, czosnek, cytryna, ocet i przyprawy.",
+    "czas_aktywny_min: ile realnie stoisz przy garnkach (reszta to pieczenie/gotowanie bez Ciebie).",
+    "przygotuj_wieczorem: co zrobić dzień wcześniej (trafia do przypomnień w Kalendarzu).",
+    "pora_roku: „zima” albo „lato” — poza swoją porą przepis wchodzi do planu tylko w ostateczności; brak pola = cały rok. wycofany: true — przepis nie trafia do nowych planów (stare tygodnie dalej go pokazują)."
+  ],
+  "przepisy": [
+    {
+      "id": "owsianka_jablko",
+      "nazwa": "Owsianka z jabłkiem, cynamonem i orzechami",
+      "posilek": [
+        "sniadanie"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 10,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "platki_owsiane",
+          50,
+          "5 łyżek"
+        ],
+        [
+          "mleko",
+          250,
+          "1 szklanka"
+        ],
+        [
+          "jablko",
+          150,
+          "1 duże"
+        ],
+        [
+          "orzechy_wloskie",
+          15,
+          "3 połówki"
+        ],
+        [
+          "siemie_lniane",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "przyprawy",
+          1,
+          "szczypta cynamonu"
+        ]
+      ],
+      "kroki": [
+        "Zagotuj mleko z płatkami, gotuj 3–4 minuty, mieszając.",
+        "Zetrzyj jabłko na grubych oczkach i wmieszaj z cynamonem.",
+        "Posyp posiekanymi orzechami i siemieniem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "owsianka_nocna",
+      "nazwa": "Owsianka na zimno z jogurtem i owocami leśnymi",
+      "posilek": [
+        "sniadanie"
+      ],
+      "kuchnia": "skandynawska",
+      "czas_min": 5,
+      "czas_aktywny_min": 5,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "platki_owsiane",
+          50,
+          "5 łyżek"
+        ],
+        [
+          "jogurt_kubeczek",
+          150,
+          "1 kubeczek"
+        ],
+        [
+          "owoce_mrozone",
+          150,
+          "1 szklanka"
+        ],
+        [
+          "migdaly",
+          15,
+          "10 sztuk"
+        ],
+        [
+          "miod",
+          10,
+          "1 łyżeczka"
+        ]
+      ],
+      "kroki": [
+        "Wieczorem wymieszaj płatki z kubeczkiem jogurtu i 3 łyżkami wody w słoiku.",
+        "Na wierzch wyłóż zamrożone owoce — rozmrożą się do rana.",
+        "Rano dodaj posiekane migdały i miód."
+      ],
+      "przygotuj_wieczorem": "Zalej płatki jogurtem w słoiku, wyłóż zamrożone owoce — rano gotowe.",
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "kanapki_twarozek_rzodkiewka",
+      "nazwa": "Kanapki z twarożkiem, rzodkiewką i awokado",
+      "posilek": [
+        "sniadanie"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 10,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "chleb",
+          90,
+          "3 kromki"
+        ],
+        [
+          "twarog_chudy",
+          100,
+          "⅖ kostki"
+        ],
+        [
+          "jogurt",
+          30,
+          "2 łyżki"
+        ],
+        [
+          "rzodkiewka",
+          60,
+          "5 sztuk"
+        ],
+        [
+          "zielenina",
+          5,
+          "garść szczypiorku"
+        ],
+        [
+          "awokado",
+          40,
+          "¼ owocu"
+        ],
+        [
+          "pomidor",
+          100,
+          "1 mały"
+        ]
+      ],
+      "kroki": [
+        "Rozgnieć twaróg widelcem z jogurtem i posiekanym szczypiorkiem, dopraw pieprzem.",
+        "Posmaruj chleb rozgniecionym awokado, na to twarożek.",
+        "Ułóż plasterki rzodkiewki i pomidora."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "jajecznica_mozzarella",
+      "nazwa": "Jajecznica „1+2” z mozzarellą light i pomidorami",
+      "posilek": [
+        "sniadanie"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 10,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "jajo",
+          60,
+          "1 jajko"
+        ],
+        [
+          "bialko_jaja",
+          66,
+          "2 białka"
+        ],
+        [
+          "mozzarella_light",
+          30,
+          "¼ kulki"
+        ],
+        [
+          "pomidorki",
+          120,
+          "8 sztuk"
+        ],
+        [
+          "zielenina",
+          5,
+          "szczypiorek"
+        ],
+        [
+          "olej_rzepakowy",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "chleb",
+          60,
+          "2 kromki"
+        ],
+        [
+          "mix_salat",
+          30,
+          "garść"
+        ]
+      ],
+      "kroki": [
+        "Rozgrzej olej, wrzuć przekrojone pomidorki na 1 minutę.",
+        "Wlej roztrzepane jajko z dwoma białkami, mieszaj na małym ogniu.",
+        "Pod koniec dodaj porwaną mozzarellę i szczypiorek. Podawaj z chlebem i sałatą."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "pasta_jajeczna",
+      "nazwa": "Pasta jajeczna light na kanapkach",
+      "posilek": [
+        "sniadanie",
+        "kolacja"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 15,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "jajo",
+          60,
+          "1 jajko"
+        ],
+        [
+          "bialko_jaja",
+          66,
+          "2 białka"
+        ],
+        [
+          "jogurt",
+          40,
+          "3 łyżki"
+        ],
+        [
+          "musztarda",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "zielenina",
+          5,
+          "szczypiorek"
+        ],
+        [
+          "chleb",
+          90,
+          "3 kromki"
+        ],
+        [
+          "ogorek",
+          100,
+          "½ ogórka"
+        ],
+        [
+          "pomidor",
+          100,
+          "1 mały"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj 3 jajka na twardo (10 minut). Użyj 1 całego jajka i 2 białek; żółtka zostaw na inny dzień albo wyrzuć.",
+        "Posiekaj, wymieszaj z jogurtem, musztardą i szczypiorkiem, dopraw pieprzem.",
+        "Podawaj na chlebie z ogórkiem i pomidorem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "kanapki_hummus",
+      "nazwa": "Kanapki z domowym hummusem i papryką",
+      "posilek": [
+        "sniadanie"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 10,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 3,
+      "skladniki": [
+        [
+          "ciecierzyca",
+          80,
+          "⅓ puszki"
+        ],
+        [
+          "sezam",
+          10,
+          "1 łyżka"
+        ],
+        [
+          "oliwa",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "cytryna",
+          10,
+          "sok z ¼ cytryny"
+        ],
+        [
+          "czosnek",
+          3,
+          "½ ząbka"
+        ],
+        [
+          "chleb",
+          90,
+          "3 kromki"
+        ],
+        [
+          "papryka",
+          80,
+          "½ papryki"
+        ],
+        [
+          "rukola",
+          20,
+          "garść"
+        ]
+      ],
+      "kroki": [
+        "Zmiksuj blenderem ciecierzycę (wypłukaną), sezam, oliwę, sok z cytryny, czosnek i 2 łyżki wody.",
+        "Posmaruj chleb hummusem.",
+        "Ułóż paski papryki i rukolę. Resztę hummusu przechowuj w lodówce do 3 dni."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "skyr_musli_banan",
+      "nazwa": "Skyr z musli, bananem i siemieniem",
+      "posilek": [
+        "sniadanie"
+      ],
+      "kuchnia": "skandynawska",
+      "czas_min": 3,
+      "czas_aktywny_min": 3,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "skyr",
+          150,
+          "1 kubeczek"
+        ],
+        [
+          "musli",
+          50,
+          "5 łyżek"
+        ],
+        [
+          "banan",
+          120,
+          "1 banan"
+        ],
+        [
+          "siemie_lniane",
+          5,
+          "1 łyżeczka"
+        ]
+      ],
+      "kroki": [
+        "Przełóż skyr do miseczki lub pudełka.",
+        "Dodaj musli, pokrojonego banana i siemię."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "kanapki_awokado_twarog",
+      "nazwa": "Kanapki z awokado, pomidorem i twarożkiem z limonką",
+      "posilek": [
+        "sniadanie"
+      ],
+      "kuchnia": "latynoska",
+      "czas_min": 8,
+      "czas_aktywny_min": 8,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "chleb",
+          90,
+          "3 kromki"
+        ],
+        [
+          "awokado",
+          70,
+          "½ owocu"
+        ],
+        [
+          "pomidor",
+          120,
+          "1 średni"
+        ],
+        [
+          "twarog_chudy",
+          60,
+          "¼ kostki"
+        ],
+        [
+          "cytryna",
+          10,
+          "sok z ¼ limonki"
+        ],
+        [
+          "przyprawy",
+          1,
+          "szczypta chili"
+        ]
+      ],
+      "kroki": [
+        "Rozgnieć awokado z sokiem z limonki, pieprzem i chili.",
+        "Posmaruj chleb, połóż plastry pomidora.",
+        "Posyp pokruszonym twarogiem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "kanapka_tunczyk",
+      "nazwa": "Kanapka z pastą z tuńczyka i ogórkiem",
+      "posilek": [
+        "przekaska"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 5,
+      "czas_aktywny_min": 5,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "chleb",
+          60,
+          "2 kromki"
+        ],
+        [
+          "tunczyk",
+          45,
+          "⅓ puszki"
+        ],
+        [
+          "jogurt",
+          20,
+          "1 łyżka"
+        ],
+        [
+          "ogorek",
+          60,
+          "kilka plasterków"
+        ],
+        [
+          "mix_salat",
+          15,
+          "liście"
+        ]
+      ],
+      "kroki": [
+        "Wymieszaj odsączonego tuńczyka z jogurtem i pieprzem.",
+        "Posmaruj chleb, dołóż sałatę i ogórek, złóż kanapkę."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "jogurt_owoce_orzechy",
+      "nazwa": "Jogurt z gruszką i orzechami",
+      "posilek": [
+        "przekaska"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 3,
+      "czas_aktywny_min": 3,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "jogurt_kubeczek",
+          150,
+          "1 kubeczek"
+        ],
+        [
+          "gruszka",
+          130,
+          "1 gruszka"
+        ],
+        [
+          "orzechy_wloskie",
+          10,
+          "2 połówki"
+        ]
+      ],
+      "kroki": [
+        "Pokrój owoc, wymieszaj z jogurtem, posyp orzechami. Zamiast gruszki może być jabłko lub banan."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "jablko_migdaly",
+      "nazwa": "Jabłko i garść migdałów",
+      "posilek": [
+        "przekaska"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 1,
+      "czas_aktywny_min": 1,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 3,
+      "skladniki": [
+        [
+          "jablko",
+          180,
+          "1 duże"
+        ],
+        [
+          "migdaly",
+          20,
+          "15 sztuk"
+        ]
+      ],
+      "kroki": [
+        "Spakuj jabłko i migdały do woreczka."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "kanapka_hummus_papryka",
+      "nazwa": "Kanapka z hummusem i papryką",
+      "posilek": [
+        "przekaska"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 5,
+      "czas_aktywny_min": 5,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "chleb",
+          60,
+          "2 kromki"
+        ],
+        [
+          "ciecierzyca",
+          50,
+          "3 łyżki"
+        ],
+        [
+          "oliwa",
+          3,
+          "kilka kropel"
+        ],
+        [
+          "cytryna",
+          5,
+          "sok"
+        ],
+        [
+          "papryka",
+          60,
+          "kilka pasków"
+        ]
+      ],
+      "kroki": [
+        "Rozgnieć ciecierzycę widelcem z oliwą, sokiem z cytryny i pieprzem (lub użyj hummusu z poniedziałku).",
+        "Posmaruj chleb, dołóż paprykę."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "koktajl_maslanka",
+      "nazwa": "Koktajl z maślanki z owocami leśnymi",
+      "posilek": [
+        "przekaska"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 3,
+      "czas_aktywny_min": 3,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "maslanka",
+          250,
+          "1 szklanka"
+        ],
+        [
+          "owoce_mrozone",
+          100,
+          "⅔ szklanki"
+        ],
+        [
+          "platki_owsiane",
+          20,
+          "2 łyżki"
+        ]
+      ],
+      "kroki": [
+        "Zmiksuj wszystko blenderem. Przelej do butelki."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "warzywa_dip",
+      "nazwa": "Słupki warzyw z dipem z jogurtu i ziół + kromka chleba",
+      "posilek": [
+        "przekaska"
+      ],
+      "kuchnia": "skandynawska",
+      "czas_min": 7,
+      "czas_aktywny_min": 7,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "marchew",
+          100,
+          "1 marchewka"
+        ],
+        [
+          "papryka",
+          100,
+          "½ papryki"
+        ],
+        [
+          "jogurt_kubeczek",
+          150,
+          "1 kubeczek"
+        ],
+        [
+          "zielenina",
+          5,
+          "koperek"
+        ],
+        [
+          "czosnek",
+          2,
+          "odrobina"
+        ],
+        [
+          "chleb",
+          30,
+          "1 kromka"
+        ]
+      ],
+      "kroki": [
+        "Pokrój marchew i paprykę w słupki.",
+        "Wymieszaj skyr z posiekanym koperkiem, czosnkiem i pieprzem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "gulasz_soczewica",
+      "nazwa": "Gulasz z czerwonej soczewicy z kaszą gryczaną",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 35,
+      "czas_aktywny_min": 20,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "soczewica",
+          120,
+          "⅔ szklanki"
+        ],
+        [
+          "pomidory_puszka",
+          400,
+          "1 puszka"
+        ],
+        [
+          "marchew",
+          100,
+          "1 marchewka"
+        ],
+        [
+          "cebula",
+          80,
+          "1 mała"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "olej_rzepakowy",
+          10,
+          "2 łyżeczki"
+        ],
+        [
+          "przyprawy",
+          4,
+          "kmin, papryka słodka, kurkuma"
+        ],
+        [
+          "kasza_gryczana",
+          120,
+          "1 woreczek + ¼"
+        ],
+        [
+          "zielenina",
+          10,
+          "natka"
+        ]
+      ],
+      "kroki": [
+        "Zeszklij na oleju posiekaną cebulę i czosnek, dodaj przyprawy na 30 sekund.",
+        "Dodaj startą marchew, wypłukaną soczewicę, pomidory i 2 szklanki wody.",
+        "Gotuj 20 minut, aż soczewica się rozpadnie. W tym czasie ugotuj kaszę.",
+        "Podziel na 2 pudełka, posyp natką."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "curry_kurczak_kalafior",
+      "nazwa": "Kurczak curry z kalafiorem i ryżem brązowym",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "azjatycka",
+      "czas_min": 40,
+      "czas_aktywny_min": 25,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 3,
+      "skladniki": [
+        [
+          "piers_kurczaka",
+          280,
+          "1 duży filet"
+        ],
+        [
+          "kalafior",
+          250,
+          "¼ główki"
+        ],
+        [
+          "papryka",
+          120,
+          "1 mała"
+        ],
+        [
+          "cebula",
+          80,
+          "1 mała"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "imbir",
+          5,
+          "kawałek 1 cm"
+        ],
+        [
+          "pomidory_puszka",
+          200,
+          "½ puszki"
+        ],
+        [
+          "jogurt",
+          100,
+          "100 g (¼ opakowania 400 g)"
+        ],
+        [
+          "olej_rzepakowy",
+          10,
+          "2 łyżeczki"
+        ],
+        [
+          "przyprawy",
+          6,
+          "curry, kurkuma"
+        ],
+        [
+          "ryz_brazowy",
+          130,
+          "⅔ szklanki"
+        ]
+      ],
+      "kroki": [
+        "Nastaw ryż (gotuje się ok. 30 minut).",
+        "Podsmaż na oleju cebulę, czosnek, imbir i curry. Dodaj kurczaka w kostce, smaż 5 minut.",
+        "Dodaj różyczki kalafiora, paprykę i pomidory, duś pod przykryciem 15 minut.",
+        "Zdejmij z ognia i wmieszaj jogurt (nie gotuj już, bo się zważy)."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false
+    },
+    {
+      "id": "chili_indyk",
+      "nazwa": "Chili z indykiem i fasolą z ryżem",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "latynoska",
+      "czas_min": 40,
+      "czas_aktywny_min": 20,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "mielone_indyk",
+          250,
+          "½ opakowania"
+        ],
+        [
+          "fasola",
+          200,
+          "1 puszka (odsączona)"
+        ],
+        [
+          "pomidory_puszka",
+          400,
+          "1 puszka"
+        ],
+        [
+          "papryka",
+          150,
+          "1 papryka"
+        ],
+        [
+          "cebula",
+          80,
+          "1 mała"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "olej_rzepakowy",
+          8,
+          "2 łyżeczki"
+        ],
+        [
+          "przyprawy",
+          6,
+          "kmin, papryka wędzona, chili, oregano"
+        ],
+        [
+          "ryz_brazowy",
+          110,
+          "½ szklanki"
+        ],
+        [
+          "cytryna",
+          20,
+          "sok z limonki"
+        ]
+      ],
+      "kroki": [
+        "Nastaw ryż.",
+        "Zeszklij cebulę i czosnek, dodaj mięso i przyprawy, smaż aż mięso zbieleje.",
+        "Dodaj paprykę, pomidory i wypłukaną fasolę, gotuj 20 minut.",
+        "Skrop limonką. Podziel na 2 pudełka."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false
+    },
+    {
+      "id": "udka_warzywa_korzeniowe",
+      "nazwa": "Pieczone udka (bez skóry) z warzywami korzeniowymi i surówką z czerwonej kapusty",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 60,
+      "czas_aktywny_min": 20,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": true,
+      "trwalosc_dni": 3,
+      "skladniki": [
+        [
+          "udo_kurczaka",
+          300,
+          "2 duże udka"
+        ],
+        [
+          "ziemniaki",
+          350,
+          "4 średnie"
+        ],
+        [
+          "marchew",
+          200,
+          "2 marchewki"
+        ],
+        [
+          "pietruszka",
+          100,
+          "1 korzeń"
+        ],
+        [
+          "cebula",
+          80,
+          "1 mała"
+        ],
+        [
+          "olej_rzepakowy",
+          15,
+          "1 łyżka"
+        ],
+        [
+          "przyprawy",
+          4,
+          "majeranek, papryka, pieprz"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "kapusta_czerwona",
+          200,
+          "¼ małej główki"
+        ],
+        [
+          "jogurt",
+          40,
+          "2 łyżki"
+        ],
+        [
+          "ocet",
+          5,
+          "1 łyżeczka"
+        ]
+      ],
+      "kroki": [
+        "Zdejmij skórę z udek, natrzyj czosnkiem, przyprawami i połową oleju.",
+        "Pokrój ziemniaki i warzywa, wymieszaj z resztą oleju, rozłóż wokół udek.",
+        "Piecz 45 minut w 200°C.",
+        "Surówka: poszatkuj kapustę, wymieszaj z jogurtem, octem i pieprzem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "makaron_bolonski_indyk",
+      "nazwa": "Makaron pełnoziarnisty z sosem bolońskim z indyka",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 35,
+      "czas_aktywny_min": 20,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 3,
+      "skladniki": [
+        [
+          "makaron_pelnoziarnisty",
+          150,
+          "1½ szklanki"
+        ],
+        [
+          "mielone_indyk",
+          250,
+          "½ opakowania"
+        ],
+        [
+          "pomidory_puszka",
+          400,
+          "1 puszka"
+        ],
+        [
+          "marchew",
+          100,
+          "1 marchewka"
+        ],
+        [
+          "cebula",
+          80,
+          "1 mała"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "olej_rzepakowy",
+          8,
+          "2 łyżeczki"
+        ],
+        [
+          "przyprawy",
+          3,
+          "oregano, bazylia"
+        ],
+        [
+          "rukola",
+          40,
+          "2 garście"
+        ]
+      ],
+      "kroki": [
+        "Podsmaż cebulę i czosnek, dodaj mięso, smaż do zbielenia.",
+        "Dodaj startą marchew, pomidory i zioła, gotuj 20 minut.",
+        "Ugotuj makaron al dente, wymieszaj z sosem. Podawaj z rukolą."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "salatka_peczak_kurczak",
+      "nazwa": "Sałatka z pęczakiem, pieczonym kurczakiem, papryką i rukolą",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 40,
+      "czas_aktywny_min": 20,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": true,
+      "trwalosc_dni": 3,
+      "skladniki": [
+        [
+          "peczak",
+          120,
+          "⅔ szklanki"
+        ],
+        [
+          "piers_kurczaka",
+          250,
+          "1 filet"
+        ],
+        [
+          "papryka",
+          150,
+          "1 papryka"
+        ],
+        [
+          "pomidorki",
+          150,
+          "10 sztuk"
+        ],
+        [
+          "rukola",
+          60,
+          "⅔ opakowania"
+        ],
+        [
+          "cebula",
+          30,
+          "kawałek czerwonej"
+        ],
+        [
+          "oliwa",
+          15,
+          "1 łyżka"
+        ],
+        [
+          "cytryna",
+          20,
+          "sok z ½ cytryny"
+        ],
+        [
+          "przyprawy",
+          2,
+          "oregano, pieprz"
+        ],
+        [
+          "pestki_slonecznika",
+          15,
+          "1 łyżka"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj pęczak (25 minut), przestudź.",
+        "Kurczaka natrzyj przyprawami i 1 łyżeczką oliwy, piecz 20 minut w 200°C, pokrój.",
+        "Wymieszaj kaszę z warzywami, kurczakiem, resztą oliwy i sokiem z cytryny.",
+        "Rukolę i pestki dodawaj tuż przed jedzeniem, żeby nie zmiękły."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "pulpety_indyk_gryczana",
+      "nazwa": "Pulpety z indyka w sosie pomidorowym z kaszą gryczaną",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 45,
+      "czas_aktywny_min": 30,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "mielone_indyk",
+          250,
+          "½ opakowania"
+        ],
+        [
+          "bialko_jaja",
+          33,
+          "1 białko"
+        ],
+        [
+          "platki_owsiane",
+          20,
+          "2 łyżki"
+        ],
+        [
+          "cebula",
+          80,
+          "1 mała"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "passata",
+          400,
+          "¾ butelki"
+        ],
+        [
+          "przyprawy",
+          3,
+          "majeranek, pieprz"
+        ],
+        [
+          "zielenina",
+          10,
+          "koperek"
+        ],
+        [
+          "kasza_gryczana",
+          120,
+          "1 woreczek + ¼"
+        ],
+        [
+          "fasolka_szparagowa",
+          200,
+          "½ opakowania"
+        ]
+      ],
+      "kroki": [
+        "Wymieszaj mięso z białkiem, płatkami, połową startej cebuli, czosnkiem i majerankiem. Uformuj 10 pulpetów.",
+        "Zagotuj passatę z resztą cebuli i ½ szklanki wody, włóż pulpety, gotuj 20 minut pod przykryciem.",
+        "Ugotuj kaszę i fasolkę. Posyp koperkiem."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "gulasz_wolowy_peczak",
+      "nazwa": "Gulasz wołowy z warzywami i pęczakiem",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 100,
+      "czas_aktywny_min": 30,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "wolowina",
+          240,
+          "kawałek udźca"
+        ],
+        [
+          "cebula",
+          100,
+          "1 cebula"
+        ],
+        [
+          "marchew",
+          150,
+          "2 małe"
+        ],
+        [
+          "papryka",
+          120,
+          "1 mała"
+        ],
+        [
+          "pieczarki",
+          150,
+          "½ opakowania"
+        ],
+        [
+          "koncentrat",
+          30,
+          "2 łyżki"
+        ],
+        [
+          "olej_rzepakowy",
+          10,
+          "2 łyżeczki"
+        ],
+        [
+          "przyprawy",
+          4,
+          "papryka słodka, ziele angielskie, liść laurowy"
+        ],
+        [
+          "peczak",
+          120,
+          "⅔ szklanki"
+        ]
+      ],
+      "kroki": [
+        "Pokrój wołowinę w kostkę, obsmaż na oleju partiami.",
+        "Dodaj cebulę, przyprawy, koncentrat i 2 szklanki wody, duś pod przykryciem 1 godzinę.",
+        "Dodaj marchew, paprykę i pieczarki, duś jeszcze 25 minut. W tym czasie ugotuj pęczak."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "losos_peczak_brokul",
+      "nazwa": "Pieczony łosoś z kaszą jęczmienną i brokułem",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "skandynawska",
+      "czas_min": 30,
+      "czas_aktywny_min": 15,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "losos",
+          240,
+          "2 kawałki"
+        ],
+        [
+          "peczak",
+          110,
+          "½ szklanki"
+        ],
+        [
+          "brokul",
+          300,
+          "¾ główki"
+        ],
+        [
+          "cytryna",
+          30,
+          "½ cytryny"
+        ],
+        [
+          "zielenina",
+          10,
+          "koperek"
+        ],
+        [
+          "jogurt",
+          80,
+          "4 łyżki"
+        ],
+        [
+          "czosnek",
+          3,
+          "1 ząbek"
+        ],
+        [
+          "oliwa",
+          5,
+          "1 łyżeczka"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj pęczak.",
+        "Łososia skrop cytryną, posyp pieprzem i koperkiem, piecz 15 minut w 200°C.",
+        "Brokuł ugotuj na parze 5 minut, skrop oliwą.",
+        "Sos: jogurt z czosnkiem, koperkiem i cytryną. Na drugi dzień łosoś jest dobry także na zimno."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "makaron_straczkowy_tunczyk",
+      "nazwa": "Makaron z ciecierzycy z tuńczykiem, pomidorkami i rukolą",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 20,
+      "czas_aktywny_min": 15,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "makaron_straczkowy",
+          160,
+          "⅔ opakowania"
+        ],
+        [
+          "tunczyk",
+          130,
+          "1 puszka (odsączona)"
+        ],
+        [
+          "pomidorki",
+          250,
+          "1 opakowanie"
+        ],
+        [
+          "rukola",
+          60,
+          "⅔ opakowania"
+        ],
+        [
+          "oliwa",
+          15,
+          "1 łyżka"
+        ],
+        [
+          "cytryna",
+          20,
+          "sok z ½ cytryny"
+        ],
+        [
+          "czosnek",
+          3,
+          "1 ząbek"
+        ],
+        [
+          "cebula",
+          30,
+          "kawałek czerwonej"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj makaron według opakowania, przepłucz zimną wodą.",
+        "Wymieszaj z połówkami pomidorków, tuńczykiem, cebulą, oliwą, cytryną i czosnkiem.",
+        "Rukolę dodaj przed jedzeniem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "losos_ziemniaki_kapusta",
+      "nazwa": "Pieczony łosoś z ziemniakami i surówką z kapusty",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "skandynawska",
+      "czas_min": 40,
+      "czas_aktywny_min": 20,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "losos",
+          120,
+          "1 kawałek"
+        ],
+        [
+          "ziemniaki",
+          250,
+          "3 średnie"
+        ],
+        [
+          "kapusta_czerwona",
+          150,
+          "garść poszatkowanej"
+        ],
+        [
+          "jogurt",
+          30,
+          "2 łyżki"
+        ],
+        [
+          "ocet",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "zielenina",
+          5,
+          "koperek"
+        ],
+        [
+          "cytryna",
+          15,
+          "plaster"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj ziemniaki (20 minut).",
+        "Łososia skrop cytryną, posyp pieprzem, piecz 15 minut w 200°C.",
+        "Kapustę wymieszaj z jogurtem, octem i koperkiem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "mintaj_pomidory_kasza",
+      "nazwa": "Ryba duszona w pomidorach z kaszą jęczmienną",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 30,
+      "czas_aktywny_min": 15,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "mintaj",
+          180,
+          "2 filety"
+        ],
+        [
+          "pomidory_puszka",
+          200,
+          "½ puszki"
+        ],
+        [
+          "cebula",
+          50,
+          "½ cebuli"
+        ],
+        [
+          "czosnek",
+          3,
+          "1 ząbek"
+        ],
+        [
+          "oliwa",
+          7,
+          "½ łyżki"
+        ],
+        [
+          "przyprawy",
+          2,
+          "oregano, papryka"
+        ],
+        [
+          "peczak",
+          70,
+          "⅓ szklanki"
+        ],
+        [
+          "zielenina",
+          5,
+          "natka"
+        ],
+        [
+          "mix_salat",
+          40,
+          "garść"
+        ]
+      ],
+      "kroki": [
+        "Nastaw kaszę.",
+        "Zeszklij cebulę i czosnek na oliwie, dodaj pomidory i przyprawy, gotuj 5 minut.",
+        "Włóż rozmrożone filety, duś pod przykryciem 10 minut. Posyp natką, podawaj z sałatą."
+      ],
+      "przygotuj_wieczorem": "Przełóż rybę z zamrażarki do lodówki.",
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "stek_warzywa",
+      "nazwa": "Stek wołowy z pieczonymi ziemniakami i warzywami",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 35,
+      "czas_aktywny_min": 15,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "wolowina",
+          140,
+          "1 stek"
+        ],
+        [
+          "ziemniaki",
+          250,
+          "3 średnie"
+        ],
+        [
+          "papryka",
+          120,
+          "1 mała"
+        ],
+        [
+          "cukinia",
+          120,
+          "½ cukinii"
+        ],
+        [
+          "olej_rzepakowy",
+          8,
+          "2 łyżeczki"
+        ],
+        [
+          "przyprawy",
+          2,
+          "rozmaryn, pieprz"
+        ],
+        [
+          "czosnek",
+          3,
+          "1 ząbek"
+        ],
+        [
+          "rukola",
+          30,
+          "garść"
+        ]
+      ],
+      "kroki": [
+        "Pokrój ziemniaki i warzywa, wymieszaj z połową oleju i rozmarynem, piecz 25 minut w 220°C.",
+        "Stek osusz, natrzyj pieprzem i resztą oleju, smaż na mocno rozgrzanej patelni 2–3 minuty z każdej strony.",
+        "Odstaw na 5 minut, podawaj z warzywami i rukolą."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "ramen_tofu",
+      "nazwa": "Ramen miso z tofu, pieczarkami i edamame",
+      "posilek": [
+        "obiad",
+        "kolacja"
+      ],
+      "kuchnia": "azjatycka",
+      "czas_min": 25,
+      "czas_aktywny_min": 20,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "makaron_soba",
+          70,
+          "1 porcja"
+        ],
+        [
+          "tofu",
+          100,
+          "½ kostki"
+        ],
+        [
+          "pieczarki",
+          80,
+          "5 sztuk"
+        ],
+        [
+          "kapusta_pekinska",
+          100,
+          "3 liście"
+        ],
+        [
+          "marchew",
+          50,
+          "½ marchewki"
+        ],
+        [
+          "edamame",
+          50,
+          "garść"
+        ],
+        [
+          "miso",
+          10,
+          "2 łyżeczki"
+        ],
+        [
+          "sos_sojowy",
+          4,
+          "½ łyżeczki"
+        ],
+        [
+          "imbir",
+          5,
+          "kawałek"
+        ],
+        [
+          "czosnek",
+          3,
+          "1 ząbek"
+        ],
+        [
+          "sezam",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "zielenina",
+          5,
+          "szczypiorek"
+        ]
+      ],
+      "kroki": [
+        "Zagotuj 2 szklanki wody z imbirem i czosnkiem, dodaj pieczarki, marchew i edamame na 5 minut.",
+        "Dodaj kapustę i tofu w kostce, gotuj 2 minuty. Zdejmij z ognia i rozpuść miso (nie gotuj go).",
+        "Ugotuj makaron osobno, włóż do miski, zalej bulionem. Dopraw sosem sojowym, posyp sezamem i szczypiorkiem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "wrapy_kurczak",
+      "nazwa": "Wrapy z kurczakiem, warzywami i sosem jogurtowym",
+      "posilek": [
+        "obiad",
+        "kolacja"
+      ],
+      "kuchnia": "latynoska",
+      "czas_min": 20,
+      "czas_aktywny_min": 15,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "tortilla",
+          102,
+          "2 tortille"
+        ],
+        [
+          "piers_kurczaka",
+          110,
+          "½ filetu"
+        ],
+        [
+          "mix_salat",
+          30,
+          "garść"
+        ],
+        [
+          "pomidor",
+          100,
+          "1 mały"
+        ],
+        [
+          "ogorek",
+          60,
+          "kawałek"
+        ],
+        [
+          "papryka",
+          60,
+          "kilka pasków"
+        ],
+        [
+          "jogurt",
+          50,
+          "3 łyżki"
+        ],
+        [
+          "czosnek",
+          2,
+          "odrobina"
+        ],
+        [
+          "olej_rzepakowy",
+          4,
+          "1 łyżeczka"
+        ],
+        [
+          "przyprawy",
+          2,
+          "papryka, kmin"
+        ]
+      ],
+      "kroki": [
+        "Kurczaka pokrój w paski, obtocz w przyprawach, usmaż na oleju 6–7 minut.",
+        "Sos: jogurt z czosnkiem i pieprzem.",
+        "Na tortille połóż sałatę, warzywa, kurczaka i sos, zwiń."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "tofu_stir_fry",
+      "nazwa": "Smażone tofu z warzywami i ryżem brązowym",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "azjatycka",
+      "czas_min": 30,
+      "czas_aktywny_min": 20,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "tofu",
+          150,
+          "¾ kostki"
+        ],
+        [
+          "ryz_brazowy",
+          65,
+          "⅓ szklanki"
+        ],
+        [
+          "brokul",
+          120,
+          "kilka różyczek"
+        ],
+        [
+          "papryka",
+          80,
+          "½ papryki"
+        ],
+        [
+          "marchew",
+          50,
+          "½ marchewki"
+        ],
+        [
+          "sos_sojowy",
+          6,
+          "1 łyżeczka"
+        ],
+        [
+          "imbir",
+          5,
+          "kawałek"
+        ],
+        [
+          "czosnek",
+          3,
+          "1 ząbek"
+        ],
+        [
+          "olej_rzepakowy",
+          8,
+          "2 łyżeczki"
+        ],
+        [
+          "sezam",
+          5,
+          "1 łyżeczka"
+        ]
+      ],
+      "kroki": [
+        "Nastaw ryż.",
+        "Tofu osusz, pokrój w kostkę, smaż na połowie oleju na złoto.",
+        "Dodaj resztę oleju, czosnek, imbir i warzywa, smaż 5 minut, mieszając.",
+        "Dodaj sos sojowy i 2 łyżki wody, wymieszaj z tofu, posyp sezamem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "kotlet_indyk_owsiany",
+      "nazwa": "Kotlet z indyka w panierce owsianej (pieczony) z ziemniakami i mizerią",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 30,
+      "czas_aktywny_min": 15,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "filet_indyka",
+          140,
+          "1 kotlet"
+        ],
+        [
+          "platki_owsiane",
+          20,
+          "2 łyżki"
+        ],
+        [
+          "bialko_jaja",
+          33,
+          "1 białko"
+        ],
+        [
+          "olej_rzepakowy",
+          6,
+          "1 łyżeczka"
+        ],
+        [
+          "ziemniaki",
+          250,
+          "3 średnie"
+        ],
+        [
+          "ogorek",
+          150,
+          "1 mały"
+        ],
+        [
+          "jogurt",
+          60,
+          "4 łyżki"
+        ],
+        [
+          "zielenina",
+          5,
+          "koperek"
+        ],
+        [
+          "przyprawy",
+          2,
+          "papryka, pieprz"
+        ]
+      ],
+      "kroki": [
+        "Rozbij filet na cienki kotlet, dopraw papryką i pieprzem.",
+        "Obtocz w białku, potem w rozdrobnionych płatkach. Posmaruj olejem, piecz 18 minut w 200°C.",
+        "Ugotuj ziemniaki. Mizeria: ogórek w plasterkach z jogurtem i koperkiem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "salatka_kurczak_rukola",
+      "nazwa": "Sałatka z kurczakiem, pomidorem i pestkami",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 15,
+      "czas_aktywny_min": 12,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "piers_kurczaka",
+          100,
+          "½ filetu"
+        ],
+        [
+          "mix_salat",
+          60,
+          "2 garście"
+        ],
+        [
+          "pomidor",
+          150,
+          "1 duży"
+        ],
+        [
+          "ogorek",
+          100,
+          "½ ogórka"
+        ],
+        [
+          "pestki_slonecznika",
+          10,
+          "1 łyżka"
+        ],
+        [
+          "oliwa",
+          7,
+          "½ łyżki"
+        ],
+        [
+          "ocet",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "chleb",
+          60,
+          "2 kromki"
+        ]
+      ],
+      "kroki": [
+        "Usmaż lub upiecz kurczaka (8 minut), pokrój w paski.",
+        "Wymieszaj sałatę z warzywami, polej oliwą z octem i pieprzem.",
+        "Dodaj kurczaka i pestki, podawaj z chlebem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "krem_pomidorowy_fasola",
+      "nazwa": "Krem pomidorowy z białą fasolą i grzanką",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 25,
+      "czas_aktywny_min": 15,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "pomidory_puszka",
+          800,
+          "2 puszki"
+        ],
+        [
+          "fasola",
+          200,
+          "1 puszka (odsączona)"
+        ],
+        [
+          "cebula",
+          80,
+          "1 mała"
+        ],
+        [
+          "marchew",
+          100,
+          "1 marchewka"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "oliwa",
+          15,
+          "1 łyżka"
+        ],
+        [
+          "przyprawy",
+          3,
+          "bazylia, oregano"
+        ],
+        [
+          "jogurt",
+          60,
+          "4 łyżki"
+        ],
+        [
+          "chleb",
+          80,
+          "2 kromki"
+        ]
+      ],
+      "kroki": [
+        "Zeszklij cebulę i czosnek na oliwie, dodaj startą marchew.",
+        "Dodaj pomidory, fasolę i 1 szklankę wody, gotuj 15 minut.",
+        "Zmiksuj blenderem, dopraw pieprzem i bazylią.",
+        "Podawaj z łyżką jogurtu i chlebem opieczonym w tosterze lub na suchej patelni."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "wrap_hummus_warzywa",
+      "nazwa": "Wrap z hummusem, papryką i rukolą",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 10,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "tortilla",
+          51,
+          "1 tortilla"
+        ],
+        [
+          "ciecierzyca",
+          100,
+          "⅖ puszki"
+        ],
+        [
+          "sezam",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "oliwa",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "cytryna",
+          10,
+          "sok"
+        ],
+        [
+          "papryka",
+          100,
+          "½ papryki"
+        ],
+        [
+          "rukola",
+          30,
+          "garść"
+        ],
+        [
+          "jogurt",
+          30,
+          "2 łyżki"
+        ],
+        [
+          "marchew",
+          50,
+          "½ marchewki"
+        ]
+      ],
+      "kroki": [
+        "Rozgnieć ciecierzycę z sezamem, oliwą i cytryną (albo użyj gotowego domowego hummusu).",
+        "Posmaruj tortillę, dołóż paprykę, startą marchew, rukolę i jogurt, zwiń."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "salatka_tunczyk_fasola",
+      "nazwa": "Sałatka z tuńczykiem, fasolą i warzywami",
+      "posilek": [
+        "kolacja",
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 10,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "tunczyk",
+          65,
+          "½ puszki"
+        ],
+        [
+          "fasola",
+          80,
+          "⅓ puszki"
+        ],
+        [
+          "pomidor",
+          150,
+          "1 duży"
+        ],
+        [
+          "ogorek",
+          100,
+          "½ ogórka"
+        ],
+        [
+          "cebula",
+          30,
+          "kawałek czerwonej"
+        ],
+        [
+          "mix_salat",
+          50,
+          "garść"
+        ],
+        [
+          "oliwa",
+          7,
+          "½ łyżki"
+        ],
+        [
+          "cytryna",
+          10,
+          "sok"
+        ],
+        [
+          "chleb",
+          40,
+          "1 kromka"
+        ]
+      ],
+      "kroki": [
+        "Odsącz i wypłucz fasolę, odsącz tuńczyka.",
+        "Wymieszaj z pokrojonymi warzywami, oliwą, cytryną i pieprzem.",
+        "Podawaj z kromką chleba."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true,
+      "wycofany": true
+    },
+    {
+      "id": "twarozek_warzywa",
+      "nazwa": "Twarożek ze szczypiorkiem, rzodkiewką i ogórkiem na chlebie",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 7,
+      "czas_aktywny_min": 7,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "twarog_chudy",
+          150,
+          "⅗ kostki"
+        ],
+        [
+          "jogurt",
+          30,
+          "2 łyżki"
+        ],
+        [
+          "rzodkiewka",
+          60,
+          "5 sztuk"
+        ],
+        [
+          "ogorek",
+          80,
+          "kawałek"
+        ],
+        [
+          "zielenina",
+          5,
+          "szczypiorek"
+        ],
+        [
+          "chleb",
+          90,
+          "3 kromki"
+        ],
+        [
+          "pomidor",
+          100,
+          "1 mały"
+        ]
+      ],
+      "kroki": [
+        "Rozgnieć twaróg z jogurtem, wmieszaj posiekaną rzodkiewkę i szczypiorek, dopraw pieprzem.",
+        "Podawaj z chlebem, ogórkiem i pomidorem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true,
+      "wycofany": true
+    },
+    {
+      "id": "omlet_bialkowy_szpinak",
+      "nazwa": "Omlet z białek ze szpinakiem i mozzarellą",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 12,
+      "czas_aktywny_min": 12,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "bialko_jaja",
+          132,
+          "4 białka"
+        ],
+        [
+          "szpinak_mrozony",
+          100,
+          "3 brykiety"
+        ],
+        [
+          "pomidor",
+          100,
+          "1 mały"
+        ],
+        [
+          "mozzarella_light",
+          30,
+          "¼ kulki"
+        ],
+        [
+          "oliwa",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "czosnek",
+          2,
+          "odrobina"
+        ],
+        [
+          "chleb",
+          60,
+          "2 kromki"
+        ]
+      ],
+      "kroki": [
+        "Rozmroź szpinak na patelni z oliwą i czosnkiem.",
+        "Wlej roztrzepane białka, smaż pod przykryciem 4 minuty na małym ogniu.",
+        "Połóż plastry pomidora i mozzarelli, przykryj na minutę. Podawaj z chlebem. Żółtka nie są potrzebne — zużyj 1 w ciągu tygodnia albo wyrzuć."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "salatka_buraki_kasza",
+      "nazwa": "Sałatka z burakami, kaszą gryczaną, orzechami i twarożkiem",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 20,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "buraki",
+          150,
+          "1½ buraka"
+        ],
+        [
+          "kasza_gryczana",
+          40,
+          "⅓ woreczka"
+        ],
+        [
+          "rukola",
+          40,
+          "garść"
+        ],
+        [
+          "orzechy_wloskie",
+          15,
+          "3 połówki"
+        ],
+        [
+          "twarog_chudy",
+          60,
+          "¼ kostki"
+        ],
+        [
+          "oliwa",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "ocet",
+          5,
+          "1 łyżeczka"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj kaszę (lub użyj ugotowanej wcześniej), przestudź.",
+        "Pokrój buraki w kostkę, wymieszaj z kaszą, rukolą, oliwą i octem.",
+        "Posyp pokruszonym twarogiem i orzechami."
+      ],
+      "przygotuj_wieczorem": "Ugotuj kaszę gryczaną na jutrzejszą sałatkę.",
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "salatka_azjatycka_tofu",
+      "nazwa": "Sałatka azjatycka z tofu, edamame i kapustą pekińską",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "azjatycka",
+      "czas_min": 15,
+      "czas_aktywny_min": 12,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "tofu",
+          120,
+          "⅔ kostki"
+        ],
+        [
+          "edamame",
+          60,
+          "garść"
+        ],
+        [
+          "kapusta_pekinska",
+          120,
+          "4 liście"
+        ],
+        [
+          "marchew",
+          60,
+          "½ marchewki"
+        ],
+        [
+          "sezam",
+          7,
+          "1 łyżka"
+        ],
+        [
+          "sos_sojowy",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "olej_rzepakowy",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "cytryna",
+          10,
+          "sok z limonki"
+        ],
+        [
+          "ryz_brazowy",
+          30,
+          "2 łyżki (przed ugotowaniem)"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj ryż i edamame (5 minut), przestudź.",
+        "Tofu pokrój w kostkę, podsmaż na oleju.",
+        "Poszatkuj kapustę, zetrzyj marchew, wymieszaj z resztą składników, sosem sojowym i limonką. Posyp sezamem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "pieczone_warzywa_ciecierzyca",
+      "nazwa": "Pieczone warzywa z ciecierzycą i sosem jogurtowo-czosnkowym",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 35,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "ciecierzyca",
+          120,
+          "½ puszki"
+        ],
+        [
+          "papryka",
+          100,
+          "½ papryki"
+        ],
+        [
+          "dynia",
+          150,
+          "plaster"
+        ],
+        [
+          "cebula",
+          50,
+          "½ cebuli"
+        ],
+        [
+          "oliwa",
+          8,
+          "2 łyżeczki"
+        ],
+        [
+          "przyprawy",
+          2,
+          "kmin, papryka wędzona"
+        ],
+        [
+          "jogurt",
+          80,
+          "4 łyżki"
+        ],
+        [
+          "czosnek",
+          2,
+          "odrobina"
+        ],
+        [
+          "chleb",
+          40,
+          "1 kromka"
+        ]
+      ],
+      "kroki": [
+        "Pokrój warzywa, wymieszaj z ciecierzycą, oliwą i przyprawami.",
+        "Piecz 25 minut w 210°C (poza sezonem zamiast dyni: cukinia lub mrożona mieszanka).",
+        "Sos: jogurt z czosnkiem i pieprzem. Podawaj z chlebem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "salatka_makrela_ziemniaki",
+      "nazwa": "Sałatka z makrelą, ziemniakami i koperkiem",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "skandynawska",
+      "czas_min": 25,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "makrela_puszka",
+          85,
+          "½ puszki"
+        ],
+        [
+          "ziemniaki",
+          150,
+          "2 małe"
+        ],
+        [
+          "ogorek",
+          100,
+          "½ ogórka"
+        ],
+        [
+          "cebula",
+          20,
+          "kawałek czerwonej"
+        ],
+        [
+          "jogurt",
+          40,
+          "3 łyżki"
+        ],
+        [
+          "zielenina",
+          5,
+          "koperek"
+        ],
+        [
+          "mix_salat",
+          40,
+          "garść"
+        ],
+        [
+          "chleb",
+          30,
+          "1 kromka"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj ziemniaki w mundurkach, ostudź, pokrój.",
+        "Wymieszaj z ogórkiem, cebulą, jogurtem i koperkiem.",
+        "Na wierzch połóż kawałki makreli, podawaj z sałatą i chlebem."
+      ],
+      "przygotuj_wieczorem": "Ugotuj ziemniaki w mundurkach na jutrzejszą sałatkę.",
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "krem_dyniowy",
+      "nazwa": "Krem z dyni z pestkami i grzanką",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 30,
+      "czas_aktywny_min": 15,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "dynia",
+          600,
+          "½ dyni"
+        ],
+        [
+          "cebula",
+          80,
+          "1 mała"
+        ],
+        [
+          "marchew",
+          100,
+          "1 marchewka"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "imbir",
+          5,
+          "kawałek"
+        ],
+        [
+          "oliwa",
+          15,
+          "1 łyżka"
+        ],
+        [
+          "przyprawy",
+          3,
+          "kurkuma, gałka, pieprz"
+        ],
+        [
+          "pestki_slonecznika",
+          20,
+          "2 łyżki"
+        ],
+        [
+          "jogurt",
+          60,
+          "4 łyżki"
+        ],
+        [
+          "chleb",
+          120,
+          "4 kromki"
+        ]
+      ],
+      "kroki": [
+        "Zeszklij cebulę, czosnek i imbir na oliwie.",
+        "Dodaj dynię w kostce (Hokkaido nie trzeba obierać), marchew i 3 szklanki wody, gotuj 20 minut.",
+        "Zmiksuj, dopraw przyprawami.",
+        "Podawaj z jogurtem, pestkami uprażonymi na suchej patelni i opieczonym chlebem."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false
+    },
+    {
+      "id": "pasta_makrela_twarog",
+      "nazwa": "Kanapki z pastą z makreli i twarożku",
+      "posilek": [
+        "sniadanie",
+        "kolacja"
+      ],
+      "kuchnia": "skandynawska",
+      "czas_min": 10,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "makrela_puszka",
+          85,
+          "½ puszki"
+        ],
+        [
+          "twarog_chudy",
+          50,
+          "⅕ kostki"
+        ],
+        [
+          "jogurt",
+          20,
+          "1 łyżka"
+        ],
+        [
+          "zielenina",
+          5,
+          "szczypiorek"
+        ],
+        [
+          "cebula",
+          15,
+          "kawałek"
+        ],
+        [
+          "chleb",
+          60,
+          "2 kromki"
+        ],
+        [
+          "ogorek",
+          80,
+          "kawałek"
+        ],
+        [
+          "pomidor",
+          100,
+          "1 mały"
+        ]
+      ],
+      "kroki": [
+        "Rozgnieć makrelę z sosem, twarogiem i jogurtem.",
+        "Wmieszaj posiekaną cebulę i szczypiorek, dopraw pieprzem.",
+        "Podawaj na chlebie z ogórkiem i pomidorem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "makaron_losos_szpinak",
+      "nazwa": "Makaron pełnoziarnisty z łososiem, szpinakiem i sosem jogurtowym",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 25,
+      "czas_aktywny_min": 20,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "makaron_pelnoziarnisty",
+          80,
+          "¾ szklanki"
+        ],
+        [
+          "losos",
+          100,
+          "1 mały kawałek"
+        ],
+        [
+          "szpinak_mrozony",
+          150,
+          "4 brykiety"
+        ],
+        [
+          "czosnek",
+          3,
+          "1 ząbek"
+        ],
+        [
+          "jogurt",
+          60,
+          "4 łyżki"
+        ],
+        [
+          "cytryna",
+          10,
+          "sok i skórka"
+        ],
+        [
+          "oliwa",
+          5,
+          "1 łyżeczka"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj makaron.",
+        "Na oliwie podsmaż czosnek, dodaj szpinak i duś do odparowania.",
+        "Dodaj łososia w kostce, smaż 4 minuty, delikatnie mieszając.",
+        "Zdejmij z ognia, wmieszaj jogurt, cytrynę i makaron, dopraw pieprzem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "salatka_sardynki_fasola",
+      "nazwa": "Sałatka z sardynkami, białą fasolą i pomidorem",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 10,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "sardynki",
+          90,
+          "1 puszka (odsączona)"
+        ],
+        [
+          "fasola",
+          80,
+          "⅓ puszki"
+        ],
+        [
+          "pomidor",
+          150,
+          "1 duży"
+        ],
+        [
+          "cebula",
+          20,
+          "kawałek czerwonej"
+        ],
+        [
+          "mix_salat",
+          40,
+          "garść"
+        ],
+        [
+          "ocet",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "oliwa",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "chleb",
+          40,
+          "1 kromka"
+        ]
+      ],
+      "kroki": [
+        "Wypłucz fasolę, pokrój pomidor i cebulę.",
+        "Wymieszaj z sałatą, octem, oliwą i pieprzem.",
+        "Połóż na wierzchu sardynki, podawaj z chlebem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "kurczak_bulgur_salatka",
+      "nazwa": "Kurczak z kaszą bulgur i sałatką pomidorowo-ogórkową",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 25,
+      "czas_aktywny_min": 15,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "piers_kurczaka",
+          130,
+          "⅔ filetu"
+        ],
+        [
+          "bulgur",
+          70,
+          "⅓ szklanki"
+        ],
+        [
+          "pomidor",
+          120,
+          "1 średni"
+        ],
+        [
+          "ogorek",
+          100,
+          "½ ogórka"
+        ],
+        [
+          "cebula",
+          20,
+          "kawałek czerwonej"
+        ],
+        [
+          "oliwa",
+          8,
+          "2 łyżeczki"
+        ],
+        [
+          "cytryna",
+          10,
+          "sok"
+        ],
+        [
+          "przyprawy",
+          2,
+          "oregano, pieprz, papryka"
+        ],
+        [
+          "zielenina",
+          5,
+          "natka"
+        ]
+      ],
+      "kroki": [
+        "Zalej bulgur 1,5 raza większą ilością wrzątku, przykryj na 15 minut.",
+        "Kurczaka natrzyj przyprawami i łyżeczką oliwy, smaż 5–6 minut z każdej strony.",
+        "Pokrój warzywa, wymieszaj z resztą oliwy, cytryną i natką. Podawaj z kaszą i kurczakiem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "indyk_soba_warzywa",
+      "nazwa": "Indyk z warzywami i makaronem soba",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "azjatycka",
+      "czas_min": 25,
+      "czas_aktywny_min": 20,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "filet_indyka",
+          130,
+          "½ opakowania"
+        ],
+        [
+          "makaron_soba",
+          70,
+          "1 porcja"
+        ],
+        [
+          "papryka",
+          80,
+          "½ papryki"
+        ],
+        [
+          "brokul",
+          100,
+          "kilka różyczek"
+        ],
+        [
+          "marchew",
+          50,
+          "½ marchewki"
+        ],
+        [
+          "sos_sojowy",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "imbir",
+          5,
+          "kawałek"
+        ],
+        [
+          "czosnek",
+          3,
+          "1 ząbek"
+        ],
+        [
+          "olej_rzepakowy",
+          7,
+          "1½ łyżeczki"
+        ],
+        [
+          "cytryna",
+          10,
+          "sok z limonki"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj makaron, przepłucz.",
+        "Indyka pokrój w paski, smaż na oleju 4 minuty.",
+        "Dodaj czosnek, imbir i warzywa, smaż 4 minuty.",
+        "Wmieszaj makaron, sos sojowy i limonkę."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "kurczak_ciecierzyca_blacha",
+      "nazwa": "Kurczak z ciecierzycą i warzywami z jednej blachy",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 35,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 3,
+      "skladniki": [
+        [
+          "piers_kurczaka",
+          130,
+          "⅔ filetu"
+        ],
+        [
+          "ciecierzyca",
+          110,
+          "½ puszki"
+        ],
+        [
+          "papryka",
+          100,
+          "½ papryki"
+        ],
+        [
+          "warzywa_mrozone",
+          150,
+          "⅓ opakowania"
+        ],
+        [
+          "cebula",
+          40,
+          "½ małej"
+        ],
+        [
+          "oliwa",
+          8,
+          "2 łyżeczki"
+        ],
+        [
+          "przyprawy",
+          3,
+          "kmin, papryka wędzona, czosnek granulowany"
+        ],
+        [
+          "jogurt",
+          50,
+          "3 łyżki"
+        ]
+      ],
+      "kroki": [
+        "Wszystko pokrój, wymieszaj na blasze z oliwą i przyprawami (ciecierzycę wypłucz i osusz).",
+        "Piecz 25 minut w 220°C, w połowie przemieszaj.",
+        "Podawaj z jogurtem."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "curry_ciecierzyca_szpinak",
+      "nazwa": "Curry z ciecierzycy i szpinaku z ryżem",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "azjatycka",
+      "czas_min": 30,
+      "czas_aktywny_min": 15,
+      "porcje": 1,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "ciecierzyca",
+          150,
+          "⅔ puszki"
+        ],
+        [
+          "szpinak_mrozony",
+          100,
+          "3 brykiety"
+        ],
+        [
+          "pomidory_puszka",
+          200,
+          "½ puszki"
+        ],
+        [
+          "cebula",
+          50,
+          "½ cebuli"
+        ],
+        [
+          "czosnek",
+          3,
+          "1 ząbek"
+        ],
+        [
+          "imbir",
+          3,
+          "kawałek"
+        ],
+        [
+          "olej_rzepakowy",
+          7,
+          "1½ łyżeczki"
+        ],
+        [
+          "przyprawy",
+          4,
+          "curry, kurkuma, kmin"
+        ],
+        [
+          "ryz_brazowy",
+          60,
+          "⅓ szklanki"
+        ],
+        [
+          "jogurt",
+          40,
+          "2 łyżki"
+        ]
+      ],
+      "kroki": [
+        "Nastaw ryż.",
+        "Zeszklij cebulę, czosnek i imbir z przyprawami.",
+        "Dodaj pomidory, ciecierzycę i szpinak, gotuj 10 minut.",
+        "Podawaj z ryżem i łyżką jogurtu."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false
+    },
+    {
+      "id": "tabbouleh_ciecierzyca",
+      "nazwa": "Sałatka z bulguru, ciecierzycy i natki (tabbouleh)",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 20,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "bulgur",
+          50,
+          "¼ szklanki"
+        ],
+        [
+          "ciecierzyca",
+          80,
+          "⅓ puszki"
+        ],
+        [
+          "pomidor",
+          150,
+          "1 duży"
+        ],
+        [
+          "ogorek",
+          100,
+          "½ ogórka"
+        ],
+        [
+          "zielenina",
+          20,
+          "pół pęczka natki i mięty"
+        ],
+        [
+          "cytryna",
+          20,
+          "sok z ½ cytryny"
+        ],
+        [
+          "oliwa",
+          8,
+          "2 łyżeczki"
+        ]
+      ],
+      "kroki": [
+        "Zalej bulgur wrzątkiem, przykryj na 15 minut, ostudź.",
+        "Drobno pokrój warzywa i natkę.",
+        "Wymieszaj z ciecierzycą, sokiem z cytryny, oliwą i pieprzem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "kanapki_indyk_pieczony",
+      "nazwa": "Kanapki z domowym pieczonym indykiem i warzywami",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 30,
+      "czas_aktywny_min": 7,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "filet_indyka",
+          80,
+          "kilka plastrów"
+        ],
+        [
+          "chleb",
+          90,
+          "3 kromki"
+        ],
+        [
+          "musztarda",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "mix_salat",
+          30,
+          "liście"
+        ],
+        [
+          "pomidor",
+          100,
+          "1 mały"
+        ],
+        [
+          "ogorek",
+          60,
+          "kawałek"
+        ],
+        [
+          "przyprawy",
+          2,
+          "majeranek, czosnek, pieprz"
+        ]
+      ],
+      "kroki": [
+        "Filet natrzyj przyprawami, piecz 25 minut w 190°C, ostudź i pokrój w plastry (zamiast wędliny — bez soli).",
+        "Posmaruj chleb musztardą, ułóż sałatę, indyka i warzywa."
+      ],
+      "przygotuj_wieczorem": "Upiecz filet z indyka (25 min w piekarniku), ostudź — jutro kanapki.",
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "pizza_tortilla",
+      "nazwa": "Pizza na tortilli z warzywami i mozzarellą light",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 15,
+      "czas_aktywny_min": 7,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "tortilla",
+          51,
+          "1 tortilla"
+        ],
+        [
+          "passata",
+          50,
+          "3 łyżki"
+        ],
+        [
+          "mozzarella_light",
+          50,
+          "⅖ kulki"
+        ],
+        [
+          "papryka",
+          60,
+          "kilka pasków"
+        ],
+        [
+          "pieczarki",
+          60,
+          "3 sztuki"
+        ],
+        [
+          "rukola",
+          20,
+          "garść"
+        ],
+        [
+          "oliwa",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "przyprawy",
+          1,
+          "oregano"
+        ]
+      ],
+      "kroki": [
+        "Posmaruj tortillę passatą, posyp oregano.",
+        "Ułóż warzywa i mozzarellę, skrop oliwą.",
+        "Piecz 8–10 minut w 220°C, na koniec dodaj rukolę."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "salatka_soczewica_marchew",
+      "nazwa": "Ciepła sałatka z soczewicą, pieczoną marchewką i twarożkiem",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 30,
+      "czas_aktywny_min": 12,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "soczewica",
+          50,
+          "¼ szklanki"
+        ],
+        [
+          "marchew",
+          150,
+          "2 marchewki"
+        ],
+        [
+          "rukola",
+          40,
+          "garść"
+        ],
+        [
+          "cebula",
+          20,
+          "kawałek czerwonej"
+        ],
+        [
+          "oliwa",
+          8,
+          "2 łyżeczki"
+        ],
+        [
+          "ocet",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "twarog_chudy",
+          40,
+          "1 plaster"
+        ],
+        [
+          "pestki_slonecznika",
+          10,
+          "1 łyżka"
+        ],
+        [
+          "przyprawy",
+          2,
+          "kmin, pieprz"
+        ]
+      ],
+      "kroki": [
+        "Marchew pokrój, wymieszaj z połową oliwy i kminem, piecz 20 minut w 210°C.",
+        "Soczewicę ugotuj (10 minut), odsącz.",
+        "Wymieszaj z rukolą, cebulą, resztą oliwy i octem. Posyp twarogiem i pestkami."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "zupa_jarzynowa_ciecierzyca",
+      "nazwa": "Zupa jarzynowa z ciecierzycą i chlebem",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 35,
+      "czas_aktywny_min": 15,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 3,
+      "skladniki": [
+        [
+          "warzywa_mrozone",
+          450,
+          "1 opakowanie"
+        ],
+        [
+          "ziemniaki",
+          200,
+          "2 średnie"
+        ],
+        [
+          "marchew",
+          100,
+          "1 marchewka"
+        ],
+        [
+          "pietruszka",
+          80,
+          "1 mały korzeń"
+        ],
+        [
+          "cebula",
+          60,
+          "½ cebuli"
+        ],
+        [
+          "ciecierzyca",
+          240,
+          "1 puszka (odsączona)"
+        ],
+        [
+          "oliwa",
+          10,
+          "2 łyżeczki"
+        ],
+        [
+          "zielenina",
+          10,
+          "koperek, natka"
+        ],
+        [
+          "przyprawy",
+          3,
+          "ziele angielskie, liść laurowy, pieprz"
+        ],
+        [
+          "chleb",
+          80,
+          "2 kromki"
+        ]
+      ],
+      "kroki": [
+        "Zeszklij cebulę na oliwie, dodaj pokrojone warzywa korzeniowe i ziemniaki, zalej 1,2 l wody, dodaj przyprawy.",
+        "Gotuj 15 minut, dodaj mrożone warzywa i ciecierzycę, gotuj 10 minut.",
+        "Posyp zieleniną. Druga porcja na jutro."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "barszcz_fasola",
+      "nazwa": "Barszcz czerwony z fasolą i ziemniakami",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 40,
+      "czas_aktywny_min": 15,
+      "porcje": 2,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "buraki",
+          400,
+          "1 opakowanie (gotowane)"
+        ],
+        [
+          "fasola",
+          200,
+          "1 puszka (odsączona)"
+        ],
+        [
+          "ziemniaki",
+          250,
+          "3 średnie"
+        ],
+        [
+          "marchew",
+          100,
+          "1 marchewka"
+        ],
+        [
+          "pietruszka",
+          60,
+          "½ korzenia"
+        ],
+        [
+          "cebula",
+          60,
+          "½ cebuli"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "przyprawy",
+          3,
+          "ziele angielskie, liść laurowy, majeranek"
+        ],
+        [
+          "cytryna",
+          20,
+          "sok z ½ cytryny"
+        ],
+        [
+          "jogurt",
+          60,
+          "4 łyżki"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj w 1,2 l wody marchew, pietruszkę, cebulę, ziemniaki i przyprawy (20 minut).",
+        "Dodaj starte buraki, fasolę i czosnek, gotuj 10 minut.",
+        "Zakwaś sokiem z cytryny, dopraw majerankiem i pieprzem. Podawaj z jogurtem."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "randka_losos_bulgur",
+      "nazwa": "Łosoś w ziołach z bulgurem, fasolką i sosem cytrynowym",
+      "posilek": [
+        "kolacja"
+      ],
+      "okazja": [
+        "randka"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 35,
+      "czas_aktywny_min": 20,
+      "porcje": 2,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "losos",
+          240,
+          "2 kawałki"
+        ],
+        [
+          "bulgur",
+          100,
+          "½ szklanki"
+        ],
+        [
+          "fasolka_szparagowa",
+          250,
+          "½ opakowania"
+        ],
+        [
+          "cytryna",
+          60,
+          "1 cytryna"
+        ],
+        [
+          "oliwa",
+          10,
+          "2 łyżeczki"
+        ],
+        [
+          "jogurt",
+          80,
+          "4 łyżki"
+        ],
+        [
+          "zielenina",
+          15,
+          "koperek, natka"
+        ],
+        [
+          "czosnek",
+          3,
+          "1 ząbek"
+        ]
+      ],
+      "kroki": [
+        "Łososia skrop cytryną, posyp ziołami i pieprzem, piecz 15 minut w 200°C.",
+        "Bulgur zalej wrzątkiem na 15 minut; fasolkę ugotuj na parze, skrop oliwą.",
+        "Sos: jogurt z czosnkiem, skórką i sokiem z cytryny. Podawaj na ciepłych talerzach z plastrem cytryny."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "randka_peczotto",
+      "nazwa": "Pęczotto z pieczarkami, szpinakiem i jogurtem",
+      "posilek": [
+        "kolacja"
+      ],
+      "okazja": [
+        "randka"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 45,
+      "czas_aktywny_min": 40,
+      "porcje": 2,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "peczak",
+          140,
+          "¾ szklanki"
+        ],
+        [
+          "pieczarki",
+          250,
+          "1 opakowanie"
+        ],
+        [
+          "szpinak_mrozony",
+          150,
+          "4 brykiety"
+        ],
+        [
+          "cebula",
+          60,
+          "½ cebuli"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "oliwa",
+          12,
+          "1 łyżka"
+        ],
+        [
+          "jogurt",
+          60,
+          "4 łyżki"
+        ],
+        [
+          "pestki_slonecznika",
+          15,
+          "1 łyżka"
+        ],
+        [
+          "przyprawy",
+          2,
+          "tymianek, pieprz"
+        ]
+      ],
+      "kroki": [
+        "Zeszklij cebulę i czosnek na oliwie, dodaj pęczak, mieszaj 2 minuty.",
+        "Wlewaj gorącą wodę po pół szklanki, mieszając, przez 30 minut.",
+        "Pieczarki usmaż osobno na złoto, dodaj do kaszy razem ze szpinakiem.",
+        "Zdejmij z ognia, wmieszaj jogurt, posyp uprażonymi pestkami."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "randka_kurczak_cytrynowy",
+      "nazwa": "Kurczak w sosie cytrynowo-ziołowym z pieczonymi ziemniakami",
+      "posilek": [
+        "kolacja"
+      ],
+      "okazja": [
+        "randka"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 50,
+      "czas_aktywny_min": 25,
+      "porcje": 2,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "piers_kurczaka",
+          260,
+          "1 filet"
+        ],
+        [
+          "ziemniaki",
+          500,
+          "6 średnich"
+        ],
+        [
+          "cytryna",
+          60,
+          "1 cytryna"
+        ],
+        [
+          "oliwa",
+          16,
+          "1 i ⅓ łyżki"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "ziola_doniczka",
+          10,
+          "rozmaryn, tymianek"
+        ],
+        [
+          "mix_salat",
+          80,
+          "pół opakowania"
+        ],
+        [
+          "pomidorki",
+          150,
+          "10 sztuk"
+        ],
+        [
+          "ocet",
+          5,
+          "1 łyżeczka"
+        ]
+      ],
+      "kroki": [
+        "Ziemniaki pokrój w ćwiartki, wymieszaj z połową oliwy i rozmarynem, piecz 35 minut w 210°C.",
+        "Kurczaka rozbij na dwa kotlety, smaż 5 minut z każdej strony.",
+        "Na patelnię dodaj czosnek, sok z cytryny i 4 łyżki wody, zredukuj do sosu.",
+        "Podawaj z sałatą i pomidorkami skropionymi octem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "randka_dorsz_pomidory",
+      "nazwa": "Dorsz w pomidorach z oliwkami i kaszą jęczmienną",
+      "posilek": [
+        "kolacja"
+      ],
+      "okazja": [
+        "randka"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 35,
+      "czas_aktywny_min": 20,
+      "porcje": 2,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "mintaj",
+          320,
+          "4 filety"
+        ],
+        [
+          "pomidory_puszka",
+          400,
+          "1 puszka"
+        ],
+        [
+          "oliwki",
+          30,
+          "8 oliwek"
+        ],
+        [
+          "cebula",
+          60,
+          "½ cebuli"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "oliwa",
+          10,
+          "2 łyżeczki"
+        ],
+        [
+          "peczak",
+          120,
+          "⅔ szklanki"
+        ],
+        [
+          "zielenina",
+          10,
+          "natka"
+        ],
+        [
+          "rukola",
+          40,
+          "garść"
+        ]
+      ],
+      "kroki": [
+        "Nastaw kaszę.",
+        "Zeszklij cebulę i czosnek, dodaj pomidory i posiekane oliwki, gotuj 8 minut.",
+        "Włóż rybę, duś 10 minut pod przykryciem.",
+        "Posyp natką, podawaj z kaszą i rukolą."
+      ],
+      "przygotuj_wieczorem": "Przełóż rybę z zamrażarki do lodówki.",
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "randka_indyk_tacos",
+      "nazwa": "Tacos z indykiem, fasolą i guacamole",
+      "posilek": [
+        "kolacja"
+      ],
+      "okazja": [
+        "randka"
+      ],
+      "kuchnia": "latynoska",
+      "czas_min": 35,
+      "czas_aktywny_min": 30,
+      "porcje": 2,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "filet_indyka",
+          220,
+          "1 opakowanie"
+        ],
+        [
+          "tortilla",
+          102,
+          "2 tortille"
+        ],
+        [
+          "fasola",
+          120,
+          "½ puszki"
+        ],
+        [
+          "awokado",
+          100,
+          "1 małe"
+        ],
+        [
+          "cytryna",
+          40,
+          "limonka"
+        ],
+        [
+          "pomidor",
+          150,
+          "1 duży"
+        ],
+        [
+          "cebula",
+          40,
+          "kawałek czerwonej"
+        ],
+        [
+          "kapusta_czerwona",
+          120,
+          "garść poszatkowanej"
+        ],
+        [
+          "jogurt",
+          60,
+          "4 łyżki"
+        ],
+        [
+          "przyprawy",
+          4,
+          "kmin, papryka wędzona, chili"
+        ],
+        [
+          "olej_rzepakowy",
+          8,
+          "2 łyżeczki"
+        ]
+      ],
+      "kroki": [
+        "Indyka w paskach obtocz w przyprawach, smaż 6 minut; dodaj wypłukaną fasolę na 2 minuty.",
+        "Guacamole: awokado rozgnieć z limonką, posiekaną cebulą i pomidorem.",
+        "Tortille podgrzej na suchej patelni, przekrój na pół.",
+        "Nakładaj mięso, kapustę, guacamole i łyżkę jogurtu."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "randka_stek_warzywa",
+      "nazwa": "Stek z pieczonymi warzywami i sosem jogurtowo-czosnkowym",
+      "posilek": [
+        "kolacja"
+      ],
+      "okazja": [
+        "randka"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 40,
+      "czas_aktywny_min": 20,
+      "porcje": 2,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "wolowina",
+          260,
+          "2 steki"
+        ],
+        [
+          "ziemniaki",
+          300,
+          "3 średnie"
+        ],
+        [
+          "papryka",
+          180,
+          "1 papryka"
+        ],
+        [
+          "cukinia",
+          200,
+          "½ cukinii"
+        ],
+        [
+          "oliwa",
+          12,
+          "1 łyżka"
+        ],
+        [
+          "jogurt",
+          80,
+          "4 łyżki"
+        ],
+        [
+          "czosnek",
+          4,
+          "1 ząbek"
+        ],
+        [
+          "rukola",
+          40,
+          "garść"
+        ],
+        [
+          "przyprawy",
+          2,
+          "pieprz, rozmaryn"
+        ]
+      ],
+      "kroki": [
+        "Warzywa i ziemniaki pokrój, wymieszaj z oliwą, piecz 30 minut w 220°C.",
+        "Steki osusz, posyp pieprzem, smaż na bardzo gorącej patelni 2–3 minuty z każdej strony; odstaw na 5 minut.",
+        "Sos: jogurt z czosnkiem. Podawaj z warzywami i rukolą."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "rodzinny_udka_ziemniaki",
+      "nazwa": "Pieczone udka z ziemniakami i surówką z czerwonej kapusty",
+      "posilek": [
+        "obiad"
+      ],
+      "okazja": [
+        "rodzinny"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 70,
+      "czas_aktywny_min": 25,
+      "porcje": 4,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "udo_kurczaka",
+          600,
+          "4 udka"
+        ],
+        [
+          "ziemniaki",
+          800,
+          "8 średnich"
+        ],
+        [
+          "marchew",
+          300,
+          "3 marchewki"
+        ],
+        [
+          "kapusta_czerwona",
+          500,
+          "¼ główki"
+        ],
+        [
+          "jablko",
+          180,
+          "1 jabłko"
+        ],
+        [
+          "olej_rzepakowy",
+          25,
+          "2 łyżki"
+        ],
+        [
+          "jogurt",
+          100,
+          "½ szklanki"
+        ],
+        [
+          "przyprawy",
+          6,
+          "majeranek, papryka, czosnek"
+        ],
+        [
+          "cytryna",
+          30,
+          "sok"
+        ]
+      ],
+      "kroki": [
+        "Udka bez skóry natrzyj przyprawami i połową oleju, ułóż z ziemniakami i marchewką na blasze, piecz 50 minut w 200°C.",
+        "Surówka: kapusta poszatkowana z tartym jabłkiem, jogurtem i sokiem z cytryny."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "rodzinny_gulasz_indyk",
+      "nazwa": "Gulasz z indyka z papryką i kaszą gryczaną",
+      "posilek": [
+        "obiad"
+      ],
+      "okazja": [
+        "rodzinny"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 60,
+      "czas_aktywny_min": 30,
+      "porcje": 4,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "filet_indyka",
+          500,
+          "2 opakowania"
+        ],
+        [
+          "papryka",
+          360,
+          "2 papryki"
+        ],
+        [
+          "cebula",
+          150,
+          "1 duża"
+        ],
+        [
+          "pieczarki",
+          250,
+          "1 opakowanie"
+        ],
+        [
+          "koncentrat",
+          40,
+          "2 łyżki"
+        ],
+        [
+          "olej_rzepakowy",
+          20,
+          "1½ łyżki"
+        ],
+        [
+          "przyprawy",
+          6,
+          "papryka słodka, majeranek, ziele"
+        ],
+        [
+          "kasza_gryczana",
+          280,
+          "3 woreczki"
+        ],
+        [
+          "ogorek",
+          400,
+          "1 ogórek"
+        ]
+      ],
+      "kroki": [
+        "Indyka w kostce obsmaż na oleju, dodaj cebulę i przyprawy.",
+        "Dodaj paprykę, pieczarki, koncentrat i 1,5 szklanki wody, duś 30 minut.",
+        "Ugotuj kaszę. Podawaj z ogórkiem w plasterkach."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "rodzinny_zapiekanka_makaron",
+      "nazwa": "Zapiekanka makaronowa z indykiem, brokułem i sosem jogurtowym",
+      "posilek": [
+        "obiad"
+      ],
+      "okazja": [
+        "rodzinny"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 55,
+      "czas_aktywny_min": 30,
+      "porcje": 4,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "makaron_pelnoziarnisty",
+          320,
+          "⅔ opakowania"
+        ],
+        [
+          "mielone_indyk",
+          400,
+          "¾ opakowania"
+        ],
+        [
+          "brokul",
+          400,
+          "1 główka"
+        ],
+        [
+          "cebula",
+          100,
+          "1 mała"
+        ],
+        [
+          "jogurt",
+          300,
+          "300 g (¾ opakowania 400 g)"
+        ],
+        [
+          "mozzarella_light",
+          125,
+          "1 kulka"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "olej_rzepakowy",
+          10,
+          "2 łyżeczki"
+        ],
+        [
+          "przyprawy",
+          4,
+          "oregano, gałka, pieprz"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj makaron al dente; brokuł blanszuj 3 minuty.",
+        "Podsmaż cebulę, czosnek i mięso z przyprawami.",
+        "Wymieszaj wszystko z jogurtem, przełóż do naczynia, posyp porwaną mozzarellą.",
+        "Zapiekaj 20 minut w 190°C."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "rodzinny_chili_straczki",
+      "nazwa": "Chili z fasolą i soczewicą z ryżem (bez mięsa)",
+      "posilek": [
+        "obiad"
+      ],
+      "okazja": [
+        "rodzinny"
+      ],
+      "kuchnia": "latynoska",
+      "czas_min": 50,
+      "czas_aktywny_min": 25,
+      "porcje": 4,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "fasola",
+          480,
+          "2 puszki"
+        ],
+        [
+          "soczewica",
+          120,
+          "⅔ szklanki"
+        ],
+        [
+          "pomidory_puszka",
+          800,
+          "2 puszki"
+        ],
+        [
+          "papryka",
+          180,
+          "1 papryka"
+        ],
+        [
+          "cebula",
+          150,
+          "1 duża"
+        ],
+        [
+          "czosnek",
+          9,
+          "3 ząbki"
+        ],
+        [
+          "olej_rzepakowy",
+          20,
+          "1½ łyżki"
+        ],
+        [
+          "przyprawy",
+          8,
+          "kmin, papryka wędzona, chili, oregano"
+        ],
+        [
+          "ryz_brazowy",
+          240,
+          "1¼ szklanki"
+        ],
+        [
+          "jogurt",
+          160,
+          "8 łyżek"
+        ],
+        [
+          "cytryna",
+          30,
+          "limonka"
+        ]
+      ],
+      "kroki": [
+        "Nastaw ryż.",
+        "Zeszklij cebulę i czosnek z przyprawami, dodaj paprykę.",
+        "Dodaj pomidory, soczewicę i 2 szklanki wody, gotuj 20 minut; dodaj wypłukaną fasolę na 5 minut.",
+        "Podawaj z ryżem, łyżką jogurtu i limonką."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "rodzinny_pulpety_rybne",
+      "nazwa": "Pulpety rybne w sosie koperkowym z ziemniakami i marchewką",
+      "posilek": [
+        "obiad"
+      ],
+      "okazja": [
+        "rodzinny"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 60,
+      "czas_aktywny_min": 40,
+      "porcje": 4,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "mintaj",
+          700,
+          "1¾ opakowania"
+        ],
+        [
+          "bialko_jaja",
+          66,
+          "2 białka"
+        ],
+        [
+          "platki_owsiane",
+          40,
+          "4 łyżki"
+        ],
+        [
+          "cebula",
+          80,
+          "½ cebuli"
+        ],
+        [
+          "ziemniaki",
+          1000,
+          "10 średnich"
+        ],
+        [
+          "marchew",
+          300,
+          "3 marchewki"
+        ],
+        [
+          "jogurt",
+          200,
+          "200 g (½ opakowania 400 g)"
+        ],
+        [
+          "zielenina",
+          20,
+          "pęczek koperku"
+        ],
+        [
+          "olej_rzepakowy",
+          10,
+          "2 łyżeczki"
+        ]
+      ],
+      "kroki": [
+        "Zmiel lub drobno posiekaj rybę z cebulą, wymieszaj z białkami i płatkami, uformuj 16 pulpetów.",
+        "Gotuj je 12 minut w wodzie z zielem angielskim i liściem laurowym (bez soli).",
+        "Ugotuj ziemniaki i marchewkę. Sos: jogurt z posiekanym koperkiem i 4 łyżkami wywaru.",
+        "Polej pulpety sosem, posyp koperkiem."
+      ],
+      "przygotuj_wieczorem": "Przełóż rybę z zamrażarki do lodówki.",
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "rodzinny_leczo_kurczak",
+      "nazwa": "Leczo z kurczakiem i ryżem brązowym",
+      "posilek": [
+        "obiad"
+      ],
+      "okazja": [
+        "rodzinny"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 50,
+      "czas_aktywny_min": 30,
+      "porcje": 4,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "piers_kurczaka",
+          500,
+          "1 duży filet"
+        ],
+        [
+          "papryka",
+          540,
+          "3 papryki"
+        ],
+        [
+          "cukinia",
+          300,
+          "1 mała"
+        ],
+        [
+          "cebula",
+          150,
+          "1 duża"
+        ],
+        [
+          "pomidory_puszka",
+          400,
+          "1 puszka"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "olej_rzepakowy",
+          20,
+          "1½ łyżki"
+        ],
+        [
+          "przyprawy",
+          6,
+          "papryka słodka i wędzona"
+        ],
+        [
+          "ryz_brazowy",
+          240,
+          "1¼ szklanki"
+        ]
+      ],
+      "kroki": [
+        "Nastaw ryż.",
+        "Kurczaka w kostce obsmaż, dodaj cebulę i czosnek.",
+        "Dodaj paprykę, cukinię, pomidory i przyprawy, duś 20 minut."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "deser_pieczone_jablka",
+      "nazwa": "Pieczone jabłka z cynamonem, orzechami i jogurtem",
+      "posilek": [
+        "deser"
+      ],
+      "okazja": [
+        "randka",
+        "rodzinny"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 35,
+      "czas_aktywny_min": 10,
+      "porcje": 4,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "jablko",
+          720,
+          "4 jabłka"
+        ],
+        [
+          "orzechy_wloskie",
+          30,
+          "6 połówek"
+        ],
+        [
+          "miod",
+          20,
+          "1 łyżka"
+        ],
+        [
+          "jogurt",
+          200,
+          "200 g (½ opakowania 400 g)"
+        ],
+        [
+          "przyprawy",
+          2,
+          "cynamon"
+        ]
+      ],
+      "kroki": [
+        "Wydrąż gniazda nasienne, nadziej orzechami z miodem i cynamonem.",
+        "Piecz 25 minut w 190°C. Podawaj z łyżką jogurtu."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "deser_salatka_owocowa",
+      "nazwa": "Sałatka owocowa z miętą i jogurtem",
+      "posilek": [
+        "deser"
+      ],
+      "okazja": [
+        "randka",
+        "rodzinny"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 10,
+      "czas_aktywny_min": 10,
+      "porcje": 4,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "cytrusy",
+          300,
+          "2 pomarańcze"
+        ],
+        [
+          "banan",
+          240,
+          "2 banany"
+        ],
+        [
+          "gruszka",
+          180,
+          "1 gruszka"
+        ],
+        [
+          "jogurt",
+          200,
+          "200 g (½ opakowania 400 g)"
+        ],
+        [
+          "ziola_doniczka",
+          5,
+          "mięta"
+        ],
+        [
+          "migdaly",
+          20,
+          "garść"
+        ]
+      ],
+      "kroki": [
+        "Pokrój owoce, wymieszaj z sokiem z pomarańczy.",
+        "Podawaj z jogurtem, miętą i posiekanymi migdałami."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "deser_parfait_lesne",
+      "nazwa": "Parfait z owocami leśnymi, jogurtem i płatkami",
+      "posilek": [
+        "deser"
+      ],
+      "okazja": [
+        "randka",
+        "rodzinny"
+      ],
+      "kuchnia": "skandynawska",
+      "czas_min": 10,
+      "czas_aktywny_min": 10,
+      "porcje": 4,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "owoce_mrozone",
+          400,
+          "1 opakowanie"
+        ],
+        [
+          "skyr",
+          300,
+          "2 kubeczki"
+        ],
+        [
+          "platki_owsiane",
+          60,
+          "6 łyżek"
+        ],
+        [
+          "miod",
+          20,
+          "1 łyżka"
+        ]
+      ],
+      "kroki": [
+        "Płatki upraż na suchej patelni.",
+        "W szklankach układaj warstwy: owoce, skyr z miodem, płatki."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "deser_gruszki_herbata",
+      "nazwa": "Gruszki gotowane w herbacie z jogurtem waniliowym",
+      "posilek": [
+        "deser"
+      ],
+      "okazja": [
+        "randka",
+        "rodzinny"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 30,
+      "czas_aktywny_min": 10,
+      "porcje": 4,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "gruszka",
+          720,
+          "4 gruszki"
+        ],
+        [
+          "herbata",
+          6,
+          "3 torebki"
+        ],
+        [
+          "miod",
+          20,
+          "1 łyżka"
+        ],
+        [
+          "jogurt",
+          200,
+          "200 g (½ opakowania 400 g)"
+        ],
+        [
+          "przyprawy",
+          2,
+          "wanilia, goździk"
+        ],
+        [
+          "cytryna",
+          20,
+          "skórka"
+        ]
+      ],
+      "kroki": [
+        "Obrane gruszki gotuj 20 minut w naparze z herbaty z miodem, goździkiem i skórką cytryny.",
+        "Podawaj z jogurtem z odrobiną wanilii."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": false
+    },
+    {
+      "id": "lunchbox_bulgur_ciecierzyca",
+      "nazwa": "Lunchbox: bulgur z ciecierzycą, warzywami i sosem jogurtowym",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 20,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "bulgur",
+          80,
+          "⅓ szklanki"
+        ],
+        [
+          "ciecierzyca",
+          120,
+          "½ puszki"
+        ],
+        [
+          "papryka",
+          100,
+          "½ papryki"
+        ],
+        [
+          "ogorek",
+          100,
+          "kawałek"
+        ],
+        [
+          "oliwa",
+          10,
+          "2 łyżeczki"
+        ],
+        [
+          "cytryna",
+          15,
+          "sok"
+        ],
+        [
+          "zielenina",
+          5,
+          "natka"
+        ],
+        [
+          "jogurt",
+          50,
+          "3 łyżki"
+        ],
+        [
+          "czosnek",
+          2,
+          "odrobina"
+        ]
+      ],
+      "kroki": [
+        "Zalej bulgur wrzątkiem, przykryj na 15 minut.",
+        "Pokrój warzywa, wymieszaj z kaszą, ciecierzycą, oliwą, cytryną i natką.",
+        "Sos jogurtowy z czosnkiem zapakuj osobno."
+      ],
+      "przygotuj_wieczorem": "Przygotuj lunchbox z bulgurem na jutro (15 min) i włóż do lodówki.",
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "lunchbox_ryz_tofu_edamame",
+      "nazwa": "Lunchbox: ryż z wędzonym tofu, edamame i marchewką",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 35,
+      "czas_aktywny_min": 10,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "ryz_brazowy",
+          70,
+          "⅓ szklanki"
+        ],
+        [
+          "tofu_wedzone",
+          100,
+          "½ kostki"
+        ],
+        [
+          "edamame",
+          80,
+          "garść"
+        ],
+        [
+          "marchew",
+          80,
+          "1 mała"
+        ],
+        [
+          "sezam",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "sos_sojowy",
+          4,
+          "½ łyżeczki"
+        ],
+        [
+          "olej_rzepakowy",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "cytryna",
+          10,
+          "sok z limonki"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj ryż i edamame, ostudź.",
+        "Pokrój tofu, zetrzyj marchew.",
+        "Wymieszaj z sosem sojowym, olejem i limonką, posyp sezamem."
+      ],
+      "przygotuj_wieczorem": "Ugotuj ryż na jutrzejszy lunchbox (30 min, możesz robić coś innego).",
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "lunchbox_kurczak_gryczana",
+      "nazwa": "Lunchbox: sałatka z kurczakiem, kaszą gryczaną i pomidorkami",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 30,
+      "czas_aktywny_min": 15,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "piers_kurczaka",
+          120,
+          "½ filetu"
+        ],
+        [
+          "kasza_gryczana",
+          70,
+          "¾ woreczka"
+        ],
+        [
+          "ogorek",
+          100,
+          "kawałek"
+        ],
+        [
+          "pomidorki",
+          100,
+          "6 sztuk"
+        ],
+        [
+          "rukola",
+          30,
+          "garść"
+        ],
+        [
+          "oliwa",
+          8,
+          "2 łyżeczki"
+        ],
+        [
+          "ocet",
+          5,
+          "1 łyżeczka"
+        ],
+        [
+          "przyprawy",
+          2,
+          "papryka, pieprz"
+        ]
+      ],
+      "kroki": [
+        "Ugotuj kaszę, ostudź.",
+        "Kurczaka posyp przyprawami, usmaż (10 min), pokrój.",
+        "Wymieszaj z warzywami, oliwą i octem; rukolę dodaj rano."
+      ],
+      "przygotuj_wieczorem": "Przygotuj lunchbox z kurczakiem i kaszą na jutro i włóż do lodówki.",
+      "mrozi_sie": false,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "leczo_kurczak_ryz",
+      "nazwa": "Leczo z kurczakiem i ryżem brązowym (na tydzień)",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 50,
+      "czas_aktywny_min": 30,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 3,
+      "skladniki": [
+        [
+          "piers_kurczaka",
+          500,
+          "1 duży filet"
+        ],
+        [
+          "papryka",
+          540,
+          "3 papryki"
+        ],
+        [
+          "cukinia",
+          300,
+          "1 mała"
+        ],
+        [
+          "cebula",
+          150,
+          "1 duża"
+        ],
+        [
+          "pomidory_puszka",
+          400,
+          "1 puszka"
+        ],
+        [
+          "czosnek",
+          6,
+          "2 ząbki"
+        ],
+        [
+          "olej_rzepakowy",
+          20,
+          "1½ łyżki"
+        ],
+        [
+          "przyprawy",
+          6,
+          "papryka słodka i wędzona"
+        ],
+        [
+          "ryz_brazowy",
+          240,
+          "1¼ szklanki"
+        ]
+      ],
+      "kroki": [
+        "Nastaw ryż.",
+        "Kurczaka w kostce obsmaż, dodaj cebulę i czosnek.",
+        "Dodaj paprykę, cukinię, pomidory i przyprawy, duś 20 minut."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "chili_fasola_soczewica",
+      "nazwa": "Chili z fasolą i soczewicą z ryżem (na tydzień)",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "latynoska",
+      "czas_min": 50,
+      "czas_aktywny_min": 25,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "fasola",
+          480,
+          "2 puszki"
+        ],
+        [
+          "soczewica",
+          120,
+          "⅔ szklanki"
+        ],
+        [
+          "pomidory_puszka",
+          800,
+          "2 puszki"
+        ],
+        [
+          "papryka",
+          180,
+          "1 papryka"
+        ],
+        [
+          "cebula",
+          150,
+          "1 duża"
+        ],
+        [
+          "czosnek",
+          9,
+          "3 ząbki"
+        ],
+        [
+          "olej_rzepakowy",
+          20,
+          "1½ łyżki"
+        ],
+        [
+          "przyprawy",
+          8,
+          "kmin, papryka wędzona, chili, oregano"
+        ],
+        [
+          "ryz_brazowy",
+          240,
+          "1¼ szklanki"
+        ],
+        [
+          "jogurt",
+          160,
+          "8 łyżek"
+        ],
+        [
+          "cytryna",
+          30,
+          "limonka"
+        ]
+      ],
+      "kroki": [
+        "Nastaw ryż.",
+        "Zeszklij cebulę i czosnek z przyprawami, dodaj paprykę.",
+        "Dodaj pomidory, soczewicę i 2 szklanki wody, gotuj 20 minut; dodaj wypłukaną fasolę na 5 minut.",
+        "Podawaj z ryżem, łyżką jogurtu i limonką."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false
+    },
+    {
+      "id": "gulasz_indyk_gryczana",
+      "nazwa": "Gulasz z indyka z papryką i kaszą gryczaną (na tydzień)",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 60,
+      "czas_aktywny_min": 30,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "filet_indyka",
+          500,
+          "2 opakowania"
+        ],
+        [
+          "papryka",
+          360,
+          "2 papryki"
+        ],
+        [
+          "cebula",
+          150,
+          "1 duża"
+        ],
+        [
+          "pieczarki",
+          250,
+          "1 opakowanie"
+        ],
+        [
+          "koncentrat",
+          40,
+          "2 łyżki"
+        ],
+        [
+          "olej_rzepakowy",
+          20,
+          "1½ łyżki"
+        ],
+        [
+          "przyprawy",
+          6,
+          "papryka słodka, majeranek, ziele"
+        ],
+        [
+          "kasza_gryczana",
+          280,
+          "3 woreczki"
+        ],
+        [
+          "ogorek",
+          400,
+          "1 ogórek"
+        ]
+      ],
+      "kroki": [
+        "Indyka w kostce obsmaż na oleju, dodaj cebulę i przyprawy.",
+        "Dodaj paprykę, pieczarki, koncentrat i 1,5 szklanki wody, duś 30 minut.",
+        "Ugotuj kaszę. Podawaj z ogórkiem w plasterkach."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "pulpety_rybne_gryczana",
+      "nazwa": "Pulpety rybne w sosie pomidorowym z kaszą gryczaną",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 60,
+      "czas_aktywny_min": 40,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "mintaj",
+          700,
+          "1¾ opakowania"
+        ],
+        [
+          "bialko_jaja",
+          66,
+          "2 białka"
+        ],
+        [
+          "platki_owsiane",
+          40,
+          "4 łyżki"
+        ],
+        [
+          "cebula",
+          80,
+          "½ cebuli"
+        ],
+        [
+          "marchew",
+          300,
+          "3 marchewki"
+        ],
+        [
+          "zielenina",
+          20,
+          "pęczek koperku"
+        ],
+        [
+          "olej_rzepakowy",
+          10,
+          "2 łyżeczki"
+        ],
+        [
+          "kasza_gryczana",
+          240,
+          "2½ woreczka"
+        ],
+        [
+          "passata",
+          500,
+          "1 butelka"
+        ]
+      ],
+      "kroki": [
+        "Zmiel lub drobno posiekaj rybę z cebulą, wymieszaj z białkami i płatkami, uformuj 16 pulpetów.",
+        "Zagotuj passatę z marchewką startą na tarce i szklanką wody, włóż pulpety i duś 15 minut.",
+        "Ugotuj kaszę. Na koniec posyp pulpety koperkiem."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "wycofany": true
+    },
+    {
+      "id": "kanapki_pasta_fasolowa",
+      "nazwa": "Kanapki z pastą z białej fasoli i papryką",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 7,
+      "czas_aktywny_min": 7,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "fasola",
+          120,
+          "½ puszki"
+        ],
+        [
+          "oliwa",
+          7,
+          "½ łyżki"
+        ],
+        [
+          "cytryna",
+          10,
+          "sok"
+        ],
+        [
+          "czosnek",
+          3,
+          "1 ząbek"
+        ],
+        [
+          "chleb",
+          80,
+          "2 kromki"
+        ],
+        [
+          "papryka",
+          120,
+          "⅔ papryki"
+        ],
+        [
+          "ogorek",
+          100,
+          "½ ogórka"
+        ],
+        [
+          "przyprawy",
+          1,
+          "papryka wędzona, pieprz"
+        ]
+      ],
+      "kroki": [
+        "Rozgnieć widelcem wypłukaną fasolę z oliwą, sokiem z cytryny, czosnkiem i przyprawami.",
+        "Posmaruj chleb, połóż paprykę i ogórek."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "salatka_ciecierzyca_papryka",
+      "nazwa": "Sałatka z ciecierzycy, papryki i ogórka z chlebem",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "srodziemnomorska",
+      "czas_min": 8,
+      "czas_aktywny_min": 8,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "ciecierzyca",
+          150,
+          "⅔ puszki"
+        ],
+        [
+          "papryka",
+          120,
+          "⅔ papryki"
+        ],
+        [
+          "ogorek",
+          100,
+          "½ ogórka"
+        ],
+        [
+          "cebula",
+          30,
+          "kawałek czerwonej"
+        ],
+        [
+          "oliwa",
+          7,
+          "½ łyżki"
+        ],
+        [
+          "cytryna",
+          10,
+          "sok"
+        ],
+        [
+          "chleb",
+          40,
+          "1 kromka"
+        ],
+        [
+          "przyprawy",
+          1,
+          "kmin, pieprz"
+        ]
+      ],
+      "kroki": [
+        "Wypłucz ciecierzycę, pokrój warzywa.",
+        "Wymieszaj z oliwą, cytryną i przyprawami. Podawaj z chlebem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "wrap_tunczyk_kapusta",
+      "nazwa": "Wrap z tuńczykiem, kapustą pekińską i marchewką",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 7,
+      "czas_aktywny_min": 7,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "tortilla",
+          51,
+          "1 duża tortilla"
+        ],
+        [
+          "tunczyk",
+          65,
+          "½ puszki"
+        ],
+        [
+          "kapusta_pekinska",
+          80,
+          "2 liście"
+        ],
+        [
+          "papryka",
+          120,
+          "⅔ papryki"
+        ],
+        [
+          "marchew",
+          60,
+          "1 mała"
+        ],
+        [
+          "jogurt",
+          80,
+          "4 łyżki"
+        ],
+        [
+          "migdaly",
+          15,
+          "garść płatków"
+        ],
+        [
+          "przyprawy",
+          1,
+          "pieprz, koperek suszony"
+        ]
+      ],
+      "kroki": [
+        "Wymieszaj odsączonego tuńczyka z jogurtem i przyprawami.",
+        "Rozłóż na tortilli z posiekaną kapustą, papryką i startą marchewką, posyp migdałami, zwiń."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "skyr_owoce_lesne_platki",
+      "nazwa": "Skyr z owocami leśnymi, płatkami i orzechami",
+      "posilek": [
+        "sniadanie"
+      ],
+      "kuchnia": "skandynawska",
+      "czas_min": 3,
+      "czas_aktywny_min": 3,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "skyr",
+          150,
+          "1 kubeczek"
+        ],
+        [
+          "owoce_mrozone",
+          120,
+          "garść (rozmrożone w lodówce albo w mikrofali)"
+        ],
+        [
+          "platki_owsiane",
+          40,
+          "4 łyżki"
+        ],
+        [
+          "orzechy_wloskie",
+          15,
+          "3 połówki"
+        ],
+        [
+          "miod",
+          8,
+          "½ łyżeczki"
+        ]
+      ],
+      "kroki": [
+        "Wyłóż skyr do miski.",
+        "Dodaj owoce, płatki i posiekane orzechy, polej miodem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "kanapki_twarozek_papryka",
+      "nazwa": "Kanapki z twarożkiem ziołowym i papryką",
+      "posilek": [
+        "sniadanie"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 5,
+      "czas_aktywny_min": 5,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "chleb",
+          100,
+          "2½ kromki (z zamrażarki — do tostera)"
+        ],
+        [
+          "twarog_chudy",
+          100,
+          "½ kostki"
+        ],
+        [
+          "jogurt",
+          40,
+          "2 łyżki"
+        ],
+        [
+          "papryka",
+          120,
+          "⅔ papryki"
+        ],
+        [
+          "ogorek",
+          80,
+          "kawałek"
+        ],
+        [
+          "przyprawy",
+          1,
+          "zioła prowansalskie, pieprz"
+        ]
+      ],
+      "kroki": [
+        "Rozgnieć twaróg z jogurtem i ziołami.",
+        "Posmaruj chleb, połóż paprykę i ogórek."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "musli_kefir_jablko",
+      "nazwa": "Płatki owsiane z kefirem, jabłkiem i migdałami",
+      "posilek": [
+        "sniadanie"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 4,
+      "czas_aktywny_min": 4,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": true,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "platki_owsiane",
+          60,
+          "6 łyżek"
+        ],
+        [
+          "kefir",
+          250,
+          "1 szklanka"
+        ],
+        [
+          "jablko",
+          150,
+          "1 jabłko"
+        ],
+        [
+          "migdaly",
+          15,
+          "10 sztuk"
+        ],
+        [
+          "przyprawy",
+          1,
+          "cynamon"
+        ]
+      ],
+      "kroki": [
+        "Zetrzyj jabłko, wymieszaj z płatkami i cynamonem.",
+        "Zalej kefirem, posyp migdałami."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true
+    },
+    {
+      "id": "gulasz_wegierski_wolowina",
+      "nazwa": "Gulasz wołowy po węgiersku z wędzoną papryką i pęczakiem",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "srodkowoeuropejska",
+      "czas_min": 120,
+      "czas_aktywny_min": 30,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "wolowina",
+          400,
+          "kawałek udźca"
+        ],
+        [
+          "cebula",
+          300,
+          "3 cebule"
+        ],
+        [
+          "papryka",
+          300,
+          "2 papryki"
+        ],
+        [
+          "marchew",
+          150,
+          "2 małe"
+        ],
+        [
+          "czosnek",
+          15,
+          "3 ząbki"
+        ],
+        [
+          "koncentrat",
+          40,
+          "2 łyżki z czubkiem"
+        ],
+        [
+          "pomidory_puszka",
+          400,
+          "1 puszka"
+        ],
+        [
+          "olej_rzepakowy",
+          20,
+          "2 łyżki"
+        ],
+        [
+          "przyprawy",
+          12,
+          "2 łyżki papryki słodkiej, 1 łyżeczka wędzonej, ½ łyżeczki kminku, majeranek, płatki chili, liść laurowy"
+        ],
+        [
+          "ocet_balsamiczny",
+          15,
+          "1 łyżka"
+        ],
+        [
+          "peczak",
+          240,
+          "1⅓ szklanki"
+        ],
+        [
+          "zielenina",
+          20,
+          "garść natki"
+        ]
+      ],
+      "kroki": [
+        "Pokrój wołowinę w kostkę 2 cm i obsmaż partiami na połowie oleju, aż mocno się zrumieni — to ona daje głęboki smak.",
+        "Na reszcie oleju zeszklij pokrojoną w piórka cebulę (10 minut, ma być złota). Dodaj czosnek, koncentrat i przyprawy; smaż 1 minutę, aż zapachnie.",
+        "Wrzuć mięso, pomidory i 2 szklanki wody. Duś pod przykryciem 1 godzinę na małym ogniu.",
+        "Dodaj paprykę i marchew, duś jeszcze 30 minut. W tym czasie ugotuj pęczak.",
+        "Na koniec wlej ocet balsamiczny i dopraw pieprzem — kwas zastępuje sól. Natkę dodaj przy podaniu."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "gulasz_dynia_ciecierzyca_marokanski",
+      "nazwa": "Gulasz z dyni i ciecierzycy po marokańsku z kuskusem",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 50,
+      "czas_aktywny_min": 25,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "dynia",
+          800,
+          "½ dyni Hokkaido"
+        ],
+        [
+          "ciecierzyca",
+          480,
+          "2 puszki"
+        ],
+        [
+          "cebula",
+          150,
+          "1 duża"
+        ],
+        [
+          "czosnek",
+          10,
+          "2 ząbki"
+        ],
+        [
+          "imbir",
+          10,
+          "kawałek 2 cm"
+        ],
+        [
+          "pomidory_puszka",
+          400,
+          "1 puszka"
+        ],
+        [
+          "morele_suszone",
+          60,
+          "6 sztuk"
+        ],
+        [
+          "olej_rzepakowy",
+          20,
+          "2 łyżki"
+        ],
+        [
+          "przyprawy",
+          8,
+          "2 łyżeczki kuminu, 1 łyżeczka cynamonu, 1 łyżeczka kurkumy, ½ łyżeczki chili"
+        ],
+        [
+          "bulgur",
+          240,
+          "1⅓ szklanki kuskusu"
+        ],
+        [
+          "cytryna",
+          60,
+          "½ cytryny"
+        ],
+        [
+          "ziola_doniczka",
+          15,
+          "garść kolendry lub mięty"
+        ]
+      ],
+      "kroki": [
+        "Na suchej patelni praż kumin i cynamon 30 sekund, aż zapachną.",
+        "Na oleju zeszklij cebulę, dodaj czosnek, starty imbir i uprażone przyprawy.",
+        "Dodaj dynię w kostce, pomidory, pokrojone morele i 1 szklankę wody. Duś 20 minut.",
+        "Dodaj odsączoną ciecierzycę, duś 10 minut. Kuskus zalej wrzątkiem w proporcji 1:1,5 i przykryj na 5 minut.",
+        "Na koniec sok i skórka z cytryny oraz świeże zioła."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "udka_sliwki_gryczana",
+      "nazwa": "Udka duszone z suszonymi śliwkami i cebulą, z kaszą gryczaną",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 70,
+      "czas_aktywny_min": 25,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 3,
+      "skladniki": [
+        [
+          "udo_kurczaka",
+          520,
+          "4 udka bez skóry"
+        ],
+        [
+          "cebula",
+          300,
+          "3 cebule"
+        ],
+        [
+          "sliwki_suszone",
+          100,
+          "12 sztuk"
+        ],
+        [
+          "marchew",
+          200,
+          "2 marchewki"
+        ],
+        [
+          "czosnek",
+          10,
+          "2 ząbki"
+        ],
+        [
+          "olej_rzepakowy",
+          15,
+          "1½ łyżki"
+        ],
+        [
+          "przyprawy",
+          6,
+          "majeranek, 4 ziela angielskie, liść laurowy, szczypta cynamonu, pieprz, płatki chili"
+        ],
+        [
+          "ocet_balsamiczny",
+          30,
+          "2 łyżki"
+        ],
+        [
+          "kasza_gryczana",
+          240,
+          "2½ woreczka"
+        ],
+        [
+          "zielenina",
+          20,
+          "natka"
+        ]
+      ],
+      "kroki": [
+        "Zdejmij skórę z udek, natrzyj je majerankiem, pieprzem i czosnkiem. Obsmaż na oleju z obu stron.",
+        "Dodaj cebulę w piórkach i marchew w plastrach, smaż 5 minut.",
+        "Dodaj śliwki, ziele, liść laurowy, cynamon i 1 szklankę wody. Duś pod przykryciem 40 minut.",
+        "Wlej ocet balsamiczny i odparuj sos 5 minut — ma być gęsty, słodko-kwaśny. Ugotuj kaszę.",
+        "Mięso można zdjąć z kości przed pakowaniem do pudełek — łatwiej podgrzać."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "tinga_kurczak_tortille",
+      "nazwa": "Tinga z kurczakiem w domowych tortillach z surówką z limonką",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "latynoska",
+      "czas_min": 75,
+      "czas_aktywny_min": 40,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 3,
+      "skladniki": [
+        [
+          "udo_kurczaka",
+          480,
+          "4 udka bez skóry"
+        ],
+        [
+          "cebula",
+          200,
+          "2 cebule"
+        ],
+        [
+          "czosnek",
+          10,
+          "2 ząbki"
+        ],
+        [
+          "pomidory_puszka",
+          400,
+          "1 puszka"
+        ],
+        [
+          "koncentrat",
+          30,
+          "1½ łyżki"
+        ],
+        [
+          "przyprawy",
+          8,
+          "2 łyżeczki papryki wędzonej, chipotle lub płatki chili, 1 łyżeczka kuminu, oregano"
+        ],
+        [
+          "maka_pelnoziarnista",
+          240,
+          "2 szklanki (8 tortilli)"
+        ],
+        [
+          "olej_rzepakowy",
+          25,
+          "2½ łyżki"
+        ],
+        [
+          "kapusta_czerwona",
+          300,
+          "¼ główki"
+        ],
+        [
+          "cytryna",
+          120,
+          "2 limonki"
+        ],
+        [
+          "jogurt",
+          160,
+          "6 łyżek"
+        ],
+        [
+          "ziola_doniczka",
+          15,
+          "garść kolendry"
+        ]
+      ],
+      "kroki": [
+        "Udka bez skóry ugotuj w małej ilości wody z połową cebuli i czosnkiem (25 minut). Ostudź i poszarp widelcem.",
+        "Na łyżce oleju podsmaż resztę cebuli, dodaj przyprawy i koncentrat, potem pomidory i ½ szklanki wywaru. Gotuj 10 minut i zmiksuj.",
+        "Wrzuć mięso do sosu i duś 10 minut, aż sos oblepi kurczaka. Dopraw sokiem z ½ limonki.",
+        "Tortille: wymieszaj mąkę z olejem i taką ilością ciepłej wody, żeby powstało miękkie, niekleiste ciasto (ok. 35 ml na 60 g mąki). Zagnieć 3 minuty, przykryj na 15 minut. Podziel na kulki po ok. 30 g, rozwałkuj bardzo cienko i piecz na suchej, mocno rozgrzanej patelni po 30–40 sekund z każdej strony, aż pojawią się brązowe plamki. Trzymaj zawinięte w ściereczkę, potem w pudełku w lodówce; na dalsze dni zamroź, przekładając papierem do pieczenia. Przed jedzeniem podgrzej kilka sekund na suchej patelni.",
+        "Surówka: cienko poszatkowana kapusta z sokiem z limonki i kolendrą — wytrzymuje 3 dni, z każdym dniem lepsza.",
+        "Podanie: ciepła tinga w tortilli, surówka, łyżka jogurtu z limonką."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "zupa_soczewica_turecka",
+      "nazwa": "Zupa z soczewicy po turecku z miętą, papryką i bulgurem",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 40,
+      "czas_aktywny_min": 15,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "soczewica",
+          250,
+          "1¼ szklanki czerwonej"
+        ],
+        [
+          "bulgur",
+          60,
+          "⅓ szklanki"
+        ],
+        [
+          "cebula",
+          150,
+          "1 duża"
+        ],
+        [
+          "marchew",
+          150,
+          "2 małe"
+        ],
+        [
+          "czosnek",
+          10,
+          "2 ząbki"
+        ],
+        [
+          "koncentrat",
+          30,
+          "1½ łyżki"
+        ],
+        [
+          "olej_rzepakowy",
+          15,
+          "1½ łyżki"
+        ],
+        [
+          "przyprawy",
+          6,
+          "2 łyżki suszonej mięty, 2 łyżeczki papryki słodkiej, płatki chili, kumin"
+        ],
+        [
+          "cytryna",
+          120,
+          "1 cytryna"
+        ],
+        [
+          "chleb",
+          160,
+          "4 kromki"
+        ]
+      ],
+      "kroki": [
+        "Na oleju zeszklij cebulę i marchew, dodaj czosnek, koncentrat, paprykę i kumin.",
+        "Dodaj soczewicę, bulgur i 1,5 l wody. Gotuj 25 minut, aż soczewica się rozpadnie.",
+        "Na końcu wsyp miętę i płatki chili. Każdą porcję polej obficie sokiem z cytryny dopiero na talerzu.",
+        "Podawaj z kromką chleba."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "ryba_meksykanska_blacha",
+      "nazwa": "Ryba po meksykańsku z blachy z czarną fasolą, ryżem i salsą",
+      "posilek": [
+        "obiad",
+        "kolacja"
+      ],
+      "kuchnia": "latynoska",
+      "czas_min": 45,
+      "czas_aktywny_min": 20,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "mintaj",
+          600,
+          "1½ opakowania filetów"
+        ],
+        [
+          "ryz_brazowy",
+          240,
+          "1⅓ szklanki"
+        ],
+        [
+          "fasola",
+          240,
+          "1 puszka (czarna lub czerwona)"
+        ],
+        [
+          "papryka",
+          300,
+          "2 papryki"
+        ],
+        [
+          "cebula",
+          150,
+          "1 czerwona"
+        ],
+        [
+          "olej_rzepakowy",
+          20,
+          "2 łyżki"
+        ],
+        [
+          "przyprawy",
+          8,
+          "2 łyżeczki kuminu, 2 łyżeczki wędzonej papryki, chili, oregano, czosnek granulowany"
+        ],
+        [
+          "cytryna",
+          120,
+          "2 limonki"
+        ],
+        [
+          "pomidorki",
+          250,
+          "1 opakowanie"
+        ],
+        [
+          "ziola_doniczka",
+          15,
+          "kolendra"
+        ],
+        [
+          "jogurt",
+          160,
+          "6 łyżek"
+        ]
+      ],
+      "kroki": [
+        "Rozmroź rybę. Wymieszaj przyprawy z olejem i sokiem z 1 limonki, natrzyj filety.",
+        "Na blachę wyłóż paprykę i cebulę w paskach, piecz 15 minut w 220°C. Dołóż rybę i fasolę, piecz jeszcze 12–15 minut.",
+        "W tym czasie ugotuj ryż.",
+        "Salsa: posiekane pomidorki, kolendra, sok z limonki, szczypta chili. Sos: jogurt ze skórką z limonki.",
+        "Porcje na dalsze dni (bez salsy) zamroź; salsę rób świeżą albo na 2 dni."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "mujaddara",
+      "nazwa": "Mujaddara: soczewica z ryżem i rumianą cebulą, z jogurtem i ogórkiem",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 55,
+      "czas_aktywny_min": 25,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "soczewica_brazowa",
+          250,
+          "1¼ szklanki"
+        ],
+        [
+          "ryz_brazowy",
+          160,
+          "1 szklanka"
+        ],
+        [
+          "cebula",
+          600,
+          "5 dużych"
+        ],
+        [
+          "olej_rzepakowy",
+          30,
+          "3 łyżki"
+        ],
+        [
+          "przyprawy",
+          6,
+          "2 łyżeczki kuminu, ½ łyżeczki cynamonu, ziele angielskie, pieprz"
+        ],
+        [
+          "jogurt",
+          400,
+          "1 opakowanie"
+        ],
+        [
+          "ogorek",
+          200,
+          "1 ogórek"
+        ],
+        [
+          "czosnek",
+          5,
+          "1 ząbek"
+        ],
+        [
+          "cytryna",
+          60,
+          "½ cytryny"
+        ],
+        [
+          "zielenina",
+          20,
+          "natka lub mięta"
+        ]
+      ],
+      "kroki": [
+        "Soczewicę gotuj 15 minut w dużej ilości wody, dodaj ryż i gotuj razem, aż oba będą miękkie (ok. 25 minut). Odcedź.",
+        "W tym czasie cebulę pokrój w cienkie piórka i smaż na oleju 25–30 minut, aż będzie ciemnozłota, słodka i częściowo chrupiąca — to serce dania.",
+        "Uprażone na sucho przyprawy wymieszaj z soczewicą, ryżem i połową cebuli. Resztę cebuli zostaw na wierzch.",
+        "Sos: jogurt z tartym ogórkiem, czosnkiem, sokiem z cytryny i ziołami (trzymaj osobno, 4 dni)."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "udka_libanskie_ziemniaki",
+      "nazwa": "Udka po libańsku z ziemniakami z blachy i jogurtem czosnkowym",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 65,
+      "czas_aktywny_min": 20,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 3,
+      "skladniki": [
+        [
+          "udo_kurczaka",
+          520,
+          "4 udka bez skóry"
+        ],
+        [
+          "ziemniaki",
+          1000,
+          "ok. 8 średnich"
+        ],
+        [
+          "cebula",
+          200,
+          "2 cebule"
+        ],
+        [
+          "czosnek",
+          20,
+          "4 ząbki"
+        ],
+        [
+          "cytryna",
+          120,
+          "1 cytryna"
+        ],
+        [
+          "olej_rzepakowy",
+          25,
+          "2½ łyżki"
+        ],
+        [
+          "przyprawy",
+          8,
+          "baharat: pieprz, ziele angielskie, cynamon, kumin, kolendra mielona, gałka, papryka słodka"
+        ],
+        [
+          "jogurt",
+          200,
+          "½ opakowania"
+        ],
+        [
+          "kapusta_czerwona",
+          300,
+          "¼ główki"
+        ],
+        [
+          "ocet",
+          15,
+          "1 łyżka winnego"
+        ],
+        [
+          "zielenina",
+          20,
+          "natka"
+        ]
+      ],
+      "kroki": [
+        "Marynata: olej, sok i skórka z cytryny, połowa czosnku, przyprawy. Obtocz w niej udka bez skóry i ziemniaki w ćwiartkach.",
+        "Rozłóż na blasze z cebulą w ósemkach. Piecz 45 minut w 200°C, w połowie przewróć.",
+        "Jogurt czosnkowy: jogurt z resztą czosnku i odrobiną skórki z cytryny.",
+        "Surówka: szatkowana kapusta z octem, natką i pieprzem (wytrzyma 4 dni).",
+        "Porcje na dalsze dni zamroź; ziemniaki po rozmrożeniu podgrzej na suchej patelni — wrócą chrupkie."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "maghmour_baklazan_ciecierzyca",
+      "nazwa": "Maghmour: gulasz z bakłażana i ciecierzycy z miętą i bulgurem",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 60,
+      "czas_aktywny_min": 25,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "baklazan",
+          800,
+          "2 bakłażany"
+        ],
+        [
+          "ciecierzyca",
+          480,
+          "2 puszki"
+        ],
+        [
+          "cebula",
+          200,
+          "2 cebule"
+        ],
+        [
+          "czosnek",
+          15,
+          "3 ząbki"
+        ],
+        [
+          "pomidory_puszka",
+          800,
+          "2 puszki"
+        ],
+        [
+          "olej_rzepakowy",
+          40,
+          "4 łyżki"
+        ],
+        [
+          "przyprawy",
+          6,
+          "1 łyżeczka cynamonu, ziele angielskie, płatki chili, 1 łyżka suszonej mięty"
+        ],
+        [
+          "bulgur",
+          240,
+          "1⅓ szklanki"
+        ],
+        [
+          "cytryna",
+          60,
+          "½ cytryny"
+        ],
+        [
+          "jogurt",
+          200,
+          "½ opakowania"
+        ]
+      ],
+      "kroki": [
+        "Bakłażany pokrój w kostkę, wymieszaj z połową oleju i piecz 25 minut w 220°C, aż się zrumienią (zamiast smażenia — mniej tłuszczu).",
+        "Na reszcie oleju zeszklij cebulę, dodaj czosnek i przyprawy, potem pomidory. Gotuj 10 minut.",
+        "Dodaj bakłażan i odsączoną ciecierzycę, duś 15 minut. Smakuje lepiej na drugi dzień.",
+        "Podawaj z bulgurem, sokiem z cytryny i łyżką jogurtu."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "kofta_indyk_bulgur",
+      "nazwa": "Kofta z indyka w sosie pomidorowym z cynamonem, z bulgurem",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 55,
+      "czas_aktywny_min": 30,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "mielone_indyk",
+          500,
+          "1 opakowanie"
+        ],
+        [
+          "cebula",
+          250,
+          "2 cebule"
+        ],
+        [
+          "czosnek",
+          15,
+          "3 ząbki"
+        ],
+        [
+          "zielenina",
+          40,
+          "duży pęczek natki"
+        ],
+        [
+          "platki_owsiane",
+          40,
+          "4 łyżki"
+        ],
+        [
+          "przyprawy",
+          8,
+          "2 łyżeczki kuminu, 1 łyżeczka cynamonu, ziele angielskie, papryka, chili"
+        ],
+        [
+          "passata",
+          500,
+          "1 butelka"
+        ],
+        [
+          "koncentrat",
+          30,
+          "1½ łyżki"
+        ],
+        [
+          "olej_rzepakowy",
+          15,
+          "1½ łyżki"
+        ],
+        [
+          "bulgur",
+          240,
+          "1⅓ szklanki"
+        ],
+        [
+          "cytryna",
+          60,
+          "½ cytryny"
+        ],
+        [
+          "jogurt",
+          160,
+          "6 łyżek"
+        ]
+      ],
+      "kroki": [
+        "Wymieszaj mięso z połową startej cebuli, połową czosnku, posiekaną natką, płatkami i połową przypraw. Uformuj podłużne klopsiki.",
+        "Obsmaż je na oleju na rumiano i odłóż.",
+        "Na tej samej patelni podsmaż resztę cebuli, czosnku i przypraw, dodaj koncentrat i passatę, gotuj 5 minut.",
+        "Włóż koftę do sosu i duś 15 minut. Dopraw sokiem z cytryny. Ugotuj bulgur, jogurt podawaj osobno."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "shorbat_adas",
+      "nazwa": "Shorbat adas: krem z soczewicy z kuminem, cytryną i chrupiącą cebulą",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 45,
+      "czas_aktywny_min": 20,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "soczewica",
+          250,
+          "1¼ szklanki czerwonej"
+        ],
+        [
+          "cebula",
+          300,
+          "3 cebule"
+        ],
+        [
+          "marchew",
+          200,
+          "2 marchewki"
+        ],
+        [
+          "ziemniaki",
+          200,
+          "2 ziemniaki"
+        ],
+        [
+          "czosnek",
+          10,
+          "2 ząbki"
+        ],
+        [
+          "olej_rzepakowy",
+          25,
+          "2½ łyżki"
+        ],
+        [
+          "przyprawy",
+          6,
+          "2 łyżeczki kuminu, 1 łyżeczka kurkumy, pieprz, chili, sumak (opcjonalnie)"
+        ],
+        [
+          "cytryna",
+          120,
+          "1 cytryna"
+        ],
+        [
+          "chleb",
+          160,
+          "4 kromki na grzanki"
+        ],
+        [
+          "zielenina",
+          20,
+          "natka"
+        ]
+      ],
+      "kroki": [
+        "Jedną cebulę pokrój w cienkie piórka i usmaż na połowie oleju na ciemnozłoto i chrupko — odłóż na posypkę.",
+        "Na reszcie oleju zeszklij pozostałą cebulę, czosnek, kumin i kurkumę.",
+        "Dodaj soczewicę, marchew, ziemniaki i 1,5 l wody. Gotuj 25 minut i zmiksuj na gładki krem.",
+        "Chleb pokrój w kostkę, posyp kuminem lub sumakiem i podpiecz na suchej patelni lub w piekarniku.",
+        "Na talerzu: dużo soku z cytryny, chrupiąca cebula, grzanki i natka."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "falafel_pieczony_tortille",
+      "nazwa": "Falafel z piekarnika w domowych plackach z sosem tahini i piklami",
+      "posilek": [
+        "kolacja",
+        "obiad"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 80,
+      "czas_aktywny_min": 45,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "ciecierzyca",
+          480,
+          "2 puszki"
+        ],
+        [
+          "cebula",
+          100,
+          "1 cebula"
+        ],
+        [
+          "czosnek",
+          10,
+          "2 ząbki"
+        ],
+        [
+          "zielenina",
+          40,
+          "pęczek natki"
+        ],
+        [
+          "ziola_doniczka",
+          15,
+          "kolendra"
+        ],
+        [
+          "przyprawy",
+          6,
+          "2 łyżeczki kuminu, 1 łyżeczka kolendry mielonej, chili, szczypta proszku do pieczenia"
+        ],
+        [
+          "maka_pelnoziarnista",
+          200,
+          "1⅔ szklanki (8 placków i do falafeli)"
+        ],
+        [
+          "olej_rzepakowy",
+          30,
+          "3 łyżki"
+        ],
+        [
+          "tahini",
+          40,
+          "2 łyżki"
+        ],
+        [
+          "jogurt",
+          160,
+          "6 łyżek"
+        ],
+        [
+          "cytryna",
+          120,
+          "1 cytryna"
+        ],
+        [
+          "kapusta_czerwona",
+          200,
+          "kawałek"
+        ],
+        [
+          "ocet",
+          30,
+          "2 łyżki"
+        ],
+        [
+          "ogorek",
+          200,
+          "1 ogórek"
+        ]
+      ],
+      "kroki": [
+        "Ciecierzycę dokładnie osusz. Zmiksuj ją z cebulą, czosnkiem, ziołami, przyprawami i 2 łyżkami mąki na grudkowatą masę.",
+        "Uformuj ok. 20 kulek, spłaszcz, posmaruj olejem i piecz 25 minut w 210°C, w połowie przewróć.",
+        "Tortille: wymieszaj mąkę z olejem i taką ilością ciepłej wody, żeby powstało miękkie, niekleiste ciasto (ok. 35 ml na 60 g mąki). Zagnieć 3 minuty, przykryj na 15 minut. Podziel na kulki po ok. 30 g, rozwałkuj bardzo cienko i piecz na suchej, mocno rozgrzanej patelni po 30–40 sekund z każdej strony, aż pojawią się brązowe plamki. Trzymaj zawinięte w ściereczkę, potem w pudełku w lodówce; na dalsze dni zamroź, przekładając papierem do pieczenia. Przed jedzeniem podgrzej kilka sekund na suchej patelni.",
+        "Pikle: cienko pokrojona kapusta zalana octem z 2 łyżkami wody — gotowe po godzinie, wytrzymują tydzień.",
+        "Sos: tahini z jogurtem, sokiem z cytryny i odrobiną wody, aż będzie lejący.",
+        "Podanie: podgrzane falafele w placku z ogórkiem, piklami i sosem."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "ful_medames",
+      "nazwa": "Ful: fasola z czosnkiem, cytryną, kuminem i oliwą, z chlebem",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 10,
+      "czas_aktywny_min": 10,
+      "porcje": 2,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "fasola",
+          240,
+          "1 puszka"
+        ],
+        [
+          "czosnek",
+          5,
+          "1 ząbek"
+        ],
+        [
+          "cytryna",
+          60,
+          "½ cytryny"
+        ],
+        [
+          "oliwa",
+          15,
+          "1 łyżka"
+        ],
+        [
+          "przyprawy",
+          2,
+          "kumin, płatki chili"
+        ],
+        [
+          "pomidorki",
+          125,
+          "½ opakowania"
+        ],
+        [
+          "zielenina",
+          15,
+          "natka"
+        ],
+        [
+          "chleb",
+          120,
+          "3 kromki"
+        ]
+      ],
+      "kroki": [
+        "Odsącz i przepłucz fasolę (płukanie zmywa część soli z zalewy).",
+        "Rozgnieć połowę widelcem z czosnkiem, kuminem, sokiem z cytryny i 2 łyżkami wody; resztę zostaw całą.",
+        "Możesz podgrzać w mikrofali 1–2 minuty. Na wierzch: pomidorki, natka, oliwa, chili.",
+        "Jedz z chlebem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "meze_hummus_baba",
+      "nazwa": "Meze: hummus i baba ganoush z pieczonego bakłażana, z warzywami i chlebem",
+      "posilek": [
+        "kolacja"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 50,
+      "czas_aktywny_min": 25,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": true,
+      "trwalosc_dni": 4,
+      "skladniki": [
+        [
+          "baklazan",
+          600,
+          "2 bakłażany"
+        ],
+        [
+          "ciecierzyca",
+          480,
+          "2 puszki"
+        ],
+        [
+          "tahini",
+          60,
+          "3 łyżki"
+        ],
+        [
+          "cytryna",
+          120,
+          "1 cytryna"
+        ],
+        [
+          "czosnek",
+          15,
+          "3 ząbki"
+        ],
+        [
+          "oliwa",
+          30,
+          "2 łyżki"
+        ],
+        [
+          "przyprawy",
+          4,
+          "kumin, papryka wędzona, sumak"
+        ],
+        [
+          "marchew",
+          300,
+          "3 marchewki"
+        ],
+        [
+          "ogorek",
+          200,
+          "1 ogórek"
+        ],
+        [
+          "papryka",
+          200,
+          "1 papryka"
+        ],
+        [
+          "chleb",
+          240,
+          "6 kromek"
+        ]
+      ],
+      "kroki": [
+        "Bakłażany nakłuj i piecz w całości 40 minut w 230°C (albo opal nad gazem), aż zapadną się w środku.",
+        "Hummus: zmiksuj ciecierzycę z połową tahini, połową soku z cytryny, czosnkiem, kuminem i zimną wodą na gładko.",
+        "Baba ganoush: wydrąż miąższ bakłażana, rozgnieć z resztą tahini, cytryny i czosnku.",
+        "Obie pasty polej oliwą i posyp papryką i sumakiem. Do tego słupki warzyw i chleb.",
+        "Pasty trzymaj w osobnych pudełkach (4 dni w lodówce albo zamroź porcje); warzywa krój na bieżąco."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "cilbir_jajka_jogurt",
+      "nazwa": "Jajka na jogurcie czosnkowym z masłem paprykowym (çılbır), z chlebem",
+      "posilek": [
+        "sniadanie"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 10,
+      "czas_aktywny_min": 5,
+      "porcje": 1,
+      "na_zapas": false,
+      "na_zimno": false,
+      "trwalosc_dni": 1,
+      "skladniki": [
+        [
+          "jajo",
+          60,
+          "1 jajko ugotowane w poniedziałek"
+        ],
+        [
+          "jogurt",
+          150,
+          "1 kubeczek"
+        ],
+        [
+          "czosnek",
+          3,
+          "½ ząbka"
+        ],
+        [
+          "oliwa",
+          7,
+          "1½ łyżeczki"
+        ],
+        [
+          "przyprawy",
+          1,
+          "papryka słodka, płatki chili, suszona mięta lub koperek"
+        ],
+        [
+          "chleb",
+          90,
+          "2 kromki"
+        ]
+      ],
+      "kroki": [
+        "Jajka na cały tydzień ugotuj w poniedziałek (8 minut), ostudź i trzymaj w lodówce do 7 dni.",
+        "Rano jogurt wymieszaj z czosnkiem i rozsmaruj na talerzu. Jajko zalej na 2 minuty wrzątkiem z czajnika, obierz, przekrój.",
+        "Oliwę wymieszaj z papryką i chili (to „masło paprykowe” bez masła), polej jajka i jogurt.",
+        "Posyp suszoną miętą lub koperkiem i jedz z chlebem."
+      ],
+      "mrozi_sie": false,
+      "bez_garnkow": true,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "kofta_rybne_bulgur",
+      "nazwa": "Kofta rybne w sosie pomidorowym z kuminem i kolendrą, z bulgurem",
+      "posilek": [
+        "obiad"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 55,
+      "czas_aktywny_min": 30,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "mintaj",
+          600,
+          "1½ opakowania filetów"
+        ],
+        [
+          "cebula",
+          200,
+          "2 cebule"
+        ],
+        [
+          "czosnek",
+          10,
+          "2 ząbki"
+        ],
+        [
+          "zielenina",
+          30,
+          "natka"
+        ],
+        [
+          "ziola_doniczka",
+          15,
+          "kolendra"
+        ],
+        [
+          "platki_owsiane",
+          60,
+          "6 łyżek"
+        ],
+        [
+          "jajo",
+          60,
+          "1 jajko"
+        ],
+        [
+          "przyprawy",
+          6,
+          "2 łyżeczki kuminu, kolendra mielona, chili, szczypta cynamonu"
+        ],
+        [
+          "passata",
+          500,
+          "1 butelka"
+        ],
+        [
+          "koncentrat",
+          20,
+          "1 łyżka"
+        ],
+        [
+          "olej_rzepakowy",
+          20,
+          "2 łyżki"
+        ],
+        [
+          "cytryna",
+          60,
+          "½ cytryny"
+        ],
+        [
+          "bulgur",
+          240,
+          "1⅓ szklanki"
+        ]
+      ],
+      "kroki": [
+        "Rozmrożoną rybę dokładnie osusz i posiekaj nożem lub krótko zmiksuj z połową cebuli, czosnkiem, ziołami, skórką z cytryny, płatkami, jajkiem i połową przypraw.",
+        "Uformuj klopsiki mokrymi rękami, obsmaż krótko na oleju (albo piecz 15 minut w 200°C).",
+        "Sos: reszta cebuli i przypraw podsmażona z koncentratem, potem passata; gotuj 5 minut.",
+        "Włóż kofta do sosu na 10 minut, dopraw sokiem z cytryny. Ugotuj bulgur."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "tacos_rybne",
+      "nazwa": "Tacos z rybą w kuminie i wędzonej papryce, z kapustą i sosem limonkowym",
+      "posilek": [
+        "obiad",
+        "kolacja"
+      ],
+      "kuchnia": "latynoska",
+      "czas_min": 60,
+      "czas_aktywny_min": 35,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "mintaj",
+          600,
+          "1½ opakowania filetów"
+        ],
+        [
+          "maka_pelnoziarnista",
+          240,
+          "2 szklanki (8 tortilli)"
+        ],
+        [
+          "olej_rzepakowy",
+          25,
+          "2½ łyżki"
+        ],
+        [
+          "przyprawy",
+          8,
+          "kumin, papryka wędzona, chili, oregano, czosnek granulowany"
+        ],
+        [
+          "kapusta_czerwona",
+          300,
+          "¼ główki"
+        ],
+        [
+          "cytryna",
+          120,
+          "2 limonki"
+        ],
+        [
+          "jogurt",
+          200,
+          "½ opakowania"
+        ],
+        [
+          "pomidorki",
+          250,
+          "1 opakowanie"
+        ],
+        [
+          "cebula",
+          80,
+          "½ czerwonej"
+        ],
+        [
+          "ziola_doniczka",
+          15,
+          "kolendra"
+        ],
+        [
+          "fasola",
+          240,
+          "1 puszka"
+        ]
+      ],
+      "kroki": [
+        "Tortille: wymieszaj mąkę z olejem i taką ilością ciepłej wody, żeby powstało miękkie, niekleiste ciasto (ok. 35 ml na 60 g mąki). Zagnieć 3 minuty, przykryj na 15 minut. Podziel na kulki po ok. 30 g, rozwałkuj bardzo cienko i piecz na suchej, mocno rozgrzanej patelni po 30–40 sekund z każdej strony, aż pojawią się brązowe plamki. Trzymaj zawinięte w ściereczkę, potem w pudełku w lodówce; na dalsze dni zamroź, przekładając papierem do pieczenia. Przed jedzeniem podgrzej kilka sekund na suchej patelni.",
+        "Rybę osusz, natrzyj przyprawami z łyżką oleju i piecz 12 minut w 220°C (albo smaż 3 minuty z każdej strony). Rozdziel widelcem na kawałki.",
+        "Kapusta: cienko poszatkowana, z sokiem z 1 limonki — wytrzymuje 3 dni.",
+        "Pico de gallo: pomidorki, czerwona cebula, kolendra, sok z limonki, chili.",
+        "Sos: jogurt ze skórką i sokiem z limonki. Fasolę rozgnieć z kuminem i podgrzej.",
+        "Rybę i tortille na dalsze dni zamroź osobno; podgrzej rybę w mikrofali, tortille na patelni."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "kaszotto_losos_koperek",
+      "nazwa": "Kaszotto z pęczaku z łososiem, koperkiem, szpinakiem i cytryną",
+      "posilek": [
+        "obiad",
+        "kolacja"
+      ],
+      "kuchnia": "polska",
+      "czas_min": 45,
+      "czas_aktywny_min": 25,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "peczak",
+          240,
+          "1⅓ szklanki"
+        ],
+        [
+          "losos",
+          280,
+          "1 kawałek fileta"
+        ],
+        [
+          "cebula",
+          150,
+          "1 duża"
+        ],
+        [
+          "czosnek",
+          10,
+          "2 ząbki"
+        ],
+        [
+          "szpinak_mrozony",
+          300,
+          "⅔ opakowania"
+        ],
+        [
+          "cytryna",
+          120,
+          "1 cytryna"
+        ],
+        [
+          "zielenina",
+          40,
+          "pęczek koperku"
+        ],
+        [
+          "jogurt",
+          160,
+          "6 łyżek"
+        ],
+        [
+          "olej_rzepakowy",
+          15,
+          "1½ łyżki"
+        ],
+        [
+          "przyprawy",
+          3,
+          "pieprz, płatki chili"
+        ]
+      ],
+      "kroki": [
+        "Na oleju zeszklij cebulę i czosnek, dodaj pęczak i smaż 2 minuty, mieszając.",
+        "Wlewaj gorącą wodę po szklance, mieszając, aż kasza będzie miękka i kremowa (ok. 30 minut).",
+        "Łososia upiecz 12 minut w 200°C ze skórką cytryny i rozdziel na płatki. Szpinak dodaj do kaszy na ostatnie 5 minut.",
+        "Zdejmij z ognia, wmieszaj jogurt, sok z cytryny, dużo koperku i pieprzu, a na wierzch łososia.",
+        "Porcje na dalsze dni zamroź; po podgrzaniu dodaj łyżkę wody i świeży sok z cytryny."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    },
+    {
+      "id": "sajadieh_ryba_ryz",
+      "nazwa": "Sajadieh: ryba z ryżem na karmelizowanej cebuli, z kuminem i cynamonem",
+      "posilek": [
+        "obiad",
+        "kolacja"
+      ],
+      "kuchnia": "bliskowschodnia",
+      "czas_min": 60,
+      "czas_aktywny_min": 30,
+      "porcje": 4,
+      "na_zapas": true,
+      "na_zimno": false,
+      "trwalosc_dni": 2,
+      "skladniki": [
+        [
+          "mintaj",
+          600,
+          "1½ opakowania filetów"
+        ],
+        [
+          "ryz_brazowy",
+          240,
+          "1⅓ szklanki"
+        ],
+        [
+          "cebula",
+          500,
+          "4 duże"
+        ],
+        [
+          "olej_rzepakowy",
+          30,
+          "3 łyżki"
+        ],
+        [
+          "przyprawy",
+          8,
+          "2 łyżeczki kuminu, 1 łyżeczka cynamonu, ziele angielskie, kurkuma, pieprz"
+        ],
+        [
+          "czosnek",
+          10,
+          "2 ząbki"
+        ],
+        [
+          "cytryna",
+          120,
+          "1 cytryna"
+        ],
+        [
+          "zielenina",
+          30,
+          "natka"
+        ],
+        [
+          "migdaly",
+          40,
+          "garść płatków"
+        ],
+        [
+          "tahini",
+          30,
+          "1½ łyżki"
+        ]
+      ],
+      "kroki": [
+        "Cebulę w piórkach smaż na oleju 25 minut, aż będzie bardzo ciemna, prawie brązowa. Połowę odłóż na wierzch.",
+        "Do reszty cebuli dodaj czosnek i przyprawy, potem ryż i wodę (2,5 raza więcej niż ryżu). Gotuj pod przykryciem 30 minut.",
+        "Rybę natrzyj kuminem i skórką cytryny, połóż na ryżu na ostatnie 10 minut gotowania.",
+        "Migdały upraż na suchej patelni. Sos: tahini z sokiem z cytryny i wodą.",
+        "Podawaj z cebulą, migdałami, natką i sosem."
+      ],
+      "mrozi_sie": true,
+      "bez_garnkow": false,
+      "pora_roku": "zima"
+    }
+  ]
+}

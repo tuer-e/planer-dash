@@ -1,0 +1,112 @@
+// Planer DASH na telefon: ekrany i nawigacja. Każdy ekran to funkcja rysuj(app) → HTML i obsługa kliknięć.
+import { porzadkuj, poprosOTrwalosc, wczytaj, wczytajKatalog, zapisz } from "./stan.js";
+import { esc, zamknijArkusz } from "./narzedzia.js";
+import * as lodowka from "./ekrany/lodowka.js";
+import * as gotowanie from "./ekrany/gotowanie.js";
+import * as tydzien from "./ekrany/tydzien.js";
+import * as wiecej from "./ekrany/wiecej.js";
+import * as przepis from "./ekrany/przepis.js";
+
+const EKRANY = { lodowka, gotowanie, tydzien, wiecej, przepis };
+// Przepis otwiera się nad zakładką, z której przyszedłeś — ta zakładka zostaje podświetlona.
+let zakladka = "lodowka";
+const ekran = document.getElementById("ekran");
+
+export const app = {
+  dane: wczytaj(),
+  ekran: "lodowka",
+  argument: null,
+  zapisz() {
+    if (!zapisz(this.dane)) this.blad = "Nie udało się zapisać danych w telefonie.";
+  },
+  odswiez() {
+    rysuj();
+  },
+  idz(adres) {
+    location.hash = adres;
+  },
+};
+
+function rysuj() {
+  const modul = EKRANY[app.ekran] ?? lodowka;
+  try {
+    ekran.innerHTML = modul.rysuj(app);
+  } catch (e) {
+    console.error(e);
+    ekran.innerHTML = `<div class="naglowek"><h1>Coś poszło nie tak</h1><p class="wyciszony">${esc(e.message)}</p></div>`;
+  }
+  if (app.ekran !== "przepis") zakladka = app.ekran;
+  document.querySelectorAll(".nawigacja a").forEach((a) => {
+    if (a.dataset.ekran === zakladka) a.setAttribute("aria-current", "page");
+    else a.removeAttribute("aria-current");
+  });
+  modul.poNarysowaniu?.(app, ekran);
+}
+
+function zAdresu() {
+  const [nazwa, ...reszta] = (location.hash.slice(1) || "lodowka").split("/");
+  const poprzedni = app.ekran;
+  app.ekran = nazwa in EKRANY ? nazwa : "lodowka";
+  app.argument = reszta.join("/") || null;
+  if (poprzedni !== app.ekran) EKRANY[poprzedni]?.poOpuszczeniu?.(app);
+  zamknijArkusz();
+  rysuj();
+  if (poprzedni !== app.ekran) window.scrollTo(0, 0);
+}
+
+// Jedna obsługa kliknięć dla całej apki: element z data-akcja wywołuje funkcję ekranu o tej nazwie.
+document.addEventListener("click", (e) => {
+  const cel = e.target.closest("[data-akcja]");
+  // Zwykły link wewnątrz elementu z akcją (np. przepis w szufladzie lodówki) ma pierwszeństwo.
+  const link = e.target.closest("a[href]");
+  if (cel && link && cel.contains(link)) return;
+  if (!cel) {
+    if (e.target.id === "arkusz") zamknijArkusz();
+    return;
+  }
+  const modul = EKRANY[app.ekran];
+  const akcja = modul.akcje?.[cel.dataset.akcja];
+  if (cel.dataset.akcja === "zamknij") return zamknijArkusz();
+  if (!akcja) return;
+  e.preventDefault();
+  akcja(app, cel, e);
+});
+
+document.addEventListener("change", (e) => {
+  const cel = e.target.closest("[data-zmiana]");
+  if (!cel) return;
+  EKRANY[app.ekran].akcje?.[cel.dataset.zmiana]?.(app, cel, e);
+});
+
+document.addEventListener("submit", (e) => {
+  const cel = e.target.closest("[data-wyslij]");
+  if (!cel) return;
+  e.preventDefault();
+  EKRANY[app.ekran].akcje?.[cel.dataset.wyslij]?.(app, cel, e);
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !document.getElementById("arkusz").hidden) zamknijArkusz();
+});
+
+async function start() {
+  ekran.innerHTML = `<p class="wyciszony">Wczytuję…</p>`;
+  try {
+    await wczytajKatalog();
+  } catch {
+    ekran.innerHTML = `<div class="naglowek"><h1>Brak danych planera</h1><p class="wyciszony">Otwórz planer raz z internetem, żeby zapisał się w telefonie.</p></div>`;
+    return;
+  }
+  porzadkuj(app.dane);
+  app.zapisz();
+  if (!app.dane.profil_ustawiony && !location.hash) location.hash = "#wiecej/profil";
+  window.addEventListener("hashchange", zAdresu);
+  zAdresu();
+  poprosOTrwalosc();
+  // Wersja offline: tylko poza komputerem dewelopera, żeby zmiany w kodzie od razu było widać.
+  if ("serviceWorker" in navigator && !["localhost", "127.0.0.1"].includes(location.hostname)) {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  }
+}
+
+start();

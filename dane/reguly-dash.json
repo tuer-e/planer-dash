@@ -1,0 +1,149 @@
+{
+  "_opis": "Jawne reguły diety DASH używane przez planer. Źródła: tabela porcji DASH (NHLBI, 'Your Guide to Lowering Your Blood Pressure with DASH'), zgodna z opisem DASH na mp.pl; zasady diety przy hipercholesterolemii z mp.pl (artykuł 88067, aktualizacja 08.02.2023). Gdy źródła się różnią, obowiązuje reguła ostrzejsza. Liczby porcji są na dzień, chyba że okres = 'tydzien'. Plik można edytować; testy sprawdzają jego poprawność.",
+  "wersja": 2,
+  "grupy": [
+    {
+      "id": "zboza",
+      "nazwa": "Produkty zbożowe (najlepiej pełnoziarniste)",
+      "porcja": "1 kromka chleba (ok. 30 g), ½ szklanki ugotowanej kaszy, ryżu lub makaronu, 30 g płatków",
+      "okres": "dzien"
+    },
+    {
+      "id": "warzywa",
+      "nazwa": "Warzywa",
+      "porcja": "1 szklanka surowych liściastych, ½ szklanki pokrojonych surowych lub gotowanych, ½ szklanki soku warzywnego",
+      "okres": "dzien"
+    },
+    {
+      "id": "owoce",
+      "nazwa": "Owoce",
+      "porcja": "1 średni owoc, ½ szklanki świeżych lub mrożonych, ¼ szklanki suszonych, ½ szklanki soku 100%",
+      "okres": "dzien"
+    },
+    {
+      "id": "nabial",
+      "nazwa": "Nabiał chudy lub beztłuszczowy",
+      "porcja": "1 szklanka mleka, jogurtu lub kefiru (250 ml), 40 g sera",
+      "okres": "dzien"
+    },
+    {
+      "id": "bialko_zwierzece",
+      "nazwa": "Chude mięso, drób, ryby, jaja",
+      "porcja": "30 g ugotowanego mięsa, drobiu lub ryby, 1 jajko",
+      "okres": "dzien"
+    },
+    {
+      "id": "orzechy_straczki",
+      "nazwa": "Orzechy, nasiona, rośliny strączkowe",
+      "porcja": "⅓ szklanki orzechów (ok. 40 g), 2 łyżki nasion lub masła orzechowego, ½ szklanki ugotowanych strączków",
+      "okres": "tydzien"
+    },
+    {
+      "id": "tluszcze",
+      "nazwa": "Tłuszcze i oleje",
+      "porcja": "1 łyżeczka oleju lub miękkiej margaryny, 1 łyżka majonezu light, 2 łyżki lekkiego dressingu",
+      "okres": "dzien"
+    },
+    {
+      "id": "slodycze",
+      "nazwa": "Słodycze i cukry dodane",
+      "porcja": "1 łyżka cukru, dżemu lub miodu, ½ szklanki sorbetu",
+      "okres": "tydzien"
+    }
+  ],
+  "poziomy_kaloryczne": [
+    {
+      "kcal": 1600,
+      "porcje": {
+        "zboza": [6, 6], "warzywa": [3, 4], "owoce": [4, 4], "nabial": [2, 3],
+        "bialko_zwierzece": [0, 6], "orzechy_straczki": [3, 3], "tluszcze": [2, 2], "slodycze": [0, 3]
+      }
+    },
+    {
+      "kcal": 1800,
+      "porcje": {
+        "zboza": [6, 6], "warzywa": [3, 4], "owoce": [4, 4], "nabial": [2, 3],
+        "bialko_zwierzece": [0, 6], "orzechy_straczki": [4, 4], "tluszcze": [2, 3], "slodycze": [0, 5]
+      }
+    },
+    {
+      "kcal": 2000,
+      "porcje": {
+        "zboza": [6, 8], "warzywa": [4, 5], "owoce": [4, 5], "nabial": [2, 3],
+        "bialko_zwierzece": [0, 6], "orzechy_straczki": [4, 5], "tluszcze": [2, 3], "slodycze": [0, 5]
+      }
+    },
+    {
+      "kcal": 2600,
+      "porcje": {
+        "zboza": [10, 11], "warzywa": [5, 6], "owoce": [5, 6], "nabial": [3, 3],
+        "bialko_zwierzece": [0, 6], "orzechy_straczki": [7, 7], "tluszcze": [3, 3], "slodycze": [0, 14]
+      }
+    }
+  ],
+  "limity": {
+    "sod_mg_dzien_domyslny": 2300,
+    "sod_mg_dzien_obnizony": 1500,
+    "czerwone_mieso_razy_tydzien_max": 2,
+    "ryby_razy_tydzien_cel": 2,
+    "tluste_ryby_morskie_razy_tydzien_min": 2,
+    "jaja_cale_tydzien_max": 3,
+    "cholesterol_mg_dzien_max": 200,
+    "tluszcz_nasycony_proc_kcal_max": 6,
+    "tluszcz_proc_kcal_max": 27,
+    "bialko_proc_kcal": 18,
+    "weglowodany_proc_kcal": 55,
+    "blonnik_g_dzien_min": 30,
+    "alkohol_porcje_tydzien_max": 7
+  },
+  "klasy_produktow": {
+    "_opis": "Każdy produkt w katalogu dostaje jedną klasę. Planer stosuje ją automatycznie; produkt niewskazany można dodać tylko ręcznie i z ostrzeżeniem.",
+    "zalecane": {
+      "planowanie": "bez_ograniczen",
+      "przyklady": [
+        "pieczywo razowe i pełnoziarniste", "płatki owsiane", "kasze gruboziarniste", "brązowy ryż", "makaron pełnoziarnisty",
+        "warzywa świeże i mrożone", "owoce świeże, mrożone i suszone bez cukru", "soki bez dodatku cukru i soli",
+        "mleko, jogurt, kefir, skyr do 1% tłuszczu", "chudy twaróg i chude sery", "białko jaj",
+        "ryby gotowane, pieczone, z rusztu (bez skóry)", "indyk i kurczak bez skóry", "królik", "cielęcina", "dziczyzna",
+        "soczewica", "fasola", "ciecierzyca", "groch", "tofu",
+        "olej rzepakowy", "oliwa", "orzechy włoskie", "migdały", "siemię lniane", "sezam", "pestki słonecznika",
+        "zioła i przyprawy bez soli", "musztarda", "zupy warzywne", "chude wywary mięsne"
+      ]
+    },
+    "ograniczone": {
+      "planowanie": "max_razy_tydzien",
+      "max_razy_tydzien": 2,
+      "przyklady": [
+        "białe pieczywo", "chuda wołowina", "jagnięcina", "chuda szynka", "kiełbasa drobiowa",
+        "ryby wędzone", "małże", "nabiał półtłusty (1,5–2%)", "sery półtłuste", "całe jaja",
+        "ziemniaki pieczone lub smażone na oleju rzepakowym", "orzechy laskowe, ziemne, pistacje",
+        "ciasta domowe na oleju", "chałwa", "alkohol"
+      ]
+    },
+    "niewskazane": {
+      "planowanie": "nigdy_automatycznie",
+      "przyklady": [
+        "kiełbasy", "salami", "kabanosy", "parówki", "pasztety", "boczek", "baleron", "podroby i wędliny podrobowe",
+        "mięso z widocznym tłuszczem", "kaczka", "gęś",
+        "krewetki", "kalmary", "ikra", "ryby smażone na niewłaściwym tłuszczu",
+        "pełne mleko", "śmietana", "sery pełnotłuste", "jogurt i kefir pełnotłusty", "zabielacze do kawy",
+        "masło", "smalec", "słonina", "margaryny twarde", "olej kokosowy i palmowy", "majonez",
+        "frytki", "chipsy", "warzywa solone i konserwowe", "croissanty", "przemysłowe ciasta, ciastka i drożdżówki",
+        "czekolada", "lody", "orzechy solone", "fast food", "zupy i sosy instant", "zupy zaprawiane śmietaną"
+      ]
+    }
+  },
+  "preferencje_planowania": [
+    "Źródła błonnika rozpuszczalnego codziennie: owies lub jęczmień, strączki, jabłka, cytrusy.",
+    "Tłuste ryby morskie (śledź, makrela, łosoś, sardynki) co najmniej 2 razy w tygodniu.",
+    "Tłuszcze zwierzęce zastępowane olejem rzepakowym, oliwą lub miękką margaryną.",
+    "Sól zastępowana ziołami i przyprawami; zabielanie zup chudym mlekiem, jogurtem lub maślanką.",
+    "Przepisy z jajami w wersji z przewagą białek (np. 1 całe jajko + 2 białka)."
+  ],
+  "wykluczenia_twarde": [
+    {
+      "tag": "sol_potasowa",
+      "powod": "Zamiennik soli z chlorkiem potasu. Przy lekach z grupy inhibitorów ACE może nadmiernie podnieść potas. Nigdy nie proponować."
+    }
+  ]
+}

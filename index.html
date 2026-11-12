@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0B0B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Planer DASH">
+<title>Planer DASH</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="ikona.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="ikona-180.png">
+<link rel="stylesheet" href="styl.css">
+</head>
+<body>
+<main id="ekran" tabindex="-1"></main>
+<nav class="nawigacja" aria-label="Ekrany">
+  <a href="#lodowka" data-ekran="lodowka">Lodówka</a>
+  <a href="#gotowanie" data-ekran="gotowanie">Gotowanie</a>
+  <a href="#tydzien" data-ekran="tydzien">Tydzień</a>
+  <a href="#wiecej" data-ekran="wiecej">Więcej</a>
+</nav>
+<div id="arkusz" class="arkusz" hidden></div>
+<p id="powiadomienie" class="powiadomienie" role="status" aria-live="polite"></p>
+<script type="module" src="app/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "Planer DASH",
+  "short_name": "Planer DASH",
+  "lang": "pl",
+  "start_url": "./#lodowka",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0B0B0B",
+  "theme_color": "#0B0B0B",
+  "icons": [
+    {"src": "ikona.svg", "sizes": "any", "type": "image/svg+xml"},
+    {"src": "ikona-180.png", "sizes": "180x180", "type": "image/png"},
+    {"src": "ikona-512.png", "sizes": "512x512", "type": "image/png"}
+  ]
+}
