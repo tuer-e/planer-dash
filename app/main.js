@@ -105,7 +105,15 @@ async function start() {
   poprosOTrwalosc();
   // Wersja offline: tylko poza komputerem dewelopera, żeby zmiany w kodzie od razu było widać.
   if ("serviceWorker" in navigator && !["localhost", "127.0.0.1"].includes(location.hostname)) {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
+    // Gdy na GitHubie jest nowa wersja: sprawdź przy każdym powrocie do planera, a po podmianie przeładuj raz.
+    const mialStara = Boolean(navigator.serviceWorker.controller);
+    let przeladowano = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (mialStara && !przeladowano) { przeladowano = true; location.reload(); }
+    });
+    navigator.serviceWorker.register("sw.js", { updateViaCache: "none" }).then((rej) => {
+      document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") rej.update().catch(() => {}); });
+    }).catch(() => {});
   }
 }
 
