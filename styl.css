@@ -390,3 +390,17 @@ body.gotowanie-poziomo main {
 .szuflada { margin-top: 16px; background: #181818; border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 2px; }
 .szuflada .cichy-link { font-size: 15px; color: var(--wyciszony); padding: 8px 0; min-height: 0; }
 @media (prefers-reduced-motion: reduce) { .drzwi { transition: none; } }
+
+/* --- Gotowanie razem --- */
+.kafel.cudzy { cursor: default; background: #1C1C1C; color: var(--ciemny); }
+.kafel.cudzy.bierny { background: repeating-linear-gradient(135deg, #222 0 4px, #181818 4px 8px); }
+.kafel.cudzy.minal { background: #141414; color: transparent; }
+.got-razem .kafel { flex-direction: column; justify-content: flex-start; gap: 1px; }
+.got-razem .kafel span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; font-size: 12px; line-height: 1.25; }
+.got-razem .kafel .danie { opacity: 0.75; }
+.got-postep { height: 3px; border-radius: 2px; background: #222; }
+.got-postep span { display: block; height: 3px; border-radius: 2px; background: var(--wyciszony); }
+.osoba-podzial { display: flex; flex-direction: column; gap: 5px; }
+.pasek-pracy { display: block; height: 6px; border-radius: 3px; background: #1C1C1C; }
+.pasek-pracy span { display: block; height: 6px; border-radius: 3px; background: #3A3A3A; }
+.przycisk.wybrany-wybor { background: var(--sredni); color: var(--tekst); }

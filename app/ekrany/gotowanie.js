@@ -3,7 +3,8 @@
 import { slotyJedzone } from "../../silnik/generator.js";
 import { etykietaKroku, koniecPlanu, krokiDania, uloz } from "../harmonogram.js";
 import { przepisy, tenTydzien, wlozDoLodowki } from "../stan.js";
-import { esc, krotkaNazwa, odmiana, pokazArkusz, powiadom, zamknijArkusz } from "../narzedzia.js";
+import { esc, kopiujTekst, krotkaNazwa, odmiana, pokazArkusz, powiadom, zamknijArkusz } from "../narzedzia.js";
+import { adresZaproszenia, czytajKod, godzina, ileOsob, kodZaproszenia, MAKS_OSOB, NAZWY_OSOB, planOsoby, podzielDania } from "../razem.js";
 
 let zegar = null;
 let blokada = null;
@@ -171,6 +172,11 @@ function karta(b, sesja, dania, bloki, m) {
 }
 
 export function rysuj(app) {
+  if (app.argument?.startsWith("razem/")) {
+    const kod = app.argument.slice(6);
+    const sesja = app.dane.gotowanie;
+    if (!(sesja?.start && sesja.razem?.kod === kod)) return rysujDolaczenie(app, kod);
+  }
   if (app.argument?.startsWith("przepis/") && !app.dane.gotowanie?.start) {
     const id = decodeURIComponent(app.argument.slice(8));
     if (przepisy()[id]) return rysujStart(app, [id]);
@@ -194,6 +200,7 @@ function rysujStart(app, ids) {
       <span class="wyciszony">Ułóż tydzień, a tutaj zobaczysz plan poniedziałkowego gotowania krok po kroku. Pojedynczy przepis ugotujesz z listy przepisów.</span>
       <div class="przyciski"><a class="przycisk glowny" href="#tydzien">Ułóż tydzień</a><a class="link" href="#wiecej/przepisy">przepisy</a></div></div>`;
   }
+  if (zaproszenie && ids.length > 1) return rysujZaproszenie(app, ids);
   const dania = przygotuj(ids);
   const plan0 = uloz(dania);
   const razem = Math.round(koniecPlanu(plan0));
@@ -202,7 +209,8 @@ function rysujStart(app, ids) {
   const gora = `<div class="got-gora"><b>Ok. ${odmiana(razem, "minuta", "minuty", "minut")}</b><span class="wyciszony maly">${ids.length > 1 ? "dania gotują się równolegle" : "jeden przepis"}</span></div>`;
   const kartaHtml = `<p class="co">Na start · ${esc(dania[pierwszy.danie].nazwa)}</p><p class="krok-tekst">${esc(pierwszy.tekst)}</p>
     <div class="rzad"><button type="button" class="przycisk glowny" data-akcja="zacznij" data-dania="${ids.join(",")}">Zaczynam</button></div>
-    <p class="ciemny maly">Ekran nie zgaśnie, dopóki gotujesz. Minutnik zadzwoni, gdy planer jest na ekranie.</p>`;
+    <p class="ciemny maly">Ekran nie zgaśnie, dopóki gotujesz. Minutnik zadzwoni, gdy planer jest na ekranie.</p>
+    ${ids.length > 1 ? `<button type="button" class="link" data-akcja="razemOtworz">gotujemy razem — podziel dania między osoby</button>` : ""}`;
   const os = gora + (poziomo() ? osPozioma(dania, bloki, 0, pierwszy) : osPionowa(dania, bloki, 0, pierwszy));
   return uloz2(os, kartaHtml);
 }
@@ -211,9 +219,12 @@ function rysujGotowanie(app, sesja) {
   const { dania, m, przyszle, wTrakcie, zrobione } = plan(sesja);
   const bloki = uklad(wszystkieBloki(dania, m, przyszle, wTrakcie, zrobione));
   const koniec = Math.max(m, koniecPlanu(bloki));
-  const gora = sesja.koniecMin != null
-    ? `<div class="got-gora"><b>Gotowe</b><span class="wyciszony maly">w ${odmiana(Math.round(sesja.koniecMin), "minutę", "minuty", "minut")}</span></div>`
-    : `<div class="got-gora"><b>Minuta ${Math.floor(m)}</b><span class="wyciszony maly">do końca ok. ${Math.max(0, Math.round(koniec - m))} min</span></div>`;
+  const z = sesja.razem;
+  const koniecWszystkich = z ? Math.max(koniec, ...z.grupy.map((g, k) => (k === z.ja ? 0 : planOsoby(g).koniec))) : koniec;
+  let gora = sesja.koniecMin != null
+    ? `<div class="got-gora"><b>${z ? "Twoja część gotowa" : "Gotowe"}</b><span class="wyciszony maly">w ${odmiana(Math.round(sesja.koniecMin), "minutę", "minuty", "minut")}</span></div>`
+    : `<div class="got-gora"><b>${m < 0 ? `Start za ${Math.ceil(-m)} min` : `Minuta ${Math.floor(m)}`}</b><span class="wyciszony maly">${z ? `${ileOsob(z.grupy.length)} · ` : ""}do końca ok. ${Math.max(0, Math.round(koniecWszystkich - Math.max(m, 0)))} min</span></div>`;
+  if (z) gora += `<div class="got-postep" aria-hidden="true"><span style="width:${Math.min(100, Math.max(0, m) / Math.max(1, koniecWszystkich) * 100).toFixed(1)}%"></span></div>`;
   const koniecGotowania = !wTrakcie.length && !przyszle.length;
   const pokazany = koniecGotowania ? null : coPokazac(bloki, sesja, dania, m);
   let kartaHtml;
@@ -225,8 +236,160 @@ function rysujGotowanie(app, sesja) {
   } else {
     kartaHtml = karta(pokazany, sesja, dania, bloki, m);
   }
-  const os = gora + (poziomo() ? osPozioma(dania, bloki, m, pokazany) : osPionowa(dania, bloki, m, pokazany));
+  if (z) {
+    kartaHtml += coRobiaInni(z, m);
+    if (z.ja === 0) kartaHtml += `<button type="button" class="link" data-akcja="razemUdostepnij">wyślij zaproszenie jeszcze raz</button>`;
+  }
+  const os = gora + (poziomo() ? osPozioma(dania, bloki, m, pokazany) : z ? osRazem(sesja, dania, bloki, m, pokazany) : osPionowa(dania, bloki, m, pokazany));
   return uloz2(os, kartaHtml) + (koniecGotowania ? "" : `<button type="button" class="link" data-akcja="przerwij">przerwij gotowanie</button>`);
+}
+
+// --- Gotowanie razem: zaproszenie, dołączanie i oś z kolumną dla każdej osoby ---
+
+let zaproszenie = null; // {osoby, za} — ekran zapraszania przed startem
+
+function nowaSesja(ids, start, tydzien, razem = null) {
+  return {
+    start, dania: ids,
+    postep: ids.map(() => ({ nastepny: 0, wolneOd: 0, ostatniStart: 0 })),
+    wTrakcie: [], zrobione: [], tydzien, ...(razem ? { razem } : {}),
+  };
+}
+
+function rysujZaproszenie(app, ids) {
+  document.body.classList.remove("gotowanie-poziomo");
+  const maks = Math.min(MAKS_OSOB, ids.length);
+  const n = Math.min(zaproszenie.osoby, maks);
+  const grupy = podzielDania(ids, n);
+  const plany = grupy.map(planOsoby);
+  const razem = Math.round(Math.max(...plany.map((p) => p.koniec)));
+  const sam = Math.round(planOsoby(ids).koniec);
+  const start = Date.now() + zaproszenie.za * 60000;
+  const maksPraca = Math.max(...plany.map((p) => p.praca), 1);
+  return `<header class="naglowek"><h1>Gotujemy razem</h1>
+      <p class="wyciszony">${esc(przygotuj(ids).map((d) => d.nazwa).join(", "))}</p></header>
+    <section class="sekcja"><span class="ciemny maly">Ile osób gotuje</span>
+      <div class="rzad" role="group" aria-label="Ile osób gotuje" style="gap:8px">${[1, 2, 3].filter((k) => k <= maks).map((k) => `
+        <button type="button" class="przycisk${k === n ? " wybrany-wybor" : ""}" aria-pressed="${k === n}" data-akcja="razemOsoby" data-n="${k}" style="min-width:56px">${k === 1 ? "sam" : k}</button>`).join("")}</div></section>
+    <section class="sekcja"><span class="ciemny maly">Kto co robi — każdy gotuje swoje dania od początku do końca</span>
+      ${grupy.map((g, k) => `<div class="osoba-podzial">
+        <div class="rozsun"><b class="${k === 0 ? "jasny" : ""}">${NAZWY_OSOB[k]}</b><span class="ciemny maly">ok. ${plany[k].praca} min przy garnku</span></div>
+        <span class="wyciszony">${esc(plany[k].dania.map((d) => d.nazwa).join(", "))}</span>
+        <span class="pasek-pracy" aria-hidden="true"><span style="width:${Math.round(plany[k].praca / maksPraca * 100)}%"></span></span></div>`).join("")}
+      <span>${n === 1 ? `Razem ok. ${sam} min` : `Razem ok. ${razem} min (sam: ok. ${sam})`}</span></section>
+    <div class="rozsun"><span>Start ${godzina(start)} · ${zaproszenie.za ? `za ${zaproszenie.za} min` : "teraz"}</span>
+      <span class="rzad"><button type="button" class="link" data-akcja="razemStart" data-o="-5">wcześniej</button>
+        <button type="button" class="link" data-akcja="razemStart" data-o="5">później</button></span></div>
+    ${n === 1
+      ? `<button type="button" class="przycisk glowny szeroki" data-akcja="zacznij" data-dania="${ids.join(",")}">Zaczynam</button>`
+      : `<button type="button" class="przycisk glowny szeroki" data-akcja="razemWyslij" data-dania="${ids.join(",")}">Wyślij zaproszenie</button>
+         <p class="ciemny maly">Druga osoba dostaje link, otwiera go w Safari i nic nie instaluje. Telefony nie łączą się ze sobą: każdy liczy ten sam plan od wspólnej godziny startu.</p>`}
+    <button type="button" class="link" data-akcja="razemZamknij">wróć</button>`;
+}
+
+function rysujDolaczenie(app, kod) {
+  document.body.classList.remove("gotowanie-poziomo");
+  const z = czytajKod(kod);
+  if (!z) {
+    return `<div class="najpierw"><h1>Ten link nie działa</h1>
+      <span class="wyciszony">Link do wspólnego gotowania jest niepełny albo pochodzi z innej wersji planera. Poproś o nowy.</span></div>`;
+  }
+  const wszystkie = z.grupy.flat().map((id) => planOsoby([id]).dania[0].nazwa);
+  const zaIle = Math.round((z.start - Date.now()) / 60000);
+  const kiedy = zaIle > 0 ? `start ${godzina(z.start)} · za ${zaIle} min` : zaIle === 0 ? `start ${godzina(z.start)} · teraz` : `trwa od ${-zaIle} min`;
+  const trwa = app.dane.gotowanie?.start ? `<p class="ciemny maly">Masz otwarte inne gotowanie — dołączenie je zakończy.</p>` : "";
+  const czesc = (k) => planOsoby(z.grupy[k]);
+  if (z.grupy.length === 2) {
+    return `<div class="najpierw"><span class="wyciszony maly">Zaproszenie do gotowania</span>
+        <h1>${esc(wszystkie.join(", "))}</h1><span class="wyciszony">${kiedy}</span></div>
+      <section class="sekcja"><span class="ciemny maly">Twoja część</span>
+        <span class="jasny" style="font-size:19px">${esc(czesc(1).dania.map((d) => d.nazwa).join(", "))}</span>
+        <span class="wyciszony">${odmiana(czesc(1).bloki.length, "krok", "kroki", "kroków")} · ok. ${czesc(1).praca} min przy garnku</span></section>
+      <button type="button" class="przycisk glowny szeroki" data-akcja="razemDolacz" data-ja="1">Dołączam</button>${trwa}
+      <p class="ciemny maly">Nie musisz nic instalować. Ekran nie zgaśnie, dopóki gotujecie, a minutniki zadzwonią, gdy planer jest na ekranie.</p>`;
+  }
+  return `<div class="najpierw"><span class="wyciszony maly">Zaproszenie do gotowania we troje</span>
+      <h1>${esc(wszystkie.join(", "))}</h1><span class="wyciszony">${kiedy}</span></div>
+    <section class="sekcja"><span class="ciemny maly">Którą osobą jesteś? Ustalcie to między sobą.</span>
+      ${[1, 2].map((k) => `<button type="button" class="przycisk szeroki" style="justify-content:space-between;gap:12px;text-align:left" data-akcja="razemDolacz" data-ja="${k}">
+        <span>${NAZWY_OSOB[k]}: ${esc(czesc(k).dania.map((d) => d.nazwa).join(", "))}</span><span class="ciemny maly">ok. ${czesc(k).praca} min</span></button>`).join("")}</section>${trwa}
+    <p class="ciemny maly">Nie musisz nic instalować. Wszystko zostaje w Twoim telefonie.</p>`;
+}
+
+// Co robią pozostałe osoby według planu (telefony nie wiedzą o sobie nic więcej).
+function cudzeBloki(z, m) {
+  return z.grupy.flatMap((g, k) => (k === z.ja ? [] : planOsoby(g).bloki.map((b) => ({
+    ...b, osoba: k, etykieta: etykietaKroku(b.tekst), nazwaDania: planOsoby(g).dania[b.danie].nazwa, minal: b.koniec <= m,
+  }))));
+}
+
+function coRobiaInni(z, m) {
+  return z.grupy.map((g, k) => {
+    if (k === z.ja) return "";
+    const bloki = planOsoby(g).bloki.filter((b) => b.aktywny);
+    const teraz = bloki.find((b) => b.start <= m && m < b.koniec);
+    const potem = bloki.find((b) => b.start > m);
+    const b = teraz ?? potem;
+    const kto = k === 0 && z.ja !== 0 ? "Osoba, która zaprosiła" : NAZWY_OSOB[k];
+    if (!b) return `<p class="ciemny maly">${kto}: swoja część gotowa.</p>`;
+    return `<p class="ciemny maly">${kto} ${teraz ? "teraz" : `za ${Math.ceil(b.start - m)} min`}: ${esc(planOsoby(g).dania[b.danie].nazwa.toLowerCase())}, ${esc(etykietaKroku(b.tekst))}</p>`;
+  }).join("");
+}
+
+// Oś 2A: kolumna „Ty”, kolumny pozostałych osób i wąski pas „samo się robi” po prawej.
+function osRazem(sesja, dania, bloki, m, pokazany) {
+  const z = sesja.razem;
+  const H = 340;
+  const mOs = Math.max(m, -2);
+  const od = Math.max(-2, mOs - 10);
+  const px = H / 50;
+  const y = (t) => (t - od) * px;
+  const n = z.grupy.length;
+  const SAMO = 48;
+  const kol = `((100% - 34px - ${SAMO}px - ${n * 6}px) / ${n})`;
+  const kolumna = (osoba) => (osoba === z.ja ? 0 : osoba < z.ja ? osoba + 1 : osoba);
+  const lewo = (osoba) => `calc(34px + ${kolumna(osoba)} * (${kol} + 6px))`;
+  const moje = bloki.map((b) => ({ ...b, osoba: z.ja, moj: true }));
+  const wszystkie = [...moje, ...cudzeBloki(z, m)].filter((b) => y(b.koniec) > -2 && y(b.start) < H + 2);
+  // Kroki „samo się robi” wszystkich osób dzielą wąski pas; nachodzące na siebie stają obok siebie.
+  const bierne = wszystkie.filter((b) => !b.aktywny).sort((a, b) => a.start - b.start);
+  const tory = [];
+  for (const b of bierne) {
+    let t = tory.findIndex((koniec) => koniec <= b.start);
+    if (t < 0) { t = tory.length; tory.push(0); }
+    tory[t] = b.koniec;
+    b.tor = t;
+  }
+  const szerToru = (SAMO - (Math.max(tory.length, 1) - 1) * 2) / Math.max(tory.length, 1);
+  const kafle = wszystkie.map((b) => {
+    const wys = (b.koniec - b.start) * px - 3;
+    const poz = b.aktywny
+      ? `left:${lewo(b.osoba)};width:calc(${kol})`
+      : `left:calc(100% - ${SAMO}px + ${(b.tor * (szerToru + 2)).toFixed(1)}px);width:${szerToru.toFixed(1)}px`;
+    const styl = `top:${y(b.start).toFixed(1)}px;height:${wys.toFixed(1)}px;${poz}`;
+    if (!b.moj) {
+      const napis = b.aktywny && wys >= 26 && !b.minal ? `${wys >= 40 ? `<span class="danie">${esc(b.nazwaDania)}</span>` : ""}<span>${esc(b.etykieta)}</span>` : "";
+      return `<span class="kafel cudzy ${b.aktywny ? "aktywny" : "bierny"}${b.minal ? " minal" : ""}" style="${styl}" aria-hidden="true">${napis}</span>`;
+    }
+    const napis = b.aktywny && wys >= 26 && b.stan !== "zrobiony"
+      ? `${wys >= 40 ? `<span class="danie">${esc(dania[b.danie].nazwa)}</span>` : ""}<span>${esc(b.etykieta)}</span>` : "";
+    return `<button type="button" class="${klasyKafla(b, pokazany)}" data-akcja="wybierz" data-klucz="${klucz(b)}" aria-label="${esc(dania[b.danie].nazwa)}: ${esc(b.etykieta)}" style="${styl}">${napis}</button>`;
+  });
+  const podzialka = [];
+  for (let t = Math.ceil(od / 10) * 10; t <= od + 50; t += 10) if (t >= 0) podzialka.push(`<span class="got-podzialka" style="left:0;top:${(y(t) - 7).toFixed(1)}px">${t}'</span>`);
+  const naglowki = [...Array(n).keys()].sort((a, b) => kolumna(a) - kolumna(b)).map((k) => `<span${k === z.ja ? ' class="jasny"' : ""}>${k === z.ja ? "Ty" : k === 0 ? "Zaprasza" : NAZWY_OSOB[k]}</span>`);
+  return `<div class="got-kolumny" style="grid-template-columns:34px repeat(${n},minmax(0,1fr)) ${SAMO}px"><span></span>${naglowki.join("")}<span>samo</span></div>
+    <div class="got-os got-pion got-razem" style="height:${H}px" aria-label="Oś czasu">${podzialka.join("")}${kafle.join("")}
+      <span class="teraz-linia" style="left:30px;right:0;height:2px;top:${(y(mOs) - 1).toFixed(1)}px"></span></div>`;
+}
+
+// Link przez okno udostępniania (AirDrop, Wiadomości…), a gdy go nie ma — do schowka.
+function udostepnijZaproszenie(sesja) {
+  const z = sesja.razem;
+  const url = adresZaproszenia(z.kod);
+  const tekst = `Gotujemy razem: ${przygotuj(z.grupy.flat()).map((d) => d.nazwa).join(", ")}. Start ${godzina(sesja.start)}.`;
+  if (navigator.share) navigator.share({ title: "Gotujemy razem", text: tekst, url }).catch(() => {});
+  else kopiujTekst(`${tekst} ${url}`).then(() => powiadom("Link skopiowany — wklej go drugiej osobie."));
 }
 
 // --- Minutniki, dźwięk i ekran, który nie gaśnie ---
@@ -306,13 +469,51 @@ export const akcje = {
     wybrany = null;
     app.odswiez();
   },
+  razemOtworz(app) {
+    zaproszenie = { osoby: 2, za: 5 };
+    app.odswiez();
+  },
+  razemZamknij(app) {
+    zaproszenie = null;
+    app.odswiez();
+  },
+  razemOsoby(app, cel) {
+    zaproszenie.osoby = Number(cel.dataset.n);
+    app.odswiez();
+  },
+  razemStart(app, cel) {
+    zaproszenie.za = Math.max(0, Math.min(120, zaproszenie.za + Number(cel.dataset.o)));
+    app.odswiez();
+  },
+  razemWyslij(app, cel) {
+    const ids = cel.dataset.dania.split(",");
+    const grupy = podzielDania(ids, zaproszenie.osoby);
+    const start = Math.round((Date.now() + zaproszenie.za * 60000) / 1000) * 1000;
+    const kod = kodZaproszenia(start, grupy);
+    app.dane.gotowanie = nowaSesja(grupy[0], start, tenTydzien(), { grupy, ja: 0, kod });
+    zaproszenie = null;
+    pik();
+    app.zapisz();
+    udostepnijZaproszenie(app.dane.gotowanie);
+    app.idz(`#gotowanie/razem/${kod}`);
+  },
+  razemUdostepnij(app) {
+    udostepnijZaproszenie(app.dane.gotowanie);
+  },
+  razemDolacz(app, cel) {
+    const z = czytajKod(app.argument?.slice(6));
+    if (!z) return;
+    const ja = Number(cel.dataset.ja);
+    poOpuszczeniu();
+    app.dane.gotowanie = nowaSesja(z.grupy[ja], z.start, null, { grupy: z.grupy, ja, kod: z.kod });
+    pik(); // pierwszy dźwięk po stuknięciu odblokowuje dźwięk w Safari
+    app.zapisz();
+    app.odswiez();
+  },
   zacznij(app, cel) {
     const ids = cel.dataset.dania.split(",");
-    app.dane.gotowanie = {
-      start: Date.now(), dania: ids,
-      postep: ids.map(() => ({ nastepny: 0, wolneOd: 0, ostatniStart: 0 })),
-      wTrakcie: [], zrobione: [], tydzien: ids.length > 1 ? tenTydzien() : null,
-    };
+    zaproszenie = null;
+    app.dane.gotowanie = nowaSesja(ids, Date.now(), ids.length > 1 ? tenTydzien() : null);
     pik(); // pierwszy dźwięk po stuknięciu odblokowuje dźwięk w Safari
     app.zapisz();
     akcje.startKroku(app, { dataset: { danie: String(przygotuj(ids).length > 0 ? uloz(przygotuj(ids))[0].danie : 0) } });
@@ -353,11 +554,14 @@ export const akcje = {
   koniec(app) {
     const sesja = app.dane.gotowanie;
     if (sesja.tydzien && app.dane.tygodnie[sesja.tydzien] && !app.dane.tygodnie[sesja.tydzien].ugotowano) wlozDoLodowki(app.dane, sesja.tydzien);
+    const wTygodniu = Boolean(sesja.tydzien);
     app.dane.gotowanie = null;
     poOpuszczeniu();
     app.zapisz();
-    powiadom("Porcje są w lodówce i zamrażarce.");
-    app.idz("#lodowka");
+    if (wTygodniu) {
+      powiadom("Porcje są w lodówce i zamrażarce.");
+      app.idz("#lodowka");
+    } else app.idz("#gotowanie");
   },
   przerwij() {
     pokazArkusz(`<h1>Przerwać gotowanie?</h1><p class="wyciszony">Postęp i minutniki znikną. Porcje nie trafią do lodówki.</p>
@@ -369,6 +573,6 @@ export const akcje = {
     poOpuszczeniu();
     zamknijArkusz();
     app.zapisz();
-    app.odswiez();
+    app.idz("#gotowanie");
   },
 };

@@ -3,7 +3,7 @@
 import { wartosciPorcji } from "../../silnik/katalog.js";
 import { doPodania, krokiDania } from "../harmonogram.js";
 import { dopiszDoZakupow, kontekst, tenTydzien } from "../stan.js";
-import { dodaj, esc, odmiana, porcjeTxt, powiadom, zakresTygodnia } from "../narzedzia.js";
+import { dodaj, esc, kopiujTekst, odmiana, porcjeTxt, powiadom, zakresTygodnia } from "../narzedzia.js";
 
 let porcjeDoZakupow = null;
 let ostatniPrzepis = null;
@@ -36,7 +36,8 @@ export function rysuj(app) {
   const tydzien = tydzienDoZakupow(app);
   return `<header class="naglowek">${wroc}<h1>${esc(p.nazwa)}</h1>
       <p class="wyciszony">${odmiana(p.porcje, "porcja", "porcje", "porcji")} · ok. ${p.czas_min} min${p.na_zapas ? ` · lodówka ${odmiana(p.trwalosc_dni, "dzień", "dni", "dni")}` : ""}${p.mrozi_sie ? " · mrozi się" : ""}</p></header>
-    <a class="przycisk glowny szeroki" href="#gotowanie/przepis/${encodeURIComponent(id)}">Gotuj krok po kroku</a>
+    <div class="rzad"><a class="przycisk glowny" href="#gotowanie/przepis/${encodeURIComponent(id)}">Gotuj krok po kroku</a>
+      <button type="button" class="link" data-akcja="udostepnij" data-id="${esc(id)}" data-nazwa="${esc(p.nazwa)}">udostępnij przepis</button></div>
     <section class="sekcja"><h2>Składniki (na ${porcjeTxt(p.porcje)})</h2><ul class="skladniki">${p.skladniki.map(([idProduktu, , miara]) => `
       <li><span>${esc(ctx.produkty[idProduktu]?.nazwa ?? idProduktu)}</span><span class="wyciszony" style="text-align:right">${esc(miara)}</span></li>`).join("")}</ul></section>
     <section class="sekcja"><h2>Przygotowanie</h2><ol class="kroki">${krokiDania(p).map((k) => `<li>${esc(k.tekst)}</li>`).join("")}</ol></section>
@@ -55,6 +56,12 @@ export function rysuj(app) {
 }
 
 export const akcje = {
+  // Link do przepisu: druga osoba otwiera go w Safari, bez instalowania planera.
+  udostepnij(app, cel) {
+    const url = `${location.origin}${location.pathname}#przepis/${encodeURIComponent(cel.dataset.id)}`;
+    if (navigator.share) navigator.share({ title: cel.dataset.nazwa, url }).catch(() => {});
+    else kopiujTekst(url).then(() => powiadom("Link do przepisu skopiowany."));
+  },
   wroc(app) {
     if (history.length > 1) history.back();
     else app.idz("#wiecej/przepisy");

@@ -23,7 +23,9 @@ export const app = {
     rysuj();
   },
   idz(adres) {
-    location.hash = adres;
+    // Ten sam adres nie wywoła zmiany — wtedy tylko przerysuj ekran.
+    if (location.hash === adres) rysuj();
+    else location.hash = adres;
   },
 };
 
