@@ -2,7 +2,8 @@
 import { opcjePodmiany, porcje, slotyJedzone } from "../../silnik/generator.js";
 import { listaZakupow } from "../../silnik/zakupy.js";
 import { kontekst, planZDopisanymi, tenTydzien, ulozTydzien, usunDopisane, zamienDanie } from "../stan.js";
-import { dodaj, dzienKrotko, dzis, esc, kopiujTekst, nazwaDnia, odmiana, pokazArkusz, porcjeTxt, powiadom, zakresTygodnia, zamknijArkusz, zl } from "../narzedzia.js";
+import { dodaj, dzis, esc, kopiujTekst, odmiana, pokazArkusz, porcjeTxt, powiadom, zakresTygodnia, zamknijArkusz, zl } from "../narzedzia.js";
+import { kafelDnia, przelacz, stanDnia, takieSame, zPlanu } from "../wyjazdy.js";
 
 const WARIANTY_OPIS = { A: "pon–śr", B: "czw–pt", C: "sob–pon" };
 let wyjazdySzkic = null; // dni wyjazdu wybrane przed ułożeniem planu
@@ -22,17 +23,13 @@ function przelacznikTygodni(nastepny) {
   </nav>`;
 }
 
-function dniWyjazdu(app, od, wybrane) {
+function dniWyjazdu(app, od, miejsca) {
   const { dom, wyjazd } = app.dane.profil;
   return `<div class="sekcja">
     <h2>Gdzie jesteś</h2>
-    <div class="dni" style="grid-template-columns:repeat(7,minmax(0,1fr))">${[1, 2, 3, 4, 5, 6, 7].map((d) => {
-      const poza = wybrane.includes(d);
-      const data = dodaj(od, d);
-      return `<button type="button" class="dzien" aria-pressed="${poza}" data-akcja="przelaczDzien" data-dzien="${d}" aria-label="${nazwaDnia(data)}: ${poza ? esc(wyjazd) : esc(dom)}">
-        <b>${dzienKrotko(data)}</b><small>${poza ? esc(wyjazd).slice(0, 6) : "dom"}</small></button>`;
-    }).join("")}</div>
-    <p class="wyciszony maly">W poniedziałek zakupy i gotowanie. Stuknij dni wyjazdu (${esc(wyjazd)}).</p>
+    <div class="dni" style="grid-template-columns:repeat(7,minmax(0,1fr))">${[1, 2, 3, 4, 5, 6, 7].map((d) =>
+      kafelDnia(d, dodaj(od, d), stanDnia(miejsca, d), dom, wyjazd, "przelaczDzien")).join("")}</div>
+    <p class="wyciszony maly">W poniedziałek zakupy i gotowanie. Stukaj dzień, żeby zmienić miejsce; przy połowie dnia górny napis to rano, dolny wieczór.</p>
   </div>`;
 }
 
@@ -50,17 +47,17 @@ export function rysuj(app) {
   if (!plan) {
     if (wyjazdySzkic === null || wyjazdySzkic.od !== od) {
       const poprzedni = app.dane.tygodnie[dodaj(od, -7)];
-      wyjazdySzkic = { od, dni: poprzedni ? [...poprzedni.poza_domem] : [] };
+      wyjazdySzkic = { od, ...zPlanu(poprzedni) };
     }
-    czesci.push(dniWyjazdu(app, od, wyjazdySzkic.dni));
+    czesci.push(dniWyjazdu(app, od, wyjazdySzkic));
     czesci.push(`<button type="button" class="przycisk glowny szeroki" data-akcja="uloz">Ułóż plan</button>
       <p class="wyciszony maly">Planer wybierze dania na poniedziałkowe gotowanie, kolacje bez gotowania i śniadania, w budżecie ${zl(app.dane.profil.budzet_tydzien_zl)}.</p>`);
     return czesci.join("");
   }
 
   const ctx = kontekst(app.dane, od);
-  const zmienioneDni = wyjazdySzkic && wyjazdySzkic.od === od && wyjazdySzkic.dni.join() !== plan.poza_domem.join();
-  czesci.push(dniWyjazdu(app, od, zmienioneDni ? wyjazdySzkic.dni : plan.poza_domem));
+  const zmienioneDni = wyjazdySzkic && wyjazdySzkic.od === od && !takieSame(wyjazdySzkic, zPlanu(plan));
+  czesci.push(dniWyjazdu(app, od, zmienioneDni ? wyjazdySzkic : zPlanu(plan)));
   if (zmienioneDni) {
     czesci.push(`<button type="button" class="przycisk glowny szeroki" data-akcja="uloz">Ułóż od nowa z tymi dniami</button>`);
   }
@@ -151,8 +148,8 @@ export const akcje = {
   przelaczDzien(app, cel) {
     const { od } = wybranyTydzien(app);
     const d = Number(cel.dataset.dzien);
-    if (!wyjazdySzkic || wyjazdySzkic.od !== od) wyjazdySzkic = { od, dni: [...(app.dane.tygodnie[od]?.poza_domem ?? [])] };
-    wyjazdySzkic.dni = wyjazdySzkic.dni.includes(d) ? wyjazdySzkic.dni.filter((x) => x !== d) : [...wyjazdySzkic.dni, d].sort((a, b) => a - b);
+    if (!wyjazdySzkic || wyjazdySzkic.od !== od) wyjazdySzkic = { od, ...zPlanu(app.dane.tygodnie[od]) };
+    wyjazdySzkic = { od, ...przelacz(wyjazdySzkic, d) };
     app.odswiez();
   },
   uloz(app, cel) {
@@ -161,8 +158,8 @@ export const akcje = {
     cel.disabled = true;
     cel.textContent = "Układam…";
     setTimeout(() => {
-      const dni = wyjazdySzkic && wyjazdySzkic.od === od ? wyjazdySzkic.dni : (app.dane.tygodnie[od]?.poza_domem ?? []);
-      ulozTydzien(app.dane, od, dni);
+      const m = wyjazdySzkic && wyjazdySzkic.od === od ? wyjazdySzkic : zPlanu(app.dane.tygodnie[od]);
+      ulozTydzien(app.dane, od, m.dni, m.pol);
       wyjazdySzkic = null;
       app.zapisz();
       app.odswiez();

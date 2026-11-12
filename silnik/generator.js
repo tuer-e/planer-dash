@@ -233,6 +233,20 @@ export function dniWDomu(trybWeekendu, poza = null) {
   return [...Array(LICZBA_DNI).keys()].filter((d) => !poza.includes(d));
 }
 
+// Pół dnia poza domem: {dzień: "wieczor"} — rano w domu, wieczorem wyjazd (kolacja poza domem);
+// {dzień: "rano"} — rano wyjazd, wieczorem w domu (śniadanie, przekąska i obiad poza domem).
+export const POLOWKI = ["rano", "wieczor"];
+
+export function pozaPosilek(polowki, d, posilek) {
+  const p = polowki?.[d];
+  if (!p) return false;
+  return p === "wieczor" ? posilek === "kolacja" : posilek !== "kolacja";
+}
+
+export function polowkiPlanu(plan) {
+  return plan.poza_pol ?? {};
+}
+
 export function pozaDomem(plan) {
   if ("poza_domem" in plan) return [...plan.poza_domem];
   return plan.tryb_weekendu === "poza_domem" ? [...WEEKEND] : [];
@@ -287,10 +301,11 @@ export function zamrozone(grupy, ctx) {
   return suma(grupy.filter((g) => g.przepis).map((g) => porcje(g, slotyJedzone(g).filter((s) => zZamrazarki(g, s[0], ctx)))));
 }
 
-export function szkielet(trybWeekendu, usuniete = [], ust = null, poza = null, zamrazarka = null, ctx = null) {
+export function szkielet(trybWeekendu, usuniete = [], ust = null, poza = null, zamrazarka = null, ctx = null, polowki = {}) {
   ust = ust || DOMYSLNY_PONIEDZIALEK;
   const wDomu = new Set(dniWDomu(trybWeekendu, poza));
-  const miejsca = (posilek, od = 0) => [...Array(LICZBA_DNI).keys()].filter((d) => d >= od && wDomu.has(d) && posilkiWDniu(d, ust).includes(posilek));
+  const jeszWDomu = (d, posilek) => wDomu.has(d) && posilkiWDniu(d, ust).includes(posilek) && !pozaPosilek(polowki, d, posilek);
+  const miejsca = (posilek, od = 0) => [...Array(LICZBA_DNI).keys()].filter((d) => d >= od && jeszWDomu(d, posilek));
   const wieczorem = ust.gotowanie === "wieczorem";
   const obiady = miejsca("obiad", wieczorem ? 1 : 0);
   const kolacje = miejsca("kolacja");
@@ -335,7 +350,7 @@ export function szkielet(trybWeekendu, usuniete = [], ust = null, poza = null, z
   for (const d of bezGarnkow) grupy.push({ id: `kolacja_${d}`, posilek: "kolacja", rodzaj: "kolacja", sloty: [[d, "kolacja"]] });
   for (const posilek of ["sniadanie", "przekaska"]) {
     for (const [litera, dni] of WARIANTY) {
-      const sloty = dni.filter((d) => wDomu.has(d) && posilkiWDniu(d, ust).includes(posilek)).map((d) => [d, posilek]);
+      const sloty = dni.filter((d) => jeszWDomu(d, posilek)).map((d) => [d, posilek]);
       if (sloty.length) grupy.push({ id: `${posilek}_${litera}`, posilek, rodzaj: "wariant", sloty });
     }
   }
@@ -547,6 +562,17 @@ export function sprawdzPozaDomem(poza) {
   return [...new Set(poza)].sort((a, b) => a - b);
 }
 
+export function sprawdzPolowki(polowki, poza) {
+  if (typeof polowki !== "object" || polowki === null || Array.isArray(polowki)) throw new Error("Pół dnia poza domem: zły format.");
+  const wynik = {};
+  for (const [k, v] of Object.entries(polowki)) {
+    const d = Number(k);
+    if (!Number.isInteger(d) || d < 1 || d >= LICZBA_DNI || !POLOWKI.includes(v)) throw new Error("Pół dnia poza domem: wybierz rano albo wieczór, od wtorku do poniedziałku.");
+    if (!poza.includes(d)) wynik[d] = v;
+  }
+  return wynik;
+}
+
 export function sprawdzZamrazarke(zamrazarka, ctx) {
   if (typeof zamrazarka !== "object" || zamrazarka === null || Array.isArray(zamrazarka)) throw new Error("Zamrażarka: zły format.");
   const wynik = {};
@@ -558,16 +584,17 @@ export function sprawdzZamrazarke(zamrazarka, ctx) {
   return wynik;
 }
 
-export function generujTydzien(od, trybWeekendu, ctx, { usuniete = [], mamWDomu = [], poniedzialek = null, poza = null, zamrazarka = null } = {}) {
+export function generujTydzien(od, trybWeekendu, ctx, { usuniete = [], mamWDomu = [], poniedzialek = null, poza = null, zamrazarka = null, polowki = {} } = {}) {
   if (dzienTygodnia(od) !== 0) throw new Error("Tydzień planu zaczyna się w poniedziałek.");
   const ust = sprawdzUstawienia(poniedzialek);
   if (poza == null) poza = trybWeekendu === "poza_domem" ? [...WEEKEND] : [];
   poza = sprawdzPozaDomem(poza);
+  polowki = sprawdzPolowki(polowki ?? {}, poza);
   if (trybWeekendu === "poza_domem") trybWeekendu = "sam";
   zamrazarka = sprawdzZamrazarke(zamrazarka ?? {}, ctx);
   ctx.ustawTryb(trybWeekendu);
   ctx.mamWDomu = new Set(mamWDomu);
-  let grupy = szkielet(trybWeekendu, usuniete, ust, poza, zamrazarka, ctx);
+  let grupy = szkielet(trybWeekendu, usuniete, ust, poza, zamrazarka, ctx, polowki);
   wybierzPartie(grupy, ctx);
   for (const g of grupy) if (g.rodzaj === "partia" && !g.przepis && slotyJedzone(g).length) wypelnij(grupy, g, ctx);
   for (const rodzaj of ["szybki", "kolacja", "wariant"]) {
@@ -585,6 +612,7 @@ export function generujTydzien(od, trybWeekendu, ctx, { usuniete = [], mamWDomu 
   return {
     wersja: WERSJA_PLANU, od, tryb_weekendu: trybWeekendu, poza_domem: poza, grupy,
     mam_w_domu: [...ctx.mamWDomu].sort(), poniedzialek: ust, z_zamrazarki: zZamrazarkiPoprzednich,
+    ...(Object.keys(polowki).length ? { poza_pol: polowki } : {}),
   };
 }
 
@@ -737,6 +765,7 @@ export function podsumuj(plan, ctx) {
   ctx.mamWDomu = new Set(plan.mam_w_domu ?? []);
   const ust = ustawienia(plan);
   const wDomu = new Set(dniWDomu(plan.tryb_weekendu, pozaDomem(plan)));
+  const polowki = polowkiPlanu(plan);
   const dni = [];
   for (let d = 0; d < LICZBA_DNI; d++) {
     const posilki = posilkiDnia(grupy, d);
@@ -754,7 +783,7 @@ export function podsumuj(plan, ctx) {
         miejsca.push({ posilek, stan: d === 0 ? "poprzedni_plan" : "nastepny_plan" });
         continue;
       }
-      if (!wDomu.has(d)) {
+      if (!wDomu.has(d) || pozaPosilek(polowki, d, posilek)) {
         miejsca.push({ posilek, stan: "poza_domem" });
         continue;
       }
@@ -777,7 +806,7 @@ export function podsumuj(plan, ctx) {
       });
     }
     dni.push({
-      indeks: d, nazwa: NAZWY_DNI[d], data: dodajDni(plan.od, d), poza_domem: !wDomu.has(d),
+      indeks: d, nazwa: NAZWY_DNI[d], data: dodajDni(plan.od, d), poza_domem: !wDomu.has(d), ...(polowki[d] ? { poza_pol: polowki[d] } : {}),
       osoby: osoby(d, plan.tryb_weekendu), miejsca, dodatki,
       cel_kcal: zaokr(ctx.cele.kcal * udzialDnia(grupy, d)),
       suma: Object.fromEntries(Object.entries(s).filter(([k]) => k !== "koszt_zl" && k !== "jaja_cale").map(([k, v]) => [k, zaokr(v, 1)])),

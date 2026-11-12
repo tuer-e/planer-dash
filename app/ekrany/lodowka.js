@@ -4,6 +4,7 @@ import {
   zamroz, zamrazarka, zjedz,
 } from "../stan.js";
 import { dataSlownie, dniaDopelniacz, dzienKrotko, dodaj, doKiedy, dzis, esc, krotkaNazwa, nazwaDnia, odmiana, porcjeTxt, pokazArkusz, powiadom, roznica, zamknijArkusz } from "../narzedzia.js";
+import { kafelDnia, przelacz, stanDnia, zPlanu } from "../wyjazdy.js";
 
 let ostatnio = null; // ostatnio zjedzona porcja — „Cofnij” przy jej karcie
 const arkusz = { osoby: 2, dni: 2 };
@@ -12,14 +13,28 @@ function nazwa(x) {
   return krotkaNazwa(przepisy()[x.przepis]?.nazwa ?? x.nazwa);
 }
 
+// „w piątek”, „we wtorek”, „w sobotę”
+function wDzien(data) {
+  const n = nazwaDnia(data);
+  return n === "wtorek" ? "we wtorek" : `w ${n.replace(/a$/, "ę")}`;
+}
+
 function wyjazdTekst(app, plan, dzisiaj) {
   if (!plan) return "";
+  const { dom, wyjazd } = app.dane.profil;
+  const m = zPlanu(plan);
   const dzien = roznica(dzisiaj, plan.od);
-  const nastepne = plan.poza_domem.filter((d) => d > dzien);
-  if (plan.poza_domem.includes(dzien)) return ` · dziś ${esc(app.dane.profil.wyjazd)}`;
-  if (!nastepne.length) return "";
-  const kiedy = dodaj(plan.od, nastepne[0]);
-  return ` · od ${roznica(kiedy, dzisiaj) === 1 ? "jutra" : dniaDopelniacz(kiedy)} ${esc(app.dane.profil.wyjazd)}`;
+  const teraz = stanDnia(m, dzien);
+  if (teraz === "caly") return ` · dziś ${esc(wyjazd)}`;
+  if (teraz === "wieczor") return ` · wieczorem ${esc(wyjazd)}`;
+  if (teraz === "rano") return ` · wieczorem ${esc(dom)}`;
+  const d = [...Array(8).keys()].find((x) => x > dzien && stanDnia(m, x) !== "dom");
+  if (d === undefined) return "";
+  const kiedy = dodaj(plan.od, d);
+  const jutro = roznica(kiedy, dzisiaj) === 1;
+  const stan = stanDnia(m, d);
+  if (stan === "caly") return ` · od ${jutro ? "jutra" : dniaDopelniacz(kiedy)} ${esc(wyjazd)}`;
+  return ` · ${jutro ? "jutro" : wDzien(kiedy)} ${stan === "wieczor" ? "wieczorem" : "rano"} ${esc(wyjazd)}`;
 }
 
 // Lodówka narysowana jak lodówka: na górze zamrażarka, niżej komora z półkami. Obie mają drzwi,
@@ -192,17 +207,19 @@ function arkuszPlanow(app) {
     return;
   }
   const dzisIdx = roznica(dzisiaj, od);
+  const m = zPlanu(plan);
+  const ileWDomu = (d) => ({ dom: 2, wieczor: 1, rano: 1, caly: 0 })[stanDnia(m, d)];
   const dni = [...Array(8).keys()].filter((d) => d >= Math.max(1, dzisIdx));
-  const wDomu = dni.filter((d) => !plan.poza_domem.includes(d));
-  const posilkiWDomu = wDomu.length * 2;
+  const posilkiWDomu = dni.reduce((suma, d) => suma + ileWDomu(d), 0);
   const dostepne = app.dane.lodowka.filter((x) => x.porcje > 0).reduce((s, x) => s + x.porcje, 0);
   // Przed wyjazdem: co zostanie w lodówce i zepsuje się, zanim wrócisz? Zakładamy, że do wyjazdu
   // jesz najpierw to, co ma najkrótszy termin (dziś zostaje jeszcze kolacja).
-  const wyjazdOd = plan.poza_domem.find((d) => d > dzisIdx);
+  const wyjazdOd = [...Array(8).keys()].find((d) => d > dzisIdx && ["caly", "wieczor"].includes(stanDnia(m, d)));
   const zepsujaSie = [];
   if (wyjazdOd !== undefined) {
-    const powrot = [...Array(8).keys()].find((d) => d > wyjazdOd && !plan.poza_domem.includes(d)) ?? 8;
-    let posilki = 1 + (wyjazdOd - dzisIdx - 1) * 2;
+    const powrot = [...Array(8).keys()].find((d) => d > wyjazdOd && ["dom", "rano"].includes(stanDnia(m, d))) ?? 8;
+    let posilki = 1 + [...Array(8).keys()].filter((d) => d > dzisIdx && d < wyjazdOd).reduce((suma, d) => suma + ileWDomu(d), 0)
+      + (stanDnia(m, wyjazdOd) === "wieczor" ? 1 : 0);
     for (const x of lodowka(app.dane).filter((y) => y.porcje > 0)) {
       const zjesz = Math.min(x.porcje, Math.max(0, posilki));
       posilki -= zjesz;
@@ -212,13 +229,8 @@ function arkuszPlanow(app) {
   }
   pokazArkusz(`
     <h1>Zmieniam plany</h1>
-    <p class="wyciszony">Stuknij dzień, żeby przełączyć: ${esc(dom)} albo ${esc(wyjazd)}.</p>
-    <div class="dni">${dni.map((d) => {
-      const poza = plan.poza_domem.includes(d);
-      const data = dodaj(od, d);
-      return `<button type="button" class="dzien" aria-pressed="${poza}" data-akcja="przelaczDzien" data-dzien="${d}" aria-label="${nazwaDnia(data)}: ${poza ? esc(wyjazd) : esc(dom)}">
-        <b>${dzienKrotko(data)}</b><small>${poza ? esc(wyjazd).slice(0, 6) : "dom"}</small></button>`;
-    }).join("")}</div>
+    <p class="wyciszony">Stukaj dzień, żeby zmienić miejsce: ${esc(dom)} albo ${esc(wyjazd)}, także na pół dnia (górny napis to rano, dolny wieczór).</p>
+    <div class="dni">${dni.map((d) => kafelDnia(d, dodaj(od, d), stanDnia(m, d), dom, wyjazd, "przelaczDzien")).join("")}</div>
     <p style="font-size:18px;font-weight:700">${posilkiWDomu > dostepne
       ? `W domu zjesz jeszcze ok. ${odmiana(posilkiWDomu, "obiad lub kolację", "obiady i kolacje", "obiadów i kolacji")}, a masz ${porcjeTxt(dostepne)}. Brakujące uzupełnisz kolacjami bez gotowania.`
       : `Masz ${porcjeTxt(dostepne)} na ${odmiana(posilkiWDomu, "posiłek", "posiłki", "posiłków")} w domu. Wystarczy.`}</p>
@@ -293,8 +305,10 @@ export const akcje = {
   },
   przelaczDzien(app, cel) {
     const plan = app.dane.tygodnie[tenTydzien()];
-    const d = Number(cel.dataset.dzien);
-    plan.poza_domem = plan.poza_domem.includes(d) ? plan.poza_domem.filter((x) => x !== d) : [...plan.poza_domem, d].sort((a, b) => a - b);
+    const nowe = przelacz(zPlanu(plan), Number(cel.dataset.dzien));
+    plan.poza_domem = nowe.dni;
+    if (Object.keys(nowe.pol).length) plan.poza_pol = nowe.pol;
+    else delete plan.poza_pol;
     app.zapisz();
     arkuszPlanow(app);
     app.odswiez();

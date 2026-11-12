@@ -177,6 +177,10 @@ p { margin: 0; }
 .dzien b { font-size: 15px; font-weight: 600; }
 .dzien small { font-size: 11px; }
 .dzien[aria-pressed="true"] { background: var(--cichy); color: var(--tekst); }
+/* Pół dnia: górny napis to rano, dolny wieczór; część poza domem ma jaśniejsze tło. */
+.dzien.stan-wieczor, .dzien.stan-rano { background: transparent; color: var(--wyciszony); gap: 3px; }
+.dzien small.pol { display: block; width: calc(100% - 6px); text-align: center; border-radius: 6px; padding: 1px 0; font-size: 11px; line-height: 1.3; }
+.dzien small.pol.poza { background: var(--cichy); color: var(--tekst); }
 
 /* Formularze */
 label.pole { display: flex; flex-direction: column; gap: 6px; font-size: 15px; color: var(--wyciszony); }
