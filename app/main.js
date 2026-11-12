@@ -13,6 +13,8 @@ let zakladka = "lodowka";
 const ekran = document.getElementById("ekran");
 
 export const app = {
+  wersja: "10",
+  pomiar: "",
   dane: wczytaj(),
   ekran: "lodowka",
   argument: null,
@@ -91,7 +93,28 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !document.getElementById("arkusz").hidden) zamknijArkusz();
 });
 
+// iPhone z planerem na ekranie początkowym czasem sam kończy ekran nad kreską na dole, a mimo to podaje,
+// że trzeba zostawić pod nią miejsce. Wtedy pasek zakładek wisiał wysoko i był dwa razy za gruby.
+// Mierzymy, czy ekran planera sięga do samego dołu; jeśli nie, nie dokładamy już miejsca pod paskiem.
+function dopasujDol() {
+  const sonda = document.createElement("div");
+  sonda.style.cssText = "position:fixed;left:0;bottom:0;width:1px;height:env(safe-area-inset-bottom);visibility:hidden;pointer-events:none";
+  document.body.append(sonda);
+  const margines = sonda.offsetHeight;
+  sonda.remove();
+  const naEkranie = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+  const pionowo = innerHeight >= innerWidth;
+  const wysEkranu = pionowo ? Math.max(screen.width, screen.height) : Math.min(screen.width, screen.height);
+  const brakuje = wysEkranu - innerHeight;
+  const krotszy = naEkranie && margines > 0 && brakuje >= margines - 2;
+  document.documentElement.style.setProperty("--dol", krotszy ? "0px" : `${margines}px`);
+  app.pomiar = `ekran ${wysEkranu}, planer ${innerHeight}, dół ${margines}${krotszy ? ", poprawka" : ""}`;
+}
+
 async function start() {
+  dopasujDol();
+  addEventListener("resize", dopasujDol);
+  addEventListener("orientationchange", () => setTimeout(dopasujDol, 300));
   ekran.innerHTML = `<p class="wyciszony">Wczytuję…</p>`;
   try {
     await wczytajKatalog();

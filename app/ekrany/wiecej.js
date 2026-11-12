@@ -26,7 +26,8 @@ export function rysuj(app) {
       <a class="wiersz duzy" href="#wiecej/profil">Profil i cele</a>
       <a class="wiersz duzy" href="#wiecej/kopia"><span>Kopia zapasowa</span>${dawnoKopia ? `<span class="opis">warto zrobić</span>` : ""}</a>
     </nav>
-    <a class="link wyciszony" href="#wiecej/uwaga" style="align-self:flex-start">Zgłoś uwagę</a>`;
+    <a class="link wyciszony" href="#wiecej/uwaga" style="align-self:flex-start">Zgłoś uwagę</a>
+    <p class="wyciszony maly">Wersja ${app.wersja}${app.pomiar ? ` · ${app.pomiar}` : ""}</p>`;
 }
 
 // --- Przepisy ---
