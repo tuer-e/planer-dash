@@ -84,14 +84,27 @@ function etykietaKafla(b, m, miejsce) {
   return `<span>${esc(b.etykieta)}</span>${czas}`;
 }
 
+// Oś pokazuje całe gotowanie; widać 50 minut naraz, resztę przewijasz palcem.
+// Sama ustawia się tak, żeby „teraz” było blisko góry (10 minut wstecz), chyba że przed chwilą przewijałeś.
+const OKNO_H = 340;
+const PX = OKNO_H / 50;
+const OD = -2;
+function zakresOsi(bloki, m) {
+  return Math.max(OD + 50, Math.max(m, 0) + 40, koniecPlanu(bloki) + 4);
+}
+function przewijana(m, wysokosc, srodek) {
+  const cel = Math.max(0, (Math.max(m, OD) - OD - 10) * PX);
+  return `<div class="got-przewijana" style="height:${OKNO_H}px" data-cel="${cel.toFixed(0)}">${srodek.replace("__WYS__", `${wysokosc.toFixed(0)}px`)}</div>`;
+}
+
 function osPionowa(dania, bloki, m, pokazany) {
-  const H = 340;
-  const od = Math.max(-2, m - 10); // na starcie bez pustego miejsca nad osią
-  const px = H / 50;
+  const od = OD;
+  const px = PX;
+  const H = (zakresOsi(bloki, m) - od) * px;
   const y = (t) => (t - od) * px;
   const n = dania.length;
   const kol = `((100% - 34px - ${(n - 1) * 6}px) / ${n})`;
-  const kafle = bloki.filter((b) => y(b.koniec) > -2 && y(b.start) < H + 2).map((b) => {
+  const kafle = bloki.map((b) => {
     const wys = (b.koniec - b.start) * px - 3;
     const ulamek = !b.rownolegly ? [0, 1] : b.glowny ? [0, 0.7] : [0.7, 0.3];
     const lewo = `calc(34px + ${b.danie} * (${kol} + 6px) + ${ulamek[0]} * ${kol} + ${ulamek[0] ? 3 : 0}px)`;
@@ -100,10 +113,10 @@ function osPionowa(dania, bloki, m, pokazany) {
       style="top:${y(b.start).toFixed(1)}px;height:${wys.toFixed(1)}px;left:${lewo};width:${szer}">${wys >= 26 ? etykietaKafla(b, m, !b.glowny ? 0 : wys >= 56 ? 100 : 60) : ""}</button>`;
   });
   const podzialka = [];
-  for (let t = Math.ceil(od / 10) * 10; t <= od + 50; t += 10) if (t >= 0) podzialka.push(`<span class="got-podzialka" style="left:0;top:${(y(t) - 7).toFixed(1)}px">${t}'</span>`);
+  for (let t = 0; t <= od + H / px; t += 10) podzialka.push(`<span class="got-podzialka" style="left:0;top:${(y(t) - 7).toFixed(1)}px">${t}'</span>`);
   return `<div class="got-kolumny" style="grid-template-columns:34px repeat(${n},minmax(0,1fr))"><span></span>${dania.map((d) => `<span>${esc(d.nazwa)}</span>`).join("")}</div>
-    <div class="got-os got-pion" style="height:${H}px" aria-label="Oś czasu">${podzialka.join("")}${kafle.join("")}
-      <span class="teraz-linia" style="left:30px;right:0;height:2px;top:${(y(m) - 1).toFixed(1)}px"></span></div>`;
+    ${przewijana(m, H, `<div class="got-os got-pion" style="height:__WYS__" aria-label="Oś czasu">${podzialka.join("")}${kafle.join("")}
+      <span class="teraz-linia" style="left:30px;right:0;height:2px;top:${(y(m) - 1).toFixed(1)}px"></span></div>`)}`;
 }
 
 function osPozioma(dania, bloki, m, pokazany) {
@@ -339,10 +352,11 @@ function coRobiaInni(z, m) {
 // Oś 2A: kolumna „Ty”, kolumny pozostałych osób i wąski pas „samo się robi” po prawej.
 function osRazem(sesja, dania, bloki, m, pokazany) {
   const z = sesja.razem;
-  const H = 340;
-  const mOs = Math.max(m, -2);
-  const od = Math.max(-2, mOs - 10);
-  const px = H / 50;
+  const mOs = Math.max(m, OD);
+  const od = OD;
+  const px = PX;
+  const cudze = cudzeBloki(z, m);
+  const H = (Math.max(zakresOsi(bloki, m), ...cudze.map((b) => b.koniec + 4)) - od) * px;
   const y = (t) => (t - od) * px;
   const n = z.grupy.length;
   const SAMO = 48;
@@ -350,7 +364,7 @@ function osRazem(sesja, dania, bloki, m, pokazany) {
   const kolumna = (osoba) => (osoba === z.ja ? 0 : osoba < z.ja ? osoba + 1 : osoba);
   const lewo = (osoba) => `calc(34px + ${kolumna(osoba)} * (${kol} + 6px))`;
   const moje = bloki.map((b) => ({ ...b, osoba: z.ja, moj: true }));
-  const wszystkie = [...moje, ...cudzeBloki(z, m)].filter((b) => y(b.koniec) > -2 && y(b.start) < H + 2);
+  const wszystkie = [...moje, ...cudze];
   // Kroki „samo się robi” wszystkich osób dzielą wąski pas; nachodzące na siebie stają obok siebie.
   const bierne = wszystkie.filter((b) => !b.aktywny).sort((a, b) => a.start - b.start);
   const tory = [];
@@ -376,11 +390,11 @@ function osRazem(sesja, dania, bloki, m, pokazany) {
     return `<button type="button" class="${klasyKafla(b, pokazany)}" data-akcja="wybierz" data-klucz="${klucz(b)}" aria-label="${esc(dania[b.danie].nazwa)}: ${esc(b.etykieta)}" style="${styl}">${napis}</button>`;
   });
   const podzialka = [];
-  for (let t = Math.ceil(od / 10) * 10; t <= od + 50; t += 10) if (t >= 0) podzialka.push(`<span class="got-podzialka" style="left:0;top:${(y(t) - 7).toFixed(1)}px">${t}'</span>`);
+  for (let t = 0; t <= od + H / px; t += 10) podzialka.push(`<span class="got-podzialka" style="left:0;top:${(y(t) - 7).toFixed(1)}px">${t}'</span>`);
   const naglowki = [...Array(n).keys()].sort((a, b) => kolumna(a) - kolumna(b)).map((k) => `<span${k === z.ja ? ' class="jasny"' : ""}>${k === z.ja ? "Ty" : k === 0 ? "Zaprasza" : NAZWY_OSOB[k]}</span>`);
   return `<div class="got-kolumny" style="grid-template-columns:34px repeat(${n},minmax(0,1fr)) ${SAMO}px"><span></span>${naglowki.join("")}<span>samo</span></div>
-    <div class="got-os got-pion got-razem" style="height:${H}px" aria-label="Oś czasu">${podzialka.join("")}${kafle.join("")}
-      <span class="teraz-linia" style="left:30px;right:0;height:2px;top:${(y(mOs) - 1).toFixed(1)}px"></span></div>`;
+    ${przewijana(m, H, `<div class="got-os got-pion got-razem" style="height:__WYS__" aria-label="Oś czasu">${podzialka.join("")}${kafle.join("")}
+      <span class="teraz-linia" style="left:30px;right:0;height:2px;top:${(y(mOs) - 1).toFixed(1)}px"></span></div>`)}`;
 }
 
 // Link przez okno udostępniania (AirDrop, Wiadomości…), a gdy go nie ma — do schowka.
@@ -424,8 +438,26 @@ document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible" && zegar) nieGasnij();
 });
 
+// Przewijanie osi: ekran odświeża się co sekundę, więc pamiętamy, gdzie ją zostawiłeś.
+const przewin = { kiedy: 0, top: 0, ustawione: -1 };
+const PAMIEC_PRZEWINIECIA_MS = 20000;
+function ustawPrzewiniecie() {
+  const el = document.querySelector(".got-przewijana");
+  if (!el) return;
+  const reczne = Date.now() - przewin.kiedy < PAMIEC_PRZEWINIECIA_MS;
+  el.scrollTop = reczne ? przewin.top : Number(el.dataset.cel);
+  przewin.ustawione = el.scrollTop;
+  el.addEventListener("scroll", () => {
+    if (Math.abs(el.scrollTop - przewin.ustawione) < 2) return; // to nasze ustawienie, nie palec
+    przewin.kiedy = Date.now();
+    przewin.top = el.scrollTop;
+    przewin.ustawione = -1;
+  }, { passive: true });
+}
+
 export function poNarysowaniu(app) {
   sledzObrot(app);
+  ustawPrzewiniecie();
   const sesja = app.dane.gotowanie;
   if (sesja?.start && !zegar) {
     nieGasnij();

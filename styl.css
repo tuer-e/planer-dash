@@ -20,9 +20,9 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; }
-/* Strona sama się nie przewija — przewija się tylko treść (main). Dzięki temu na iPhonie dolny pasek
+/* Strona sama się nie przewija — przewija się tylko treść (main), przypięta do ekranu tak jak pasek. Dzięki temu na iPhonie dolny pasek
    z zakładkami stoi w miejscu i nie podskakuje razem ze „sprężynowaniem” ekranu. */
-html, body { height: 100%; overflow: hidden; }
+html, body { overscroll-behavior: none; }
 body {
   margin: 0;
   background: var(--tlo);
@@ -47,8 +47,10 @@ body::before {
   z-index: 6;
 }
 main > * { flex-shrink: 0; }
+/* Treść leży na całym ekranie (jak dolny pasek), więc pasek zawsze jest na samym dole. */
 main {
-  height: 100%;
+  position: fixed;
+  inset: 0;
   overflow-y: auto;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
@@ -404,3 +406,6 @@ body.gotowanie-poziomo main {
 .pasek-pracy { display: block; height: 6px; border-radius: 3px; background: #1C1C1C; }
 .pasek-pracy span { display: block; height: 6px; border-radius: 3px; background: #3A3A3A; }
 .przycisk.wybrany-wybor { background: var(--sredni); color: var(--tekst); }
+
+/* Oś gotowania przewijana palcem w górę i w dół */
+.got-przewijana { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; position: relative; }
