@@ -164,6 +164,12 @@ function doZaczecia(bloki, sesja, dania) {
   return bloki.filter((b) => b.stan === "plan" && b.krok === sesja.postep[b.danie].nastepny && (!zajete(b.danie) || dania[b.danie].kroki[b.krok].rownolegly));
 }
 
+let notatki = {}; // Twoje notatki do przepisów — krótko w karcie „Teraz”
+function notatkaKarty(b, dania) {
+  const t = notatki[dania[b.danie].id];
+  return t ? `<p class="notatka-karty"><span class="ciemny">Twoja notatka:</span> ${esc(t)}</p>` : "";
+}
+
 function karta(b, sesja, dania, bloki, m) {
   const nazwa = esc(dania[b.danie].nazwa);
   const tlo = bloki.filter((x) => x.stan === "trwa" && klucz(x) !== klucz(b));
@@ -173,7 +179,7 @@ function karta(b, sesja, dania, bloki, m) {
     const zostalo = b.koniec - m;
     const zMinutnikiem = b.zCzasem || !b.aktywny;
     return `<p class="co">${nazwa} · ${zostalo <= 0 && zMinutnikiem ? "czas minął — sprawdź" : b.aktywny ? "przy garnku" : "samo się robi"}</p>
-      <p class="krok-tekst">${esc(b.tekst)}</p>
+      <p class="krok-tekst">${esc(b.tekst)}</p>${notatkaKarty(b, dania)}
       ${zMinutnikiem ? `<p class="minutnik" aria-live="off">${mmss(zostalo)}</p>` : ""}
       <div class="rzad"><button type="button" class="przycisk glowny" data-akcja="zrobione" data-i="${b.i}">Zrobione</button>
         ${zMinutnikiem ? `<button type="button" class="link" data-akcja="minuta" data-i="${b.i}">+1 min</button>` : ""}${wroc}</div>${wTle}`;
@@ -182,7 +188,7 @@ function karta(b, sesja, dania, bloki, m) {
     const mozna = doZaczecia(bloki, sesja, dania).some((x) => klucz(x) === klucz(b));
     const kiedy = b.start <= m + 0.5 ? "teraz" : `za ${Math.ceil(b.start - m)} min`;
     return `<p class="co">${nazwa} · ${mozna ? kiedy : "po poprzednim kroku"} · ${b.aktywny ? "przy garnku" : "samo się robi"}, ok. ${b.min} min</p>
-      <p class="krok-tekst">${esc(b.tekst)}</p>
+      <p class="krok-tekst">${esc(b.tekst)}</p>${notatkaKarty(b, dania)}
       <div class="rzad">${mozna ? `<button type="button" class="przycisk glowny" data-akcja="startKroku" data-danie="${b.danie}">Zaczynam ten krok</button>` : ""}${wroc}</div>${wTle}`;
   }
   return `<p class="co">${nazwa} · zrobione</p><p class="krok-tekst">${esc(b.tekst)}</p><div class="rzad">${wroc}</div>`;
@@ -233,6 +239,7 @@ function rysujStart(app, ids) {
 }
 
 function rysujGotowanie(app, sesja) {
+  notatki = app.dane.notatki ?? {};
   const { dania, m, przyszle, wTrakcie, zrobione } = plan(sesja);
   const bloki = uklad(wszystkieBloki(dania, m, przyszle, wTrakcie, zrobione));
   const koniec = Math.max(m, koniecPlanu(bloki));

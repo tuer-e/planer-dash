@@ -32,6 +32,7 @@ function puste() {
     kupione: {},
     dodatkowe: {},
     dopisane_produkty: {},
+    notatki: {},
     uwagi: [],
     ostatnia_kopia: null,
   };
@@ -107,6 +108,19 @@ export function zamienDanie(dane, od, idGrupy, idPrzepisu) {
 }
 
 // Dania dopisane do zakupów spoza planu (np. dla gości): {od: [{id, przepis, porcje}]}.
+// Twoje notatki do przepisów: {idPrzepisu: "tekst"}. Pusty tekst usuwa notatkę.
+export const MAKS_NOTATKI = 2000;
+export function ustawNotatke(dane, id, tekst) {
+  const t = String(tekst ?? "").trim().slice(0, MAKS_NOTATKI);
+  dane.notatki ??= {};
+  if (t) dane.notatki[id] = t;
+  else delete dane.notatki[id];
+}
+
+export function notatka(dane, id) {
+  return dane.notatki?.[id] ?? "";
+}
+
 export function dopiszDoZakupow(dane, od, przepis, ile) {
   (dane.dodatkowe[od] ?? (dane.dodatkowe[od] = [])).push({ id: noweId(), przepis, porcje: ile });
 }
