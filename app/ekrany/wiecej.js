@@ -1,6 +1,7 @@
 // Więcej: przepisy, profil, kopia zapasowa i mała „Zgłoś uwagę”.
 import { AKTYWNOSC, celeDzienne } from "../../silnik/cele.js";
 import { eksport, importuj, kontekst, przepisy, tenTydzien, wczytajKatalog } from "../stan.js";
+import { godzinyPosilkow, minuty, POSILKI_KUCHNI } from "../kuchnia.js";
 import { dzis, esc, kopiujTekst, odmiana, pokazArkusz, powiadom, roznica, zamknijArkusz } from "../narzedzia.js";
 
 let szukaj = "";
@@ -48,6 +49,7 @@ function rysujPrzepisy() {
 function rysujProfil(app) {
   const p = app.dane.profil;
   const pierwszy = !app.dane.profil_ustawiony;
+  const godziny = godzinyPosilkow(p);
   let cele = null;
   try { cele = celeDzienne(p, kontekst(app.dane, tenTydzien()).reguly); } catch { /* niepełny profil */ }
   // Pola liczbowe: tylko dodatnie liczby w rozsądnym zakresie (klawiatura bez minusa).
@@ -77,6 +79,11 @@ function rysujProfil(app) {
         ${pole("zamrazarka_pudelka", "Pudełek w zamrażarce")}
         ${pole("limit_sodu_mg", "Limit sodu (mg)")}
       </div>
+      <h2 class="ciemny maly" style="margin:8px 0 0">Pory posiłków</h2>
+      <div class="siatka2">
+        ${POSILKI_KUCHNI.map((k) => `<label class="pole">${POSILKI[k].replace(/^./, (z) => z.toUpperCase())}<input name="godz_${k}" type="time" value="${esc(godziny[k])}"></label>`).join("")}
+      </div>
+      <p class="wyciszony maly">Według nich Kuchnia podpowiada: rano blat, w porze przekąski plecak, w porze obiadu i kolacji lodówkę.</p>
       <label class="pole">Czego nie jesz (po przecinku)<input name="wykluczone" type="text" value="${esc((p.wykluczone ?? []).join(", "))}"></label>
       <p class="wyciszony maly">Planer pomija dania, w których jest taki produkt, np. „wieprzowina”, „łosoś”, „soczewica”. Działa od następnego układania tygodnia.</p>
       <p id="bledy-profilu" class="karta odwrocona" hidden></p>
@@ -147,6 +154,15 @@ export const akcje = {
     profil.aktywnosc = f.get("aktywnosc");
     profil.dom = String(f.get("dom")).trim() || "dom";
     profil.wyjazd = String(f.get("wyjazd")).trim() || "wyjazd";
+    // Godziny posiłków: pozostałe pola z Maca (np. godzina zakupów) zostają bez zmian.
+    profil.godziny = { ...(profil.godziny ?? {}) };
+    for (const k of POSILKI_KUCHNI) {
+      const v = String(f.get(`godz_${k}`) ?? "").slice(0, 5);
+      if (minuty(v) !== null) profil.godziny[k] = v;
+      else bledy.push(`Godzina: ${POSILKI[k]}.`);
+    }
+    const kolejno = POSILKI_KUCHNI.map((k) => minuty(profil.godziny[k]));
+    if (!bledy.length && kolejno.some((m, i) => i && m <= kolejno[i - 1])) bledy.push("Pory posiłków muszą iść po kolei: śniadanie, przekąska, obiad, kolacja.");
     profil.wykluczone = String(f.get("wykluczone")).split(",").map((s) => s.trim()).filter(Boolean);
     const pole = document.getElementById("bledy-profilu");
     if (bledy.length) {

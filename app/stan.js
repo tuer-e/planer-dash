@@ -31,6 +31,7 @@ function puste() {
     gotowanie: null,
     kupione: {},
     dodatkowe: {},
+    dopisane_produkty: {},
     uwagi: [],
     ostatnia_kopia: null,
   };

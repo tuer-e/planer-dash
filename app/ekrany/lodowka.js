@@ -1,10 +1,15 @@
-// Lodówka: co masz ugotowane, do kiedy jest dobre i co zjeść najpierw. Jesz, na co masz ochotę.
+// Kuchnia (dawniej Lodówka): lodówka z ugotowanymi porcjami, blat ze śniadaniami i plecak z przekąską.
+// Podpowiada miejsce według pory dnia, ale jesz, na co masz ochotę.
 import {
-  cofnijPrzelozenie, cofnijZjedzenie, kontekst, lodowka, przelozDoLodowki, przepisy, tenTydzien, wlozDoLodowki,
+  cofnijPrzelozenie, cofnijZjedzenie, lodowka, przelozDoLodowki, przepisy, tenTydzien, wlozDoLodowki,
   zamroz, zamrazarka, zjedz,
 } from "../stan.js";
-import { dataSlownie, dniaDopelniacz, dzienKrotko, dodaj, doKiedy, dzis, esc, krotkaNazwa, nazwaDnia, odmiana, porcjeTxt, pokazArkusz, powiadom, roznica, zamknijArkusz } from "../narzedzia.js";
+import { dataSlownie, dniaDopelniacz, dodaj, doKiedy, dzis, esc, krotkaNazwa, nazwaDnia, odmiana, porcjeTxt, pokazArkusz, powiadom, roznica, zamknijArkusz } from "../narzedzia.js";
 import { kafelDnia, przelacz, stanDnia, zPlanu } from "../wyjazdy.js";
+import {
+  coMasz, dopiszProdukt, godzinyPosilkow, krotkiProdukt, MIEJSCA, minuty, naBlacie, podpowiedz, produktyPrzepisu, propozycje,
+  wSpizarni, zPlanuNaDzien,
+} from "../kuchnia.js";
 
 let ostatnio = null; // ostatnio zjedzona porcja — „Cofnij” przy jej karcie
 const arkusz = { osoby: 2, dni: 2 };
@@ -37,11 +42,12 @@ function wyjazdTekst(app, plan, dzisiaj) {
   return ` · ${jutro ? "jutro" : wDzien(kiedy)} ${stan === "wieczor" ? "wieczorem" : "rano"} ${esc(wyjazd)}`;
 }
 
-// Lodówka narysowana jak lodówka: na górze zamrażarka, niżej komora z półkami. Obie mają drzwi,
-// które odsuwają się w bok po stuknięciu (zostaje pasek z uchwytem). Na drzwiach lodówki wisi
-// karteczka z tym, co zjeść najpierw — „Zjadłem porcję” działa bez otwierania drzwi.
-let otwarte = ""; // "lod" | "zam" | ""
+// Kuchnia narysowana na górze ekranu: lodówka, blat i plecak na haczyku. Podpowiadane miejsce (według pory dnia)
+// jest jaśniejsze; stuknięcie innego otwiera je pod rysunkiem. Lodówka pokazuje karteczkę „Najpierw” i półki.
+let miejsce = null; // miejsce wybrane ręcznie; null = to, które podpowiada pora dnia
 let wybrane = null; // id porcji przeniesionej na karteczkę stuknięciem półki
+let ostatniaPodpowiedz = "";
+let zegar = null;
 
 // Kafelki zamiast cyfr: jeden kafelek = jedna porcja.
 function kafle(n, rodzaj = "") {
@@ -71,10 +77,121 @@ function karteczka(app, x, dzisiaj, pierwsze, ileWZamrazarce, plan) {
         <button type="button" class="link" data-akcja="juzUgotowane">już ugotowane</button></div>`;
   }
   if (ileWZamrazarce) {
-    return `<h1>W lodówce pusto</h1><span class="wyciszony">Stuknij zamrażarkę i przełóż coś na jutro albo zrób kolację bez gotowania.</span>${cofnij}`;
+    return `<h1>W lodówce pusto</h1><span class="wyciszony">Przełóż coś z zamrażarki na jutro, a dziś zajrzyj na blat: tam jest coś bez gotowania.</span>${cofnij}`;
   }
   return `<h1>Lodówka jest pusta</h1><span class="wyciszony">Ułóż plan na tydzień: planer wybierze dania na poniedziałkowe gotowanie i zrobi listę zakupów.</span>
     <div class="przyciski"><a class="przycisk glowny" href="#tydzien">Ułóż tydzień</a></div>${cofnij}`;
+}
+
+function rysunekKuchni(wyb, pod) {
+  const przycisk = (co, rys) => `<button type="button" class="miejsce m-${co}${co === wyb ? " wybrane" : ""}${co === pod ? " podpowiadane" : ""}"
+      data-akcja="miejsce" data-co="${co}" aria-pressed="${co === wyb}" aria-label="${MIEJSCA[co]}${co === pod ? ", podpowiedź na teraz" : ""}">
+      <span class="rys" aria-hidden="true">${rys}</span><span class="podpis">${MIEJSCA[co]}</span></button>`;
+  return `<div class="kuchnia" role="group" aria-label="Kuchnia">
+    ${przycisk("lod", `<span class="ksztalt lod-korpus"><span class="lod-zam"></span><span class="detal lod-uchwyt g"></span><span class="detal lod-uchwyt d"></span></span>`)}
+    ${przycisk("blat", `<span class="detal sloik s1"></span><span class="detal sloik s2"></span><span class="owoc o1"></span><span class="owoc o2"></span><span class="owoc o3"></span><span class="detal miska"></span><span class="blat-gora"></span><span class="ksztalt szafka"></span>`)}
+    ${przycisk("plecak", `<span class="hak"></span><span class="detal ucho"></span><span class="ksztalt worek"></span><span class="detal klapa"></span><span class="detal kieszen"></span>`)}
+  </div>`;
+}
+
+// Wiersz propozycji: przepis, co z nim (masz wszystko / brakuje), i „dopisz do zakupów”.
+function propozycja(x, stan, dopisane) {
+  const p = stan.ctx.przepisy[x.id];
+  const zDopisanych = produktyPrzepisu(p, stan.ctx, stan.zamiany).filter((id) => dopisane.includes(id));
+  const brak = x.brakuje[0];
+  const opis = brak ? `brakuje: ${krotkiProdukt(stan.ctx.produkty[brak].nazwa)}`
+    : zDopisanych.length ? `dopisane do zakupów: ${zDopisanych.map((id) => krotkiProdukt(stan.ctx.produkty[id].nazwa)).join(", ")}`
+      : `masz wszystko · ok. ${p.czas_min} min`;
+  return `<div class="pozycja-kuchni"><a class="cichy-link" href="#przepis/${encodeURIComponent(x.id)}"><span>${esc(krotkaNazwa(p.nazwa, 60))}</span><span class="ciemny maly">${opis}</span></a>
+    ${brak ? `<button type="button" class="link" data-akcja="dopisz" data-id="${brak}" data-od="${stan.od}">dopisz do zakupów</button>` : ""}</div>`;
+}
+
+function grupa(tytul, tresc) {
+  return tresc ? `<div class="grupa-kuchni"><h2 class="ciemny maly">${tytul}</h2>${tresc}</div>` : "";
+}
+
+function daniePlanu(app, id, etykieta, opis) {
+  const p = przepisy()[id];
+  return `<span class="wyciszony maly">${etykieta}</span><h1>${esc(p.nazwa)}</h1>
+    <span class="wyciszony">${opis} · ok. ${p.czas_min} min</span>
+    <div class="przyciski"><a class="link" href="#przepis/${encodeURIComponent(id)}">przepis</a></div>`;
+}
+
+function panelBlat(app, pod, dzisiaj, maPorcje) {
+  const g = godzinyPosilkow(app.dane.profil);
+  const teraz = new Date();
+  const m = teraz.getHours() * 60 + teraz.getMinutes();
+  const jutroSn = pod.pora.jutro || m >= minuty(g.przekaska) - 30;
+  const dataSn = jutroSn ? dodaj(dzisiaj, 1) : dzisiaj;
+  const sn = zPlanuNaDzien(app.dane, "sniadanie", dataSn);
+  const stan = coMasz(app.dane, dataSn);
+  const dopisane = app.dane.dopisane_produkty?.[stan.od] ?? [];
+  const lista = (xs) => xs.map((x) => propozycja(x, stan, dopisane)).join("");
+  const bezGotowania = pod.bezGotowania && !maPorcje;
+  const czesci = [];
+  if (bezGotowania) {
+    const stanDzis = coMasz(app.dane, dzisiaj);
+    const prop = propozycje(stanDzis, { bezGotowania: true, ile: 4 });
+    const [pierwsza, ...reszta] = prop;
+    if (pierwsza) {
+      czesci.push(`<section class="karteczka">${daniePlanu(app, pierwsza.id, "Bez gotowania", pierwsza.brakuje.length ? `brakuje: ${krotkiProdukt(stanDzis.ctx.produkty[pierwsza.brakuje[0]].nazwa)}` : "masz wszystko")}</section>`);
+      czesci.push(grupa("Albo", reszta.map((x) => propozycja(x, stanDzis, app.dane.dopisane_produkty?.[stanDzis.od] ?? [])).join("")));
+    } else {
+      czesci.push(`<section class="karteczka"><span class="wyciszony maly">Bez gotowania</span><h1>Kanapki albo coś z zamrażarki</h1></section>`);
+    }
+    czesci.push(grupa("Jutro na śniadanie", sn ? `<a class="cichy-link" href="#przepis/${encodeURIComponent(sn)}">${esc(przepisy()[sn].nazwa)}</a>` : ""));
+  } else {
+    const etykieta = jutroSn ? "Jutro na śniadanie" : "Na śniadanie";
+    czesci.push(`<section class="karteczka">${sn ? daniePlanu(app, sn, etykieta, "z planu")
+      : `<span class="wyciszony maly">${etykieta}</span><h1>Śniadanie spoza planu</h1><span class="wyciszony">Coś z tego, co masz — poniżej.</span>`}</section>`);
+    czesci.push(grupa("Z tego, co masz, zrobisz też", lista(propozycje(stan, { posilek: "sniadanie", pomin: sn ? [sn] : [] }))));
+  }
+  const owoce = naBlacie(stan);
+  czesci.push(grupa("Na blacie", owoce.length ? `<p class="wyciszony">${esc(owoce.join(", "))}</p>` : ""));
+  const spizarnia = wSpizarni(app.dane, stan);
+  czesci.push(grupa("W spiżarni", spizarnia.length ? `<p class="wyciszony">${esc(spizarnia.slice(0, 8).join(", "))}${spizarnia.length > 8 ? ` i ${spizarnia.length - 8} innych` : ""}</p>` : ""));
+  return czesci.join("");
+}
+
+function panelPlecak(app, pod, dzisiaj, plan) {
+  const g = godzinyPosilkow(app.dane.profil);
+  const teraz = new Date();
+  const m = teraz.getHours() * 60 + teraz.getMinutes();
+  const jutro = pod.pora.jutro || m >= minuty(g.obiad) - 30;
+  const data = jutro ? dodaj(dzisiaj, 1) : dzisiaj;
+  const prz = zPlanuNaDzien(app.dane, "przekaska", data);
+  const stan = coMasz(app.dane, data);
+  const dopisane = app.dane.dopisane_produkty?.[stan.od] ?? [];
+  const etykieta = jutro ? "Jutro na przekąskę" : pod.pora.posilek === "przekaska" && !pod.pora.przed ? "Na przekąskę" : `Na przekąskę o ${g.przekaska.replace(/^0/, "")}`;
+  const czesci = [`<section class="karteczka">${prz ? daniePlanu(app, prz, etykieta, "z planu")
+    : `<span class="wyciszony maly">${etykieta}</span><h1>Przekąska spoza planu</h1><span class="wyciszony">Coś z tego, co masz — poniżej.</span>`}</section>`];
+  czesci.push(grupa("Albo, z tego, co masz", propozycje(stan, { posilek: "przekaska", pomin: prz ? [prz] : [] }).map((x) => propozycja(x, stan, dopisane)).join("")));
+  if (plan) {
+    const mj = zPlanu(plan);
+    const d = roznica(dzisiaj, plan.od);
+    const { wyjazd } = app.dane.profil;
+    const droga = stanDnia(mj, d) === "wieczor" ? `Dziś wieczorem jedziesz: ${esc(wyjazd)}. Weź przekąskę na drogę.`
+      : stanDnia(mj, d) === "dom" && stanDnia(mj, d + 1) === "caly" ? `Jutro jedziesz: ${esc(wyjazd)}. Spakuj przekąskę na drogę.` : "";
+    czesci.push(grupa("Na drogę", droga ? `<p class="wyciszony">${droga}</p>` : ""));
+  }
+  return czesci.join("");
+}
+
+function panelLodowka(app, d) {
+  const { dzisiaj, plan, wZamrazarce, rozmrazane, doJedzenia, zjedzone, naKarteczce, pierwsze } = d;
+  const bez = plan ? [...new Set(plan.grupy.filter((g) => ["kolacja", "szybki"].includes(g.rodzaj) && g.przepis).map((g) => g.przepis))] : [];
+  const polki = [...doJedzenia, ...rozmrazane].filter((x) => x !== naKarteczce).map((x) => `<button type="button" class="polka" data-akcja="naKarteczke" data-id="${x.id}" aria-label="${esc(nazwa(x))}, ${porcjeTxt(x.porcje)}">
+      <span class="polka-nazwa">${esc(nazwa(x))}</span>
+      <span class="polka-opis">${kafle(x.porcje, rozmrazaSie(x, dzisiaj) ? "roz" : "")}<span>${rozmrazaSie(x, dzisiaj) ? "rozmraża się, na jutro" : doKiedy(x.dobre_do, dzisiaj).replace("dobre ", "")}</span></span>
+    </button><span class="deska" aria-hidden="true"></span>`).join("");
+  return `<section class="karteczka" aria-label="Karteczka">${karteczka(app, naKarteczce, dzisiaj, pierwsze, wZamrazarce.length, plan)}</section>
+    ${grupa("Na półkach", polki)}
+    ${grupa("Zamrażarka", wZamrazarce.map((x) => `<div class="rozsun polka-zam">
+        <span class="polka-tekst"><span>${esc(nazwa(x))}</span>${kafle(x.porcje, "zam")}</span>
+        <button type="button" class="link" data-akcja="przeloz" data-id="${x.id}">na jutro</button></div>`).join(""))}
+    ${bez.length ? `<div class="szuflada"><span class="ciemny maly">Szuflada · bez gotowania</span>
+      ${bez.map((i) => `<a class="cichy-link" href="#przepis/${encodeURIComponent(i)}">${esc(przepisy()[i]?.nazwa ?? i)}</a>`).join("")}</div>` : ""}
+    ${zjedzone.length ? `<p class="ciemny maly">Zjedzone: ${zjedzone.map((x) => esc(nazwa(x))).join(", ")}</p>` : ""}`;
 }
 
 export function rysuj(app) {
@@ -90,66 +207,45 @@ export function rysuj(app) {
   const zjedzone = wLodowce.filter((x) => !x.porcje);
   const pierwsze = doJedzenia[0];
   const naKarteczce = dostepne.find((x) => x.id === wybrane) ?? pierwsze ?? null;
-  const reszta = doJedzenia.filter((x) => x !== naKarteczce);
-  const bez = plan ? [...new Set(plan.grupy.filter((g) => ["kolacja", "szybki"].includes(g.rodzaj) && g.przepis).map((g) => g.przepis))] : [];
-  const ctx = bez.length ? kontekst(app.dane, plan.od) : null;
-  const drzwiAttr = (co, opis) => `class="drzwi${otwarte === co ? " otwarte" : ""}" role="button" tabindex="0" aria-expanded="${otwarte === co}" aria-label="${opis}" data-akcja="drzwi" data-co="${co}"`;
-  const wnetrzeAttr = (co) => `class="wnetrze" data-akcja="zamknijDrzwi"${otwarte === co ? "" : " inert"}`;
 
-  const zamrazarkaHtml = `<div class="komora zam">
-      <div ${wnetrzeAttr("zam")}>
-        ${wZamrazarce.length ? wZamrazarce.map((x) => `<div class="rozsun polka-zam">
-          <span class="polka-tekst"><span>${esc(nazwa(x))}</span>${kafle(x.porcje, "zam")}</span>
-          <button type="button" class="link" data-akcja="przeloz" data-id="${x.id}">na jutro</button></div>`).join("")
-          : `<span class="wyciszony">W zamrażarce pusto.</span>`}
-      </div>
-      <div ${drzwiAttr("zam", "Zamrażarka")}><span class="uchwyt" aria-hidden="true"></span>
-        <span class="ciemny maly">Zamrażarka</span>
-        ${wZamrazarce.map((x) => `<span class="w-srodku"><span>${esc(nazwa(x))}</span>${kafle(x.porcje, "zam")}</span>`).join("")}
-        ${rozmrazane.length ? `<span class="ciemny maly">rozmraża się: ${rozmrazane.map((x) => esc(nazwa(x))).join(", ")}</span>` : ""}
-        ${!wZamrazarce.length && !rozmrazane.length ? `<span class="ciemny">pusto</span>` : ""}
-      </div>
-    </div>`;
+  const pod = podpowiedz(app.dane.profil, doJedzenia.length > 0);
+  // Gdy zmieni się pora dnia, ekran wraca do podpowiadanego miejsca.
+  const klucz = `${pod.miejsce}|${pod.powod}`;
+  if (ostatniaPodpowiedz && ostatniaPodpowiedz !== klucz) miejsce = null;
+  ostatniaPodpowiedz = klucz;
+  const wyb = miejsce ?? pod.miejsce;
 
-  const polki = [...doJedzenia, ...rozmrazane].map((x) => `<button type="button" class="polka" data-akcja="naKarteczke" data-id="${x.id}" aria-label="${esc(nazwa(x))}, ${porcjeTxt(x.porcje)}">
-      <span class="polka-nazwa">${esc(nazwa(x))}</span>
-      <span class="polka-opis">${kafle(x.porcje, rozmrazaSie(x, dzisiaj) ? "roz" : "")}<span>${rozmrazaSie(x, dzisiaj) ? "rozmraża się, na jutro" : doKiedy(x.dobre_do, dzisiaj).replace("dobre ", "")}</span></span>
-    </button><span class="deska" aria-hidden="true"></span>`).join("");
-  const lodowkaHtml = `<div class="komora lod">
-      <div ${wnetrzeAttr("lod")}>
-        ${polki || `<span class="wyciszony">Na półkach pusto.</span>`}
-        ${bez.length ? `<div class="szuflada"><span class="ciemny maly">Szuflada · bez gotowania</span>
-          ${bez.map((i) => `<a class="cichy-link" href="#przepis/${encodeURIComponent(i)}">${esc(ctx.przepisy[i].nazwa)}</a>`).join("")}</div>` : ""}
-        ${zjedzone.length ? `<p class="ciemny maly">Zjedzone dziś: ${zjedzone.map((x) => esc(nazwa(x))).join(", ")}</p>` : ""}
-      </div>
-      <div ${drzwiAttr("lod", "Lodówka")}><span class="uchwyt" aria-hidden="true"></span>
-        <section class="karteczka" aria-label="Karteczka">${karteczka(app, naKarteczce, dzisiaj, pierwsze, wZamrazarce.length, plan)}</section>
-        ${reszta.length ? `<div class="sekcja" style="gap:10px"><span class="ciemny maly">W środku też</span>
-          ${reszta.map((x) => `<span class="w-srodku"><span>${esc(nazwa(x))}</span>${kafle(x.porcje)}</span>`).join("")}</div>` : ""}
-      </div>
-    </div>`;
+  const panel = wyb === "lod"
+    ? panelLodowka(app, { dzisiaj, plan, wZamrazarce, rozmrazane, doJedzenia, zjedzone, naKarteczce, pierwsze })
+    : wyb === "blat" ? panelBlat(app, pod, dzisiaj, doJedzenia.length > 0) : panelPlecak(app, pod, dzisiaj, plan);
 
   return `<p class="ciemny maly">${esc(nazwaDnia(dzisiaj).replace(/^./, (z) => z.toUpperCase()))}, ${dataSlownie(dzisiaj)}${wyjazdTekst(app, plan, dzisiaj)}</p>
-    <section class="szafa" aria-label="Lodówka">${zamrazarkaHtml}${lodowkaHtml}</section>
+    ${rysunekKuchni(wyb, pod.miejsce)}
+    <section class="panel-kuchni" aria-label="${MIEJSCA[wyb]}">
+      <p class="ciemny maly">${MIEJSCA[wyb]}${wyb === pod.miejsce ? ` · ${esc(pod.powod.replace(/^./, (z) => z.toLowerCase()))}` : ""}</p>
+      ${panel}
+    </section>
     <div class="rzad">
       <button type="button" class="link" data-akcja="goscie">Goście</button>
       <button type="button" class="link" data-akcja="plany">Zmieniam plany</button>
     </div>`;
 }
 
-// Drzwi przesuwają się bez przerysowania ekranu, żeby ruch był płynny.
-function ustawDrzwi(co) {
-  otwarte = co;
-  for (const d of document.querySelectorAll(".szafa .drzwi")) {
-    const otw = d.dataset.co === co;
-    d.classList.toggle("otwarte", otw);
-    d.setAttribute("aria-expanded", String(otw));
-    d.previousElementSibling?.toggleAttribute("inert", !otw);
-  }
+// Co minutę (i po powrocie do planera) sprawdź, czy nie zmieniła się pora dnia — wtedy przerysuj.
+export function poNarysowaniu(app) {
+  if (zegar) return;
+  const sprawdz = () => {
+    if (app.ekran !== "lodowka" || document.visibilityState !== "visible" || !document.getElementById("arkusz").hidden) return;
+    const pelne = lodowka(app.dane).some((x) => x.porcje > 0 && !rozmrazaSie(x, dzis()));
+    const p = podpowiedz(app.dane.profil, pelne);
+    if (`${p.miejsce}|${p.powod}` !== ostatniaPodpowiedz) app.odswiez();
+  };
+  zegar = setInterval(sprawdz, 60000);
+  document.addEventListener("visibilitychange", sprawdz);
 }
 
 export function poOpuszczeniu() {
-  otwarte = "";
+  miejsce = null;
   wybrane = null;
 }
 
@@ -241,17 +337,20 @@ function arkuszPlanow(app) {
 }
 
 export const akcje = {
-  drzwi(app, cel) {
-    ustawDrzwi(otwarte === cel.dataset.co ? "" : cel.dataset.co);
-  },
-  zamknijDrzwi() {
-    ustawDrzwi("");
+  miejsce(app, cel) {
+    const pod = ostatniaPodpowiedz.split("|")[0];
+    miejsce = cel.dataset.co === pod ? null : cel.dataset.co;
+    app.odswiez();
   },
   naKarteczke(app, cel) {
-    // Danie z półki trafia na karteczkę, a drzwi same się zasuwają.
     wybrane = cel.dataset.id;
     app.odswiez();
-    requestAnimationFrame(() => requestAnimationFrame(() => ustawDrzwi("")));
+  },
+  dopisz(app, cel) {
+    dopiszProdukt(app.dane, cel.dataset.od, cel.dataset.id);
+    app.zapisz();
+    app.odswiez();
+    powiadom("Dopisane do listy zakupów.");
   },
   danie(app, cel) {
     arkuszDania(app, cel.dataset.id);

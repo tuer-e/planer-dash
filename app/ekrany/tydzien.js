@@ -4,6 +4,7 @@ import { listaZakupow } from "../../silnik/zakupy.js";
 import { kontekst, planZDopisanymi, tenTydzien, ulozTydzien, usunDopisane, zamienDanie } from "../stan.js";
 import { dodaj, dzis, esc, kopiujTekst, odmiana, pokazArkusz, porcjeTxt, powiadom, zakresTygodnia, zamknijArkusz, zl } from "../narzedzia.js";
 import { kafelDnia, przelacz, stanDnia, takieSame, zPlanu } from "../wyjazdy.js";
+import { usunProdukt } from "../kuchnia.js";
 
 const WARIANTY_OPIS = { A: "pon–śr", B: "czw–pt", C: "sob–pon" };
 let wyjazdySzkic = null; // dni wyjazdu wybrane przed ułożeniem planu
@@ -113,6 +114,7 @@ function rysujZakupy(app, od, plan, nastepny) {
   const lista = listaZakupow(planZDopisanymi(app.dane, od), ctx, app.dane.zapasy);
   const kupione = app.dane.kupione[od] ?? {};
   const dopisane = app.dane.dodatkowe[od] ?? [];
+  const produktyZKuchni = app.dane.dopisane_produkty?.[od] ?? [];
   const ile = lista.dzialy.reduce((s, d) => s + d.pozycje.length, 0);
   const ileKupione = lista.dzialy.reduce((s, d) => s + d.pozycje.filter((x) => kupione[x.id]).length, 0);
   return `<header class="naglowek"><a class="link" href="${adres(nastepny, false)}">‹ ${zakresTygodnia(od)}</a><h1>Lista zakupów</h1>
@@ -122,6 +124,12 @@ function rysujZakupy(app, od, plan, nastepny) {
       <div class="rozsun"><a class="link" href="#przepis/${encodeURIComponent(x.przepis)}">${esc(ctx.przepisy[x.przepis]?.nazwa ?? x.przepis)} · ${porcjeTxt(x.porcje)}</a>
       <button type="button" class="link" data-akcja="usunDopisane" data-id="${x.id}">Usuń</button></div>`).join("")}
       <p class="wyciszony maly">Ich składniki są już na liście poniżej.</p></section>` : ""}
+    ${produktyZKuchni.length ? `<section class="sekcja"><h2>Dopisane z kuchni</h2><div>${produktyZKuchni.map((id) => `
+      <label class="zakupy-pozycja${kupione[`+${id}`] ? " kupione" : ""}">
+        <input type="checkbox" data-zmiana="kupione" data-id="+${esc(id)}"${kupione[`+${id}`] ? " checked" : ""}>
+        <span style="flex-grow:1"><b>${esc(ctx.produkty[id]?.nazwa ?? id)}</b></span>
+        <button type="button" class="link" data-akcja="usunProdukt" data-id="${esc(id)}">usuń</button>
+      </label>`).join("")}</div></section>` : ""}
     ${lista.dzialy.map((d) => `<section class="sekcja"><h2>${esc(d.nazwa)}</h2><div>${d.pozycje.map((x) => `
       <label class="zakupy-pozycja${kupione[x.id] ? " kupione" : ""}">
         <input type="checkbox" data-zmiana="kupione" data-id="${x.id}"${kupione[x.id] ? " checked" : ""}>
@@ -196,6 +204,12 @@ export const akcje = {
     app.zapisz();
     app.odswiez();
   },
+  usunProdukt(app, cel) {
+    const { od } = wybranyTydzien(app);
+    usunProdukt(app.dane, od, cel.dataset.id);
+    app.zapisz();
+    app.odswiez();
+  },
   mam(app, cel) {
     app.dane.zapasy[cel.dataset.id] = { stan: "jest", data: dzis() };
     app.zapisz();
@@ -209,6 +223,9 @@ export const akcje = {
   async kopiujListe(app) {
     const { od } = wybranyTydzien(app);
     const lista = listaZakupow(planZDopisanymi(app.dane, od), kontekst(app.dane, od), app.dane.zapasy);
-    powiadom((await kopiujTekst(lista.tekst_przypomnienia)) ? "Skopiowane. Wklej do Przypomnień." : "Nie udało się skopiować.");
+    const ctx = kontekst(app.dane, od);
+    const zKuchni = (app.dane.dopisane_produkty?.[od] ?? []).map((id) => ctx.produkty[id]?.nazwa ?? id);
+    const tekst = [lista.tekst_przypomnienia, ...zKuchni].filter(Boolean).join("\n");
+    powiadom((await kopiujTekst(tekst)) ? "Skopiowane. Wklej do Przypomnień." : "Nie udało się skopiować.");
   },
 };
