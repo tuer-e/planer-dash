@@ -119,27 +119,31 @@ function osPionowa(dania, bloki, m, pokazany) {
       <span class="teraz-linia" style="left:30px;right:0;height:2px;top:${(y(m) - 1).toFixed(1)}px"></span></div>`)}`;
 }
 
+// Telefon poziomo: tory dań jeden pod drugim, czas płynie w prawo. Też całe gotowanie, przewijane palcem w bok;
+// samo ustawia „teraz” blisko lewej krawędzi (8 minut wstecz), chyba że przed chwilą przewijałeś.
+const PX_POZIOMO = 9; // ok. 9 px na minutę
 function osPozioma(dania, bloki, m, pokazany) {
-  const od = Math.max(-2, m - 8);
-  const okno = 50;
-  const proc = (t) => `${((t - od) / okno * 100).toFixed(2)}%`;
+  const od = OD;
+  const W = (zakresOsi(bloki, m) - od) * PX_POZIOMO;
+  const x = (t) => (t - od) * PX_POZIOMO;
   const tory = dania.map((d, k) => {
-    const kafle = bloki.filter((b) => b.danie === k && b.koniec > od && b.start < od + okno).map((b) => {
-      const start = Math.max(b.start, od);
+    const kafle = bloki.filter((b) => b.danie === k).map((b) => {
       const top = b.rownolegly && !b.glowny ? 42 : 2;
       const wys = !b.rownolegly ? 52 : b.glowny ? 36 : 12;
-      const miejsce = (b.koniec - start) * 9; // ok. 9 px na minutę na telefonie poziomo
+      const miejsce = (b.koniec - b.start) * PX_POZIOMO;
       return `<button type="button" class="${klasyKafla(b, pokazany)}" data-akcja="wybierz" data-klucz="${klucz(b)}" aria-label="${esc(d.nazwa)}: ${esc(b.etykieta)}"
-        style="left:${proc(start)};width:calc(${proc(b.koniec - start + od)} - 4px);top:${top}px;height:${wys}px">${etykietaKafla(b, m, miejsce)}</button>`;
+        style="left:${x(b.start).toFixed(1)}px;width:${(miejsce - 4).toFixed(1)}px;top:${top}px;height:${wys}px">${etykietaKafla(b, m, miejsce)}</button>`;
     });
-    return `<div class="sekcja" style="gap:4px"><span class="wyciszony maly">${esc(d.nazwa)}</span><div class="got-os" style="height:56px">${kafle.join("")}</div></div>`;
+    return `<div class="sekcja" style="gap:4px"><span class="wyciszony maly got-tor-nazwa">${esc(d.nazwa)}</span><div class="got-os" style="height:56px">${kafle.join("")}</div></div>`;
   });
   const podzialka = [];
-  for (let t = Math.ceil(od / 10) * 10; t <= od + okno; t += 10) if (t >= 0) podzialka.push(`<span class="got-podzialka" style="top:0;left:${proc(t)}">${t ? `${t}'` : "start"}</span>`);
-  return `<div class="got-os got-poziom" style="overflow:visible">
-    <div style="position:relative;height:14px">${podzialka.join("")}</div>
-    <div class="sekcja" style="gap:10px">${tory.join("")}</div>
-    <span class="teraz-linia" style="top:2px;bottom:0;width:2px;left:${proc(m)}"></span></div>`;
+  for (let t = 0; t <= od + W / PX_POZIOMO; t += 10) podzialka.push(`<span class="got-podzialka" style="top:0;left:${x(t).toFixed(1)}px">${t ? `${t}'` : "start"}</span>`);
+  const cel = Math.max(0, (Math.max(m, od) - od - 8) * PX_POZIOMO);
+  return `<div class="got-przewijana got-przewijana-x" data-os="x" data-cel="${cel.toFixed(0)}">
+    <div class="got-os got-poziom" style="overflow:visible;width:${W.toFixed(0)}px">
+      <div style="position:relative;height:14px">${podzialka.join("")}</div>
+      <div class="sekcja" style="gap:10px">${tory.join("")}</div>
+      <span class="teraz-linia" style="top:2px;bottom:0;width:2px;left:${x(m).toFixed(1)}px"></span></div></div>`;
 }
 
 // Co pokazuje karta: stuknięty kafelek, a bez wyboru — krok przy garnku w trakcie, potem krok „samo się robi”,
@@ -439,18 +443,22 @@ document.addEventListener("visibilitychange", () => {
 });
 
 // Przewijanie osi: ekran odświeża się co sekundę, więc pamiętamy, gdzie ją zostawiłeś.
-const przewin = { kiedy: 0, top: 0, ustawione: -1 };
+// Oś pionowa przewija się w dół (scrollTop), pozioma w bok (scrollLeft). Po obróceniu telefonu zaczynamy od „teraz”.
+const przewin = { kiedy: 0, pozycja: 0, ustawione: -1, os: "y" };
 const PAMIEC_PRZEWINIECIA_MS = 20000;
 function ustawPrzewiniecie() {
   const el = document.querySelector(".got-przewijana");
   if (!el) return;
+  const os = el.dataset.os === "x" ? "x" : "y";
+  const wlasnosc = os === "x" ? "scrollLeft" : "scrollTop";
+  if (przewin.os !== os) Object.assign(przewin, { os, kiedy: 0, pozycja: 0 });
   const reczne = Date.now() - przewin.kiedy < PAMIEC_PRZEWINIECIA_MS;
-  el.scrollTop = reczne ? przewin.top : Number(el.dataset.cel);
-  przewin.ustawione = el.scrollTop;
+  el[wlasnosc] = reczne ? przewin.pozycja : Number(el.dataset.cel);
+  przewin.ustawione = el[wlasnosc];
   el.addEventListener("scroll", () => {
-    if (Math.abs(el.scrollTop - przewin.ustawione) < 2) return; // to nasze ustawienie, nie palec
+    if (Math.abs(el[wlasnosc] - przewin.ustawione) < 2) return; // to nasze ustawienie, nie palec
     przewin.kiedy = Date.now();
-    przewin.top = el.scrollTop;
+    przewin.pozycja = el[wlasnosc];
     przewin.ustawione = -1;
   }, { passive: true });
 }

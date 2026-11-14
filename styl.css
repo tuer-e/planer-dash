@@ -429,3 +429,6 @@ body.gotowanie-poziomo main {
 
 /* Oś gotowania przewijana palcem w górę i w dół */
 .got-przewijana { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; position: relative; }
+.got-przewijana-x { overflow-x: auto; overflow-y: hidden; padding-bottom: 6px; }
+/* Nazwa dania zostaje przy lewej krawędzi, gdy przewijasz oś w bok. */
+.got-tor-nazwa { position: sticky; left: 0; align-self: flex-start; z-index: 2; background: var(--tlo); padding-right: 8px; }
