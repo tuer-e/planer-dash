@@ -5,6 +5,7 @@ import { kontekst, planZDopisanymi, tenTydzien, ulozTydzien, usunDopisane, zamie
 import { dodaj, dzis, esc, kopiujTekst, odmiana, pokazArkusz, porcjeTxt, powiadom, zakresTygodnia, zamknijArkusz, zl } from "../narzedzia.js";
 import { kafelDnia, przelacz, stanDnia, takieSame, zPlanu } from "../wyjazdy.js";
 import { usunProdukt } from "../kuchnia.js";
+import { adresSkrotu, NAZWA_KALENDARZA, NAZWA_LISTY, NAZWA_SKROTU, paczkaDlaSkrotu } from "../kalendarz.js";
 
 const WARIANTY_OPIS = { A: "pon–śr", B: "czw–pt", C: "sob–pon" };
 let wyjazdySzkic = null; // dni wyjazdu wybrane przed ułożeniem planu
@@ -103,10 +104,52 @@ export function rysuj(app) {
     <div class="rozsun"><h3>Zakupy</h3><b>ok. ${zl(lista.koszt.w_sklepie_zl)}</b></div>
     <p class="wyciszony maly">${odmiana(ile, "pozycja", "pozycje", "pozycji")} · budżet ${zl(lista.koszt.budzet_zl)}</p>
     <a class="przycisk${zmienioneDni ? "" : " glowny"} szeroki" href="${adres(nastepny, true)}">Lista zakupów</a>
-    ${nastepny ? "" : `<a class="link" href="#gotowanie">zacznij gotowanie</a>`}
+    <div class="rzad">${nastepny ? "" : `<a class="link" href="#gotowanie">zacznij gotowanie</a>`}${linkWyslij(plan)}</div>
+    ${opisWyslania(plan)}
   </section>
   <button type="button" class="link" data-akcja="ulozOdNowa">Ułóż cały tydzień od nowa</button>`);
   return czesci.join("");
+}
+
+// --- Kalendarz i Przypomnienia (przez skrót „Planer DASH” w aplikacji Skróty) ---
+
+function linkWyslij() {
+  return `<button type="button" class="link" data-akcja="wyslij">wyślij do Kalendarza i Przypomnień</button>`;
+}
+
+function opisWyslania(plan) {
+  if (!plan.wyslano) return "";
+  const t = new Date(plan.wyslano);
+  const kiedy = dzis(t) === dzis() ? "dziś" : `${t.getDate()}.${String(t.getMonth() + 1).padStart(2, "0")}`;
+  return `<p class="ciemny maly">Wysłane do Skrótów ${kiedy} o ${t.getHours()}:${String(t.getMinutes()).padStart(2, "0")}.</p>`;
+}
+
+function wyslijDoSkrotow(app, od) {
+  const plan = app.dane.tygodnie[od];
+  const ctx = kontekst(app.dane, od);
+  const lista = listaZakupow(planZDopisanymi(app.dane, od), ctx, app.dane.zapasy);
+  const zKuchni = (app.dane.dopisane_produkty?.[od] ?? []).map((id) => ctx.produkty[id]?.nazwa ?? id);
+  const pozycje = [...lista.tekst_przypomnienia.split("\n").filter(Boolean), ...zKuchni];
+  const paczka = paczkaDlaSkrotu(plan, ctx, app.dane.profil, {
+    zakupy: { pozycje: pozycje.length, koszt_zl: lista.koszt.w_sklepie_zl }, pozycje,
+    adres: `${location.origin}${location.pathname}`,
+  });
+  plan.wyslano = new Date().toISOString();
+  app.dane.skrot_uzyty = true;
+  app.zapisz();
+  zamknijArkusz();
+  app.odswiez();
+  location.href = adresSkrotu(paczka);
+}
+
+// Za pierwszym razem: krótko, co się stanie i że potrzebny jest skrót.
+function arkuszWysylki() {
+  pokazArkusz(`<h1>Kalendarz i Przypomnienia</h1>
+    <p>Planer otworzy skrót „${NAZWA_SKROTU}” w aplikacji Skróty. Skrót wpisze zakupy, gotowanie i „Na jutro” do Kalendarza i zastąpi listę zakupów w Przypomnieniach — w kalendarzu i na liście wybranych przy dodawaniu skrótu (zwykle „${NAZWA_KALENDARZA}” i „${NAZWA_LISTY}”).</p>
+    <p class="wyciszony maly">Przed usunięciem starych wpisów Skróty zapytają o zgodę.</p>
+    <p class="wyciszony maly">Skrót dodajesz raz. Jeśli go jeszcze nie masz, Skróty pokażą, że go nie znalazły — nic się wtedy nie zmieni.</p>
+    <button type="button" class="przycisk glowny szeroki" data-akcja="wyslijTak">Wyślij</button>
+    <button type="button" class="link" data-akcja="zamknij">anuluj</button>`);
 }
 
 function rysujZakupy(app, od, plan, nastepny) {
@@ -119,7 +162,8 @@ function rysujZakupy(app, od, plan, nastepny) {
   const ileKupione = lista.dzialy.reduce((s, d) => s + d.pozycje.filter((x) => kupione[x.id]).length, 0);
   return `<header class="naglowek"><a class="link" href="${adres(nastepny, false)}">‹ ${zakresTygodnia(od)}</a><h1>Lista zakupów</h1>
       <p class="wyciszony">ok. ${zl(lista.koszt.w_sklepie_zl)} · ${ileKupione} z ${ile} w koszyku</p></header>
-    <div class="rzad"><button type="button" class="przycisk glowny" data-akcja="kopiujListe">Kopiuj listę</button></div>
+    <div class="rzad"><button type="button" class="przycisk glowny" data-akcja="kopiujListe">Kopiuj listę</button>${linkWyslij(plan)}</div>
+    ${opisWyslania(plan)}
     ${dopisane.length ? `<section class="sekcja"><h2>Dopisane spoza planu</h2>${dopisane.map((x) => `
       <div class="rozsun"><a class="link" href="#przepis/${encodeURIComponent(x.przepis)}">${esc(ctx.przepisy[x.przepis]?.nazwa ?? x.przepis)} · ${porcjeTxt(x.porcje)}</a>
       <button type="button" class="link" data-akcja="usunDopisane" data-id="${x.id}">Usuń</button></div>`).join("")}
@@ -219,6 +263,13 @@ export const akcje = {
     app.dane.zapasy[cel.dataset.id] = { stan: "konczy_sie", data: dzis() };
     app.zapisz();
     app.odswiez();
+  },
+  wyslij(app) {
+    if (!app.dane.skrot_uzyty) return arkuszWysylki();
+    wyslijDoSkrotow(app, wybranyTydzien(app).od);
+  },
+  wyslijTak(app) {
+    wyslijDoSkrotow(app, wybranyTydzien(app).od);
   },
   async kopiujListe(app) {
     const { od } = wybranyTydzien(app);
