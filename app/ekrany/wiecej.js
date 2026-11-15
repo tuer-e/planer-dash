@@ -83,7 +83,7 @@ function rysujProfil(app) {
       <div class="siatka2">
         ${POSILKI_KUCHNI.map((k) => `<label class="pole">${POSILKI[k].replace(/^./, (z) => z.toUpperCase())}<input name="godz_${k}" type="time" value="${esc(godziny[k])}"></label>`).join("")}
       </div>
-      <p class="wyciszony maly">Według nich Kuchnia podpowiada: rano blat, w porze przekąski plecak, w porze obiadu i kolacji lodówkę.</p>
+      <p class="wyciszony maly">Według nich Kuchnia podpowiada: rano spiżarnię, w porze przekąski plecak, w porze obiadu i kolacji lodówkę.</p>
       <label class="pole">Czego nie jesz (po przecinku)<input name="wykluczone" type="text" value="${esc((p.wykluczone ?? []).join(", "))}"></label>
       <p class="wyciszony maly">Planer pomija dania, w których jest taki produkt, np. „wieprzowina”, „łosoś”, „soczewica”. Działa od następnego układania tygodnia.</p>
       <p id="bledy-profilu" class="karta odwrocona" hidden></p>

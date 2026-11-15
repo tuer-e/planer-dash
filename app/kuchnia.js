@@ -1,11 +1,12 @@
-// Kuchnia: trzy miejsca — lodówka (ugotowane porcje), blat (śniadania, owoce, spiżarnia) i plecak (przekąska).
-// Planer patrzy na godzinę i podpowiada jedno miejsce. Blat i plecak niczego nie liczą: pokazują danie z planu
+// Kuchnia: trzy miejsca — lodówka (ugotowane porcje), spiżarnia (śniadania, owoce, zapasy) i plecak (przekąska).
+// Planer patrzy na godzinę i podpowiada jedno miejsce. Spiżarnia i plecak niczego nie liczą: pokazują danie z planu
 // i co jeszcze da się zrobić z tego, co jest w domu albo na liście zakupów tego tygodnia.
 import { kontekst, planZDopisanymi, tenTydzien } from "./stan.js";
 import { dodaj, roznica } from "./narzedzia.js";
 import { zapotrzebowanie } from "../silnik/generator.js";
 
-export const MIEJSCA = { lod: "Lodówka", blat: "Blat", plecak: "Plecak" };
+// „blat” to dziś Spiżarnia (nazwa wewnętrzna została, żeby nie ruszać zapisanych danych).
+export const MIEJSCA = { lod: "Lodówka", blat: "Spiżarnia", plecak: "Plecak" };
 export const DOMYSLNE_GODZINY = { sniadanie: "07:30", przekaska: "11:00", obiad: "14:00", kolacja: "19:00" };
 export const POSILKI_KUCHNI = ["sniadanie", "przekaska", "obiad", "kolacja"];
 const MIEJSCE_POSILKU = { sniadanie: "blat", przekaska: "plecak", obiad: "lod", kolacja: "lod" };
@@ -35,7 +36,7 @@ export function poraDnia(profil, teraz = new Date()) {
   return p ? { posilek: p, jutro: false, przed: false } : { posilek: "sniadanie", jutro: false, przed: true };
 }
 
-// Podpowiadane miejsce i krótki powód. Pusta lodówka w porze obiadu albo kolacji → blat (coś bez gotowania).
+// Podpowiadane miejsce i krótki powód. Pusta lodówka w porze obiadu albo kolacji → spiżarnia (coś bez gotowania).
 export function podpowiedz(profil, maPorcje, teraz = new Date()) {
   const pora = poraDnia(profil, teraz);
   let miejsce = MIEJSCE_POSILKU[pora.posilek];

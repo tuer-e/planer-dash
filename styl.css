@@ -345,7 +345,7 @@ body.gotowanie-poziomo main {
 .zakupy-pozycja input { width: 24px; height: 24px; margin-top: 2px; accent-color: #BDBDBD; flex-shrink: 0; }
 .zakupy-pozycja.kupione { opacity: 0.35; text-decoration: line-through; }
 
-/* --- Kuchnia: rysunek (lodówka, blat, plecak na haczyku); podpowiadane albo wybrane miejsce jest jaśniejsze --- */
+/* --- Kuchnia: rysunek (lodówka, spiżarnia, plecak); podpowiadane albo wybrane miejsce jest jaśniejsze --- */
 .kuchnia { height: 196px; display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; padding: 0 4px; }
 .miejsce { border: none; background: none; padding: 0; color: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .miejsce .rys { position: relative; display: block; }
@@ -363,26 +363,12 @@ body.gotowanie-poziomo main {
 .miejsce .lod-uchwyt { left: 10px; width: 5px; border-radius: 3px; }
 .miejsce .lod-uchwyt.g { top: 15px; height: 24px; }
 .miejsce .lod-uchwyt.d { top: 66px; height: 44px; }
-.m-blat .rys { width: 124px; height: 124px; }
-.miejsce .sloik { bottom: 80px; width: 16px; border-radius: 6px; }
-.miejsce .sloik.s1 { left: 8px; height: 30px; }
-.miejsce .sloik.s2 { left: 28px; height: 22px; }
-.miejsce .miska { left: 62px; bottom: 80px; width: 46px; height: 20px; border-radius: 0 0 23px 23px; }
-.miejsce .owoc { width: 14px; height: 14px; border-radius: 50%; background: #2E2E2E; }
-.miejsce.wybrane .owoc { background: #8C8C8C; }
-.miejsce .owoc.o1 { left: 70px; bottom: 96px; }
-.miejsce .owoc.o2 { left: 85px; bottom: 97px; }
-.miejsce .owoc.o3 { left: 77px; bottom: 108px; }
-.miejsce .blat-gora { left: 0; right: 0; bottom: 70px; height: 10px; border-radius: 4px; background: #2A2A2A; }
-.miejsce.wybrane .blat-gora { background: #6E6E6E; }
-.miejsce .szafka { left: 5px; right: 5px; bottom: 0; height: 70px; border-radius: 0 0 10px 10px; }
-/* Plecak wisi na haczyku wyżej, ale jego podpis stoi w jednej linii z pozostałymi. */
-.m-plecak .rys { width: 78px; height: 126px; margin-bottom: 34px; }
-.miejsce .hak { left: 33px; top: 0; width: 12px; height: 12px; border-radius: 50%; background: #2A2A2A; }
-.miejsce .ucho { left: 28px; top: 7px; width: 22px; height: 20px; border-radius: 11px 11px 0 0; }
-.miejsce .worek { left: 3px; top: 22px; width: 72px; height: 100px; border-radius: 22px 22px 12px 12px; }
-.miejsce .klapa { left: 3px; top: 22px; width: 72px; height: 34px; border-radius: 22px 22px 9px 9px; }
-.miejsce .kieszen { left: 16px; top: 78px; width: 46px; height: 30px; border-radius: 9px; }
+/* Spiżarnia (regał) i plecak (pudełko śniadaniowe): kształty z pozycją w stylu, kolor z roli */
+.m-blat .rys { width: 130px; height: 150px; }
+.m-plecak .rys { width: 92px; height: 126px; }
+.miejsce .akcent { background: #2E2E2E; }
+.miejsce.wybrane .akcent { background: #8C8C8C; }
+.miejsce .ciemne { background: var(--tlo); }
 .panel-kuchni { display: flex; flex-direction: column; gap: 14px; }
 .grupa-kuchni { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
 .grupa-kuchni h2 { margin: 0 0 2px; font-weight: 600; }

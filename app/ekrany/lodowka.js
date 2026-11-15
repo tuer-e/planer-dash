@@ -1,4 +1,4 @@
-// Kuchnia (dawniej Lodówka): lodówka z ugotowanymi porcjami, blat ze śniadaniami i plecak z przekąską.
+// Kuchnia (dawniej Lodówka): lodówka z ugotowanymi porcjami, spiżarnia ze śniadaniami i plecak z przekąską.
 // Podpowiada miejsce według pory dnia, ale jesz, na co masz ochotę.
 import {
   cofnijPrzelozenie, cofnijZjedzenie, lodowka, przelozDoLodowki, przepisy, tenTydzien, wlozDoLodowki,
@@ -42,7 +42,7 @@ function wyjazdTekst(app, plan, dzisiaj) {
   return ` · ${jutro ? "jutro" : wDzien(kiedy)} ${stan === "wieczor" ? "wieczorem" : "rano"} ${esc(wyjazd)}`;
 }
 
-// Kuchnia narysowana na górze ekranu: lodówka, blat i plecak na haczyku. Podpowiadane miejsce (według pory dnia)
+// Kuchnia narysowana na górze ekranu: lodówka, spiżarnia (regał) i plecak (pudełko śniadaniowe). Podpowiadane miejsce (według pory dnia)
 // jest jaśniejsze; stuknięcie innego otwiera je pod rysunkiem. Lodówka pokazuje karteczkę „Najpierw” i półki.
 let miejsce = null; // miejsce wybrane ręcznie; null = to, które podpowiada pora dnia
 let wybrane = null; // id porcji przeniesionej na karteczkę stuknięciem półki
@@ -77,11 +77,29 @@ function karteczka(app, x, dzisiaj, pierwsze, ileWZamrazarce, plan) {
         <button type="button" class="link" data-akcja="juzUgotowane">już ugotowane</button></div>`;
   }
   if (ileWZamrazarce) {
-    return `<h1>W lodówce pusto</h1><span class="wyciszony">Przełóż coś z zamrażarki na jutro, a dziś zajrzyj na blat: tam jest coś bez gotowania.</span>${cofnij}`;
+    return `<h1>W lodówce pusto</h1><span class="wyciszony">Przełóż coś z zamrażarki na jutro, a dziś zajrzyj do spiżarni: tam jest coś bez gotowania.</span>${cofnij}`;
   }
   return `<h1>Lodówka jest pusta</h1><span class="wyciszony">Ułóż plan na tydzień: planer wybierze dania na poniedziałkowe gotowanie i zrobi listę zakupów.</span>
     <div class="przyciski"><a class="przycisk glowny" href="#tydzien">Ułóż tydzień</a></div>${cofnij}`;
 }
+
+// Kształt rysunku: prostokąt w pikselach (x, y, szerokość, wysokość), rola koloru i zaokrąglenie.
+const k = (x, y, w, h, rola, r = "0") => `<span class="${rola}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;border-radius:${r}"></span>`;
+
+// Spiżarnia: regał z trzema półkami — słoiki z pokrywkami, paczka, puszki, torebka i duże słoje.
+const SPIZARNIA = [
+  k(0, 0, 130, 150, "ksztalt", "10px"), k(7, 7, 116, 136, "ciemne", "6px"), k(7, 52, 116, 5, "detal"), k(7, 98, 116, 5, "detal"),
+  ...[[14, 30], [34, 24], [54, 34]].flatMap(([x, h]) => [k(x, 52 - h, 16, h, "akcent", "5px"), k(x + 2, 48 - h, 12, 5, "detal", "2px")]),
+  k(82, 22, 30, 30, "akcent", "4px"),
+  ...[14, 34, 54].map((x) => k(x, 76, 17, 22, "akcent", "3px")), k(80, 64, 30, 34, "akcent", "6px 6px 3px 3px"),
+  k(16, 111, 34, 32, "akcent", "8px"), k(58, 117, 26, 26, "akcent", "8px"), k(92, 113, 24, 30, "akcent", "8px"),
+].join("");
+
+// Plecak: pudełko śniadaniowe z rączką i zapięciem.
+const PUDELKO = [
+  k(24, 42, 44, 22, "detal", "22px 22px 0 0"), k(32, 50, 28, 14, "ciemne", "14px 14px 0 0"),
+  k(0, 62, 92, 64, "ksztalt", "14px"), k(0, 62, 92, 18, "detal", "14px 14px 4px 4px"), k(38, 74, 16, 14, "akcent", "4px"),
+].join("");
 
 function rysunekKuchni(wyb, pod) {
   const przycisk = (co, rys) => `<button type="button" class="miejsce m-${co}${co === wyb ? " wybrane" : ""}${co === pod ? " podpowiadane" : ""}"
@@ -89,8 +107,8 @@ function rysunekKuchni(wyb, pod) {
       <span class="rys" aria-hidden="true">${rys}</span><span class="podpis">${MIEJSCA[co]}</span></button>`;
   return `<div class="kuchnia" role="group" aria-label="Kuchnia">
     ${przycisk("lod", `<span class="ksztalt lod-korpus"><span class="lod-zam"></span><span class="detal lod-uchwyt g"></span><span class="detal lod-uchwyt d"></span></span>`)}
-    ${przycisk("blat", `<span class="detal sloik s1"></span><span class="detal sloik s2"></span><span class="owoc o1"></span><span class="owoc o2"></span><span class="owoc o3"></span><span class="detal miska"></span><span class="blat-gora"></span><span class="ksztalt szafka"></span>`)}
-    ${przycisk("plecak", `<span class="hak"></span><span class="detal ucho"></span><span class="ksztalt worek"></span><span class="detal klapa"></span><span class="detal kieszen"></span>`)}
+    ${przycisk("blat", SPIZARNIA)}
+    ${przycisk("plecak", PUDELKO)}
   </div>`;
 }
 
@@ -148,7 +166,7 @@ function panelBlat(app, pod, dzisiaj, maPorcje) {
     czesci.push(grupa("Z tego, co masz, zrobisz też", lista(propozycje(stan, { posilek: "sniadanie", pomin: sn ? [sn] : [] }))));
   }
   const owoce = naBlacie(stan);
-  czesci.push(grupa("Na blacie", owoce.length ? `<p class="wyciszony">${esc(owoce.join(", "))}</p>` : ""));
+  czesci.push(grupa("Owoce", owoce.length ? `<p class="wyciszony">${esc(owoce.join(", "))}</p>` : ""));
   const spizarnia = wSpizarni(app.dane, stan);
   czesci.push(grupa("W spiżarni", spizarnia.length ? `<p class="wyciszony">${esc(spizarnia.slice(0, 8).join(", "))}${spizarnia.length > 8 ? ` i ${spizarnia.length - 8} innych` : ""}</p>` : ""));
   return czesci.join("");
