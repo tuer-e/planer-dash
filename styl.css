@@ -456,3 +456,13 @@ textarea[name="notatka"] { width: 100%; min-height: 110px; resize: vertical; }
 .czesc-zakupow { margin: 10px 0 -4px; font-size: 22px; color: var(--tekst); }
 .wybor-dnia { display: flex; flex-direction: column; align-items: center; min-width: 64px; line-height: 1.2; padding: 8px 12px; }
 .kiedy-zakupy { margin: 4px 0 0; }
+
+/* Jedna jasna akcja + „⋯” (reszta opcji w arkuszu) i wiersze, które otwierają kartę elementu */
+.rzad-glowny { display: flex; gap: 10px; align-items: stretch; }
+.rzad-glowny > .przycisk.glowny { flex: 1; }
+.przycisk.wiecej { min-width: 54px; padding: 0; font-size: 22px; line-height: 1; letter-spacing: 1px; }
+.opcje { display: flex; flex-direction: column; }
+.opcja { min-height: 52px; display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 8px 0; border: none; background: none; text-align: left; font-size: 17px; color: var(--tekst); text-decoration: none; cursor: pointer; }
+.wiersz .prawo { font-size: 15px; color: var(--ciemny); white-space: nowrap; }
+.ilosc-karty { display: flex; align-items: center; gap: 14px; padding: 6px 0; }
+.ilosc-karty b { min-width: 150px; text-align: center; color: var(--tekst); }

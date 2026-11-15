@@ -84,6 +84,8 @@ export function czytajMiare(miara) {
   const lista = ile === null && m[3].includes(",");
   const jedn = lista ? undefined : LEMAT[slowo.replace(/[.;:]$/, "").toLowerCase()];
   if (jedn) return { ile: ile ?? 1, jedn, dopisek: reszta.join(" ") };
+  // „2 × kumin, płatki chili” — wcześniej zmieniona ilość przy mierze, której nie da się odczytać.
+  if (ile !== null && /^×\s/.test(m[3])) return { ile, jedn: null, tekst: m[3].replace(/^×\s+/, "") };
   if (ile !== null && m[3] === "g") return { ile, jedn: "g", dopisek: "" };
   return { ile: 1, jedn: null, tekst: t };
 }

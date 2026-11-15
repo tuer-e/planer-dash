@@ -2,7 +2,7 @@
 import { opcjePodmiany, porcje, slotyJedzone } from "../../silnik/generator.js";
 import { listaZakupow, tekstPozycji } from "../../silnik/zakupy.js";
 import { kontekst, planZDopisanymi, tenTydzien, ulozTydzien, usunDopisane, zamienDanie } from "../stan.js";
-import { dodaj, dzis, esc, kopiujTekst, odmiana, pokazArkusz, porcjeTxt, powiadom, zakresTygodnia, zamknijArkusz, zl } from "../narzedzia.js";
+import { arkuszOpcji, dodaj, dzis, esc, kopiujTekst, krotkaNazwa, odmiana, pokazArkusz, porcjeTxt, powiadom, przyciskWiecej, zakresTygodnia, zamknijArkusz, zl } from "../narzedzia.js";
 import { kafelDnia, przelacz, stanDnia, takieSame, zPlanu } from "../wyjazdy.js";
 import { usunProdukt } from "../kuchnia.js";
 import { DNI_ZAKUPOW, dzienSkrot, GODZINY_ZAKUPOW, kiedyZakupy, opisKiedy, podzielListe, wDzien } from "../zakupy-kiedy.js";
@@ -45,7 +45,8 @@ export function rysuj(app) {
   const { od, nastepny, zakupy } = wybranyTydzien(app);
   const plan = app.dane.tygodnie[od];
   if (zakupy && plan) return rysujZakupy(app, od, plan, nastepny);
-  const czesci = [`<header class="naglowek"><p class="wyciszony">${nastepny ? "Następny tydzień" : "Ten tydzień"}</p><h1>${zakresTygodnia(od)}</h1></header>`, przelacznikTygodni(nastepny)];
+  // Który tydzień — widać w przełączniku pod datą, więc nad datą nie powtarzamy.
+  const czesci = [`<header class="naglowek"><h1>${zakresTygodnia(od)}</h1></header>`, przelacznikTygodni(nastepny)];
 
   if (!plan) {
     if (wyjazdySzkic === null || wyjazdySzkic.od !== od) {
@@ -60,21 +61,17 @@ export function rysuj(app) {
 
   const ctx = kontekst(app.dane, od);
   const zmienioneDni = wyjazdySzkic && wyjazdySzkic.od === od && !takieSame(wyjazdySzkic, zPlanu(plan));
-  czesci.push(dniWyjazdu(app, od, zmienioneDni ? wyjazdySzkic : zPlanu(plan)));
+  // Gdzie jesteś: jedna cicha linijka zamiast paska dni; zmiana dni pod „⋯ → Dni wyjazdów”.
+  czesci.push(`<p class="ciemny maly gdzie">${esc(opisMiejsc(app, zmienioneDni ? wyjazdySzkic : zPlanu(plan)))}</p>`);
   if (zmienioneDni) {
     czesci.push(`<button type="button" class="przycisk glowny szeroki" data-akcja="uloz">Ułóż od nowa z tymi dniami</button>`);
   }
 
+  // Każdy wiersz otwiera kartę dania (przepis, zamiana) — bez linków przy każdej pozycji.
+  const wiersz = (g, prawo) => `<button type="button" class="wiersz" data-akcja="kartaDania" data-grupa="${g.id}">
+      <span>${esc(krotkaNazwa(ctx.przepisy[g.przepis].nazwa, 40))}</span><span class="prawo">${esc(prawo)}</span></button>`;
   const partie = plan.grupy.filter((g) => g.rodzaj === "partia" && g.przepis && slotyJedzone(g).length);
-  czesci.push(`<section class="sekcja"><h2>Gotujesz w poniedziałek</h2><div class="lista">${partie.map((g) => `
-    <article class="karta">
-      <h3>${esc(ctx.przepisy[g.przepis].nazwa)}</h3>
-      <p class="wyciszony maly">${opisDania(g, ctx)}</p>
-      <div class="rzad">
-        <button type="button" class="link" data-akcja="zamien" data-grupa="${g.id}">zamień</button>
-        <a class="link" href="#przepis/${encodeURIComponent(g.przepis)}">przepis</a>
-      </div>
-    </article>`).join("")}</div></section>`);
+  czesci.push(`<section class="sekcja"><h2>Gotujesz w poniedziałek</h2><div>${partie.map((g) => wiersz(g, porcjeTxt(porcje(g)))).join("")}</div></section>`);
 
   const zZamrazarki = plan.grupy.filter((g) => g.rodzaj === "zamrazarka" && slotyJedzone(g).length);
   if (zZamrazarki.length) {
@@ -83,20 +80,13 @@ export function rysuj(app) {
 
   const bez = plan.grupy.filter((g) => ["kolacja", "szybki"].includes(g.rodzaj) && g.przepis);
   if (bez.length) {
-    czesci.push(`<section class="sekcja"><h2>Kolacje bez gotowania</h2><div class="lista">${bez.map((g) => `
-      <div class="rozsun"><a class="cichy-link" href="#przepis/${encodeURIComponent(g.przepis)}">${esc(ctx.przepisy[g.przepis].nazwa)}</a>
-      <button type="button" class="link" data-akcja="zamien" data-grupa="${g.id}">zamień</button></div>`).join("")}</div></section>`);
+    czesci.push(`<section class="sekcja"><h2>Kolacje bez gotowania</h2><div>${bez.map((g) => wiersz(g, dniGrupy(g, od))).join("")}</div></section>`);
   }
 
   const warianty = plan.grupy.filter((g) => g.rodzaj === "wariant" && g.przepis);
-  if (warianty.length) {
-    const wiersz = (posilek, tytul) => {
-      const lista = warianty.filter((g) => g.posilek === posilek);
-      return lista.length ? `<h2>${tytul}</h2><div class="lista">${lista.map((g) => `
-        <div class="rozsun"><a class="cichy-link" href="#przepis/${encodeURIComponent(g.przepis)}">${esc(ctx.przepisy[g.przepis].nazwa)}</a>
-        <span class="wyciszony maly" style="white-space:nowrap">${WARIANTY_OPIS[g.id.slice(-1)] ?? ""}</span></div>`).join("")}</div>` : "";
-    };
-    czesci.push(`<section class="sekcja">${wiersz("sniadanie", "Śniadania")}${wiersz("przekaska", "Przekąski")}</section>`);
+  for (const [posilek, tytul] of [["sniadanie", "Śniadania"], ["przekaska", "Przekąski"]]) {
+    const lista = warianty.filter((g) => g.posilek === posilek);
+    if (lista.length) czesci.push(`<section class="sekcja"><h2>${tytul}</h2><div>${lista.map((g) => wiersz(g, WARIANTY_OPIS[g.id.slice(-1)] ?? "")).join("")}</div></section>`);
   }
 
   const lista = listaZakupow(planZDopisanymi(app.dane, od), ctx, app.dane.zapasy);
@@ -104,26 +94,74 @@ export function rysuj(app) {
   czesci.push(`<section class="karta">
     <div class="rozsun"><h3>Zakupy</h3><b>ok. ${zl(lista.koszt.w_sklepie_zl)}</b></div>
     <p class="wyciszony maly">${odmiana(ile, "pozycja", "pozycje", "pozycji")} · budżet ${zl(lista.koszt.budzet_zl)}</p>
-    <a class="przycisk${zmienioneDni ? "" : " glowny"} szeroki" href="${adres(nastepny, true)}">Lista zakupów</a>
+    <div class="rzad-glowny"><a class="przycisk${zmienioneDni ? "" : " glowny"}" href="${adres(nastepny, true)}">Lista zakupów</a>${przyciskWiecej("opcjeTygodnia")}</div>
     ${linijkaKiedy(app, od, plan)}
-    <div class="rzad">${nastepny ? "" : `<a class="link" href="#gotowanie">zacznij gotowanie</a>`}${linkWyslij(plan)}</div>
-    ${opisWyslania(plan)}
-  </section>
-  <button type="button" class="link" data-akcja="ulozOdNowa">Ułóż cały tydzień od nowa</button>`);
+  </section>`);
   return czesci.join("");
+}
+
+// „sob–nd: <wyjazd> · pt wieczorem: <wyjazd>” albo „Cały tydzień: <dom>”.
+function opisMiejsc(app, miejsca) {
+  const { dom, wyjazd } = app.dane.profil;
+  const OPIS = { caly: "", wieczor: " wieczorem", rano: " rano" };
+  const KROTKO = ["pon", "wt", "śr", "czw", "pt", "sob", "nd", "pon"];
+  const czesci = [];
+  for (let d = 1; d <= 7; d++) {
+    const st = stanDnia(miejsca, d);
+    if (st === "dom") continue;
+    let k = d;
+    while (st === "caly" && k + 1 <= 7 && stanDnia(miejsca, k + 1) === "caly") k++;
+    czesci.push(`${KROTKO[d]}${k > d ? `–${KROTKO[k]}` : ""}${OPIS[st]}: ${wyjazd}`);
+    d = k;
+  }
+  return czesci.length ? czesci.join(" · ") : `Cały tydzień: ${dom}`;
+}
+
+function dniGrupy(g, od) {
+  return [...new Set(slotyJedzone(g).map(([d]) => dzienSkrot(dodaj(od, d))))].join(", ");
+}
+
+function arkuszWyjazdow(app, od) {
+  const plan = app.dane.tygodnie[od];
+  const m = wyjazdySzkic && wyjazdySzkic.od === od ? wyjazdySzkic : zPlanu(plan);
+  const zmienione = plan && !takieSame(m, zPlanu(plan));
+  pokazArkusz(`<h1>Dni wyjazdów</h1>${dniWyjazdu(app, od, m)}
+    ${zmienione ? `<button type="button" class="przycisk glowny szeroki" data-akcja="uloz">Ułóż od nowa z tymi dniami</button>` : ""}
+    <button type="button" class="link" data-akcja="zamknijWyjazdy" style="align-self:flex-start">${zmienione ? "zostaw na później" : "zamknij"}</button>`);
+}
+
+function opcjeTygodnia(app, od, nastepny) {
+  const plan = app.dane.tygodnie[od];
+  arkuszOpcji("Więcej", [
+    { nazwa: "Wyślij do Kalendarza i Przypomnień", opis: opisWyslania(plan), akcja: "wyslij" },
+    { nazwa: "Dzień zakupów", opis: opisKiedy(od, kiedyZakupy(plan, app.dane.profil)), akcja: "zmienZakupy" },
+    nastepny ? null : { nazwa: "Zacznij gotowanie", href: "#gotowanie" },
+    { nazwa: "Dni wyjazdów", opis: opisMiejsc(app, zPlanu(plan)), akcja: "wyjazdy" },
+    { nazwa: "Ułóż tydzień od nowa", akcja: "ulozOdNowa" },
+  ]);
+}
+
+function kartaDania(app, od, idGrupy) {
+  const plan = app.dane.tygodnie[od];
+  const g = plan.grupy.find((x) => x.id === idGrupy);
+  if (!g) return;
+  const ctx = kontekst(app.dane, od);
+  const p = ctx.przepisy[g.przepis];
+  const opis = g.rodzaj === "partia" ? opisDania(g, ctx) : `${g.rodzaj === "wariant" ? WARIANTY_OPIS[g.id.slice(-1)] ?? "" : dniGrupy(g, od)} · ok. ${p.czas_min} min`;
+  arkuszOpcji(p.nazwa, [
+    { nazwa: "Przepis", href: `#przepis/${encodeURIComponent(g.przepis)}` },
+    { nazwa: "Zamień na inne danie", akcja: "zamien", dane: { grupa: g.id } },
+    g.rodzaj === "partia" ? { nazwa: "Gotuj tylko to", opis: "krok po kroku", href: `#gotowanie/przepis/${encodeURIComponent(g.przepis)}` } : null,
+  ], { opis });
 }
 
 // --- Kalendarz i Przypomnienia (przez skrót „Planer DASH” w aplikacji Skróty) ---
 
-function linkWyslij() {
-  return `<button type="button" class="link" data-akcja="wyslij">wyślij do Kalendarza i Przypomnień</button>`;
-}
-
 function opisWyslania(plan) {
-  if (!plan.wyslano) return "";
+  if (!plan?.wyslano) return "";
   const t = new Date(plan.wyslano);
   const kiedy = dzis(t) === dzis() ? "dziś" : `${t.getDate()}.${String(t.getMonth() + 1).padStart(2, "0")}`;
-  return `<p class="ciemny maly">Wysłane do Skrótów ${kiedy} o ${t.getHours()}:${String(t.getMinutes()).padStart(2, "0")}.</p>`;
+  return `ostatnio: ${kiedy} o ${t.getHours()}:${String(t.getMinutes()).padStart(2, "0")}`;
 }
 
 function wyslijDoSkrotow(app, od) {
@@ -171,10 +209,11 @@ function linieZakupow(app, od) {
   return { ...z, linie: [...z.teraz.map(tekstPozycji), ...zKuchni, ...z.dokup.map((x) => `${tekstPozycji(x)} (${kiedyDokup})`)] };
 }
 
-function linijkaKiedy(app, od, plan) {
+// Informacja o zakupach tylko wtedy, gdy coś znaczy: zakupy nie w poniedziałek albo jest co dokupić.
+function linijkaKiedy(app, od) {
   const z = zakupyTygodnia(app, od);
-  return `<p class="ciemny maly kiedy-zakupy">zakupy: ${opisKiedy(od, z.kiedy)} · <button type="button" class="link" data-akcja="zmienZakupy">zmień</button></p>
-    ${z.dokup.length ? `<p class="ciemny maly">${wDzien(od)} dokupisz: ${z.dokup.map((x) => esc(nazwaKrotka(x.nazwa))).join(", ")}</p>` : ""}`;
+  if (z.kiedy.dzien === 0 && !z.dokup.length) return "";
+  return `<p class="ciemny maly kiedy-zakupy">zakupy: ${opisKiedy(od, z.kiedy)}${z.dokup.length ? ` · ${wDzien(od)} dokupisz: ${z.dokup.map((x) => esc(nazwaKrotka(x.nazwa))).join(", ")}` : ""}</p>`;
 }
 
 const nazwaKrotka = (n) => n.replace(/\s*\(.*?\)/g, "").replace(/\s+\d[\d,.]*(\s*[×x]\s*\d[\d,.]*)?\s*(g|kg|ml|l|szt\.?)(?=\s|$).*$/i, "").trim().toLowerCase();
@@ -212,9 +251,8 @@ function rysujZakupy(app, od, plan, nastepny) {
   const ileKupione = lista.dzialy.reduce((s, d) => s + d.pozycje.filter((x) => kupione[x.id]).length, 0);
   return `<header class="naglowek"><a class="link" href="${adres(nastepny, false)}">‹ ${zakresTygodnia(od)}</a><h1>Lista zakupów</h1>
       <p class="wyciszony">ok. ${zl(lista.koszt.w_sklepie_zl)} · ${ileKupione} z ${ile} w koszyku</p>
-      <p class="ciemny maly">zakupy: ${opisKiedy(od, kiedy)} · <button type="button" class="link" data-akcja="zmienZakupy">zmień</button></p></header>
-    <div class="rzad"><button type="button" class="przycisk glowny" data-akcja="kopiujListe">Kopiuj listę</button>${linkWyslij(plan)}</div>
-    ${opisWyslania(plan)}
+      ${kiedy.dzien !== 0 ? `<p class="ciemny maly">zakupy: ${opisKiedy(od, kiedy)}</p>` : ""}</header>
+    <div class="rzad-glowny"><button type="button" class="przycisk glowny" data-akcja="kopiujListe">Kopiuj listę</button>${przyciskWiecej("opcjeListy")}</div>
     ${dopisane.length ? `<section class="sekcja"><h2>Dopisane spoza planu</h2>${dopisane.map((x) => `
       <div class="rozsun"><a class="link" href="#przepis/${encodeURIComponent(x.przepis)}">${esc(ctx.przepisy[x.przepis]?.nazwa ?? x.przepis)} · ${porcjeTxt(x.porcje)}</a>
       <button type="button" class="link" data-akcja="usunDopisane" data-id="${x.id}">Usuń</button></div>`).join("")}
@@ -254,6 +292,29 @@ export const akcje = {
     const d = Number(cel.dataset.dzien);
     if (!wyjazdySzkic || wyjazdySzkic.od !== od) wyjazdySzkic = { od, ...zPlanu(app.dane.tygodnie[od]) };
     wyjazdySzkic = { od, ...przelacz(wyjazdySzkic, d) };
+    app.odswiez();
+    if (app.dane.tygodnie[od]) arkuszWyjazdow(app, od);
+  },
+  opcjeTygodnia(app) {
+    const { od, nastepny } = wybranyTydzien(app);
+    opcjeTygodnia(app, od, nastepny);
+  },
+  opcjeListy(app) {
+    const { od } = wybranyTydzien(app);
+    const plan = app.dane.tygodnie[od];
+    arkuszOpcji("Więcej", [
+      { nazwa: "Wyślij do Kalendarza i Przypomnień", opis: opisWyslania(plan), akcja: "wyslij" },
+      { nazwa: "Dzień zakupów", opis: opisKiedy(od, kiedyZakupy(plan, app.dane.profil)), akcja: "zmienZakupy" },
+    ]);
+  },
+  kartaDania(app, cel) {
+    kartaDania(app, wybranyTydzien(app).od, cel.dataset.grupa);
+  },
+  wyjazdy(app) {
+    arkuszWyjazdow(app, wybranyTydzien(app).od);
+  },
+  zamknijWyjazdy(app) {
+    zamknijArkusz();
     app.odswiez();
   },
   uloz(app, cel) {

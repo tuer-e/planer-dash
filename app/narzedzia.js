@@ -139,3 +139,21 @@ export async function kopiujTekst(tekst) {
     return ok;
   }
 }
+
+// --- Jedna jasna akcja + „⋯”: reszta opcji w arkuszu od dołu (pod kciukiem, z nazwami) ---
+
+const atrybuty = (dane = {}) => Object.entries(dane).map(([k, v]) => `data-${k}="${esc(String(v))}"`).join(" ");
+
+export function przyciskWiecej(akcja, dane = {}) {
+  return `<button type="button" class="przycisk wiecej" data-akcja="${akcja}" ${atrybuty(dane)} aria-label="Więcej opcji">⋯</button>`;
+}
+
+// opcje: [{ nazwa, opis?, akcja, dane? } albo { nazwa, opis?, href }]; puste pozycje są pomijane.
+export function arkuszOpcji(tytul, opcje, { opis = "", dodatek = "" } = {}) {
+  const tresc = (o) => `<span>${esc(o.nazwa)}</span>${o.opis ? `<span class="ciemny maly">${esc(o.opis)}</span>` : ""}`;
+  pokazArkusz(`<h1>${esc(tytul)}</h1>${opis ? `<p class="wyciszony">${esc(opis)}</p>` : ""}${dodatek}
+    <div class="opcje">${opcje.filter(Boolean).map((o) => (o.href
+      ? `<a class="opcja" href="${o.href}">${tresc(o)}</a>`
+      : `<button type="button" class="opcja" data-akcja="${o.akcja}" ${atrybuty(o.dane)}>${tresc(o)}</button>`)).join("")}</div>
+    <button type="button" class="link" data-akcja="zamknij" style="align-self:flex-start">zamknij</button>`);
+}

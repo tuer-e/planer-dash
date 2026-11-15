@@ -7,12 +7,13 @@ import {
   wersjaPrzepisu, zapiszWersjePrzepisu,
 } from "../stan.js";
 import { czytajMiare, doSzukania, krokIlosci, nazwaProduktu, piszMiare, zwyklaMiara } from "../miary.js";
-import { dataSlownie, dodaj, esc, kopiujTekst, odmiana, pokazArkusz, porcjeTxt, powiadom, zakresTygodnia, zamknijArkusz } from "../narzedzia.js";
+import { arkuszOpcji, dataSlownie, dodaj, esc, kopiujTekst, odmiana, pokazArkusz, porcjeTxt, powiadom, przyciskWiecej, zakresTygodnia, zamknijArkusz } from "../narzedzia.js";
 
 let porcjeDoZakupow = null;
 let ostatniPrzepis = null;
 let edytuje = false; // czy pole notatki jest otwarte
-// Zmiana składników: kopia robocza do „Zapisz zmiany”. Ilości w miarach kuchennych, gramy liczone w tle.
+// Składniki do zmiany (kopia robocza na czas jednej zmiany — każda zmiana zapisuje się od razu jako Twoja wersja).
+// Ilości w miarach kuchennych, gramy liczone w tle.
 let skladniki = null; // [{produkt, ile, jedn, dopisek, tekst, gNaJedn, miara, zmienione, zamiast, dodany}]
 let wybor = null; // okienko wyboru produktu: { tryb: "zamien" | "dodaj", i }
 
@@ -41,32 +42,17 @@ export function rysuj(app) {
     edytuje = false;
     skladniki = null;
   }
-  if (skladniki) return rysujEdycje(app, id, p, ctx, wroc);
   const w = wartosciPorcji(p, ctx.produkty);
   const podanie = p.kroki.filter(doPodania);
-  const tydzien = tydzienDoZakupow(app);
   const wersja = wersjaPrzepisu(app.dane, id);
   return `<header class="naglowek">${wroc}<h1>${esc(p.nazwa)}</h1>
-      <p class="wyciszony">${odmiana(p.porcje, "porcja", "porcje", "porcji")} · ok. ${p.czas_min} min${p.na_zapas ? ` · lodówka ${odmiana(p.trwalosc_dni, "dzień", "dni", "dni")}` : ""}${p.mrozi_sie ? " · mrozi się" : ""}</p>
-      ${wersja ? `<p class="wyciszony maly">Twoja wersja · zmieniona ${dataSlownie(wersja.zmieniono)} · <button type="button" class="link" data-akcja="przywroc">przywróć oryginał</button></p>` : ""}</header>
-    <div class="rzad"><a class="przycisk glowny" href="#gotowanie/przepis/${encodeURIComponent(id)}">Gotuj krok po kroku</a>
-      <button type="button" class="link" data-akcja="udostepnij" data-id="${esc(id)}" data-nazwa="${esc(p.nazwa)}">udostępnij przepis</button>
-      ${!notatka(app.dane, id) && !edytuje ? `<button type="button" class="link" data-akcja="edytujNotatke">dodaj notatkę</button>` : ""}</div>
+      <p class="wyciszony">${odmiana(p.porcje, "porcja", "porcje", "porcji")} · ok. ${p.czas_min} min${p.na_zapas ? ` · lodówka ${odmiana(p.trwalosc_dni, "dzień", "dni", "dni")}` : ""}${p.mrozi_sie ? " · mrozi się" : ""}${wersja ? ` · Twoja wersja z ${dataSlownie(wersja.zmieniono)}` : ""}</p></header>
+    <div class="rzad-glowny"><a class="przycisk glowny" href="#gotowanie/przepis/${encodeURIComponent(id)}">Gotuj krok po kroku</a>${przyciskWiecej("opcjePrzepisu")}</div>
     ${sekcjaNotatki(app, id)}
     ${sekcjaSkladnikow(app, id, p, ctx)}
     <section class="sekcja"><h2>Przygotowanie</h2>${uwagaOZamianach(app, id, ctx)}<ol class="kroki">${krokiDania(p).map((k) => `<li>${esc(k.tekst)}</li>`).join("")}</ol></section>
     ${podanie.length ? `<section class="sekcja"><h2>Podanie</h2>${podanie.map((t) => `<p>${esc(t)}</p>`).join("")}</section>` : ""}
-    <section class="karta">
-      <h3>Dopisz do zakupów</h3>
-      ${tydzien ? `<div class="rozsun">
-          <button type="button" class="przycisk" data-akcja="mniej" aria-label="Mniej porcji" style="min-width:52px">−</button>
-          <b style="font-size:20px">${porcjeTxt(porcjeDoZakupow)}</b>
-          <button type="button" class="przycisk" data-akcja="wiecej" aria-label="Więcej porcji" style="min-width:52px">+</button></div>
-        <button type="button" class="przycisk glowny szeroki" data-akcja="dopisz">Dopisz składniki do listy</button>
-        <p class="wyciszony maly">Trafią na listę zakupów na ${zakresTygodnia(tydzien)}.</p>`
-        : `<p class="wyciszony maly">Najpierw ułóż tydzień — składniki dopiszesz do jego listy zakupów.</p>`}
-    </section>
-    <p class="wyciszony maly">Porcja: ok. ${Math.round(w.kcal)} kcal · sód ${Math.round(w.sod_mg)} mg · ok. ${w.koszt_zl.toFixed(2).replace(".", ",")} zł</p>`;
+    <p class="ciemny maly">Porcja: ok. ${Math.round(w.kcal)} kcal · sód ${Math.round(w.sod_mg)} mg · ok. ${w.koszt_zl.toFixed(2).replace(".", ",")} zł</p>`;
 }
 
 // --- Składniki: widok i Twoja wersja ---
@@ -83,12 +69,13 @@ function sekcjaSkladnikow(app, id, p, ctx) {
     const il = z.ilosci.find((x) => x.produkt === pid && x.jest === miara);
     return il ? `było: ${il.bylo}` : "";
   };
-  return `<section class="sekcja"><div class="rozsun"><h2>Składniki (na ${porcjeTxt(p.porcje)})</h2>
-      <button type="button" class="link" data-akcja="zmienSkladniki">zmień składniki</button></div>
-    <ul class="skladniki">${p.skladniki.map(([pid, , miara]) => {
+  // Stuknięcie składnika otwiera jego kartę: ilość − / +, zamiana, usunięcie.
+  return `<section class="sekcja"><h2>Składniki (na ${porcjeTxt(p.porcje)})</h2>
+    <div>${p.skladniki.map(([pid, , miara], i) => {
       const d = dopisek(pid, miara);
-      return `<li><span>${esc(nazwa(ctx, pid))}${d ? `<br><span class="ciemny maly">${esc(d)}</span>` : ""}</span><span class="wyciszony" style="text-align:right">${esc(miara)}</span></li>`;
-    }).join("")}</ul>
+      return `<button type="button" class="wiersz skladnik" data-akcja="kartaSkladnika" data-i="${i}">
+        <span>${esc(nazwa(ctx, pid))}${d ? `<br><span class="ciemny maly">${esc(d)}</span>` : ""}</span><span class="wyciszony" style="text-align:right">${esc(miara)}</span></button>`;
+    }).join("")}</div>
     ${z?.usuniete.length ? `<p class="ciemny maly">Usunięte: ${z.usuniete.map((x) => esc(nazwa(ctx, x).toLowerCase())).join(", ")}</p>` : ""}</section>`;
 }
 
@@ -108,27 +95,68 @@ function doZapisu(lista) {
   }));
 }
 
-function rysujEdycje(app, id, p, ctx, wroc) {
-  const probny = { ...p, skladniki: doZapisu(skladniki).map((x) => [x.produkt, x.gramy, x.miara]) };
-  const w = wartosciPorcji(probny, ctx.produkty);
-  return `<header class="naglowek">${wroc}<h1>${esc(p.nazwa)}</h1>
-      <p class="wyciszony">Zmieniasz składniki (na ${porcjeTxt(p.porcje)})</p></header>
-    <section class="lista-edycji">${skladniki.map((x, i) => `
-      <div class="skladnik-edycja">
-        <div class="rozsun"><button type="button" class="nazwa-skladnika" data-akcja="wybierzZamiane" data-i="${i}">${esc(nazwa(ctx, x.produkt))}</button>
-          <button type="button" class="link ciemny" data-akcja="usunSkladnik" data-i="${i}">usuń</button></div>
-        <div class="ilosc">
-          <button type="button" class="przycisk krok" data-akcja="ilosc" data-i="${i}" data-o="-1" aria-label="Mniej: ${esc(nazwa(ctx, x.produkt))}">−</button>
-          <b>${esc(x.zmienione ? piszMiare(x) : x.miara)}</b>
-          <button type="button" class="przycisk krok" data-akcja="ilosc" data-i="${i}" data-o="1" aria-label="Więcej: ${esc(nazwa(ctx, x.produkt))}">+</button>
-        </div>
-      </div>`).join("")}
-      <button type="button" class="link" data-akcja="dodajSkladnik" style="align-self:flex-start">dodaj składnik</button>
-    </section>
-    <p class="ciemny maly">Porcja: ok. ${Math.round(w.kcal)} kcal · sód ${Math.round(w.sod_mg)} mg · ok. ${w.koszt_zl.toFixed(2).replace(".", ",")} zł</p>
-    <div class="rzad"><button type="button" class="przycisk glowny" data-akcja="zapiszSkladniki">Zapisz zmiany</button>
-      <button type="button" class="link" data-akcja="anulujSkladniki">anuluj</button></div>
-    <p class="ciemny maly">Stuknij nazwę, żeby zamienić produkt. Zmiana od razu trafi do listy zakupów tego tygodnia.</p>`;
+// Kopia robocza składników z obecnej wersji przepisu (z oznaczeniami: zamiast czego, dodane).
+function robocze(app, id) {
+  const p = przepisy()[id];
+  const w = wersjaPrzepisu(app.dane, id);
+  return p.skladniki.map(([produkt, g, miara], i) => {
+    const m = czytajMiare(miara);
+    const ile = m.ile > 0 ? m.ile : 1;
+    const zapis = w?.skladniki[i];
+    return {
+      produkt, ...m, ile, gNaJedn: m.jedn === "g" ? 1 : g / ile, miara, zmienione: false,
+      ...(zapis?.zamiast ? { zamiast: zapis.zamiast } : {}), ...(zapis?.dodany ? { dodany: true } : {}),
+    };
+  });
+}
+
+function zapiszRobocze(app, id) {
+  zapiszWersjePrzepisu(app.dane, id, doZapisu(skladniki));
+  skladniki = null;
+  app.zapisz();
+}
+
+function kartaSkladnika(app, id, i) {
+  const ctx = kontekst(app.dane, tenTydzien());
+  const [pid, , miara] = przepisy()[id].skladniki[i] ?? [];
+  if (!pid) return zamknijArkusz();
+  const ilosc = `<div class="ilosc-karty">
+      <button type="button" class="przycisk krok" data-akcja="iloscSkladnika" data-i="${i}" data-o="-1" aria-label="Mniej">−</button>
+      <b>${esc(miara)}</b>
+      <button type="button" class="przycisk krok" data-akcja="iloscSkladnika" data-i="${i}" data-o="1" aria-label="Więcej">+</button></div>`;
+  arkuszOpcji(nazwa(ctx, pid), [
+    { nazwa: "Zamień", opis: "podobne w smaku", akcja: "wybierzZamiane", dane: { i } },
+    przepisy()[id].skladniki.length > 1 ? { nazwa: "Usuń z przepisu", akcja: "usunSkladnik", dane: { i } } : null,
+  ], { opis: "Zmiany zapisują się od razu jako Twoja wersja.", dodatek: ilosc });
+}
+
+function opcjePrzepisu(app, id) {
+  const p = przepisy()[id];
+  const tekst = notatka(app.dane, id);
+  arkuszOpcji("Więcej", [
+    { nazwa: tekst ? "Zmień notatkę" : "Dodaj notatkę", akcja: "edytujNotatke" },
+    { nazwa: "Dodaj składnik", akcja: "dodajSkladnik" },
+    { nazwa: "Dopisz do zakupów", opis: tydzienDoZakupow(app) ? `na ${zakresTygodnia(tydzienDoZakupow(app))}` : "najpierw ułóż tydzień", akcja: "arkuszDopisz" },
+    { nazwa: "Udostępnij przepis", akcja: "udostepnij", dane: { id, nazwa: p.nazwa } },
+    wersjaPrzepisu(app.dane, id) ? { nazwa: "Przywróć oryginał", opis: "cofa Twoje zmiany składników", akcja: "przywroc" } : null,
+  ]);
+}
+
+function arkuszDopisz(app) {
+  const tydzien = tydzienDoZakupow(app);
+  if (!tydzien) {
+    pokazArkusz(`<h1>Dopisz do zakupów</h1><p class="wyciszony">Najpierw ułóż tydzień — składniki dopiszesz do jego listy zakupów.</p>
+      <button type="button" class="link" data-akcja="zamknij" style="align-self:flex-start">zamknij</button>`);
+    return;
+  }
+  pokazArkusz(`<h1>Dopisz do zakupów</h1>
+    <div class="rozsun">
+      <button type="button" class="przycisk" data-akcja="mniej" aria-label="Mniej porcji" style="min-width:52px">−</button>
+      <b style="font-size:20px">${porcjeTxt(porcjeDoZakupow)}</b>
+      <button type="button" class="przycisk" data-akcja="wiecej" aria-label="Więcej porcji" style="min-width:52px">+</button></div>
+    <button type="button" class="przycisk glowny szeroki" data-akcja="dopisz">Dopisz składniki do listy</button>
+    <p class="wyciszony maly">Trafią na listę zakupów na ${zakresTygodnia(tydzien)}.</p>
+    <button type="button" class="link" data-akcja="zamknij" style="align-self:flex-start">zamknij</button>`);
 }
 
 // Okienko wyboru produktu: najpierw podobne w smaku (grupy smakowe), potem wyszukiwarka po całym katalogu.
@@ -215,41 +243,41 @@ export function poOpuszczeniu() {
 }
 
 export const akcje = {
-  zmienSkladniki(app) {
+  opcjePrzepisu(app) {
+    opcjePrzepisu(app, argumenty(app).id);
+  },
+  kartaSkladnika(app, cel) {
+    kartaSkladnika(app, argumenty(app).id, Number(cel.dataset.i));
+  },
+  iloscSkladnika(app, cel) {
     const { id } = argumenty(app);
-    const p = przepisy()[id];
-    const w = wersjaPrzepisu(app.dane, id);
-    skladniki = p.skladniki.map(([produkt, gramy, miara], i) => {
-      const m = czytajMiare(miara);
-      const ile = m.ile > 0 ? m.ile : 1;
-      const zapis = w?.skladniki[i];
-      return {
-        produkt, ...m, ile, gNaJedn: m.jedn === "g" ? 1 : gramy / ile, miara, zmienione: false,
-        ...(zapis?.zamiast ? { zamiast: zapis.zamiast } : {}), ...(zapis?.dodany ? { dodany: true } : {}),
-      };
-    });
-    app.odswiez();
-    document.getElementById("ekran").scrollTop = 0;
-  },
-  anulujSkladniki(app) {
-    skladniki = null;
-    app.odswiez();
-  },
-  ilosc(app, cel) {
-    const x = skladniki[Number(cel.dataset.i)];
-    x.ile = krokIlosci(x.ile, x.jedn, Number(cel.dataset.o));
+    const i = Number(cel.dataset.i);
+    skladniki = robocze(app, id);
+    const x = skladniki[i];
+    const nowa = krokIlosci(x.ile, x.jedn, Number(cel.dataset.o));
+    if (nowa === x.ile) return;
+    x.ile = nowa;
     x.zmienione = true;
+    zapiszRobocze(app, id);
     app.odswiez();
+    kartaSkladnika(app, id, i);
   },
   usunSkladnik(app, cel) {
+    const { id } = argumenty(app);
+    skladniki = robocze(app, id);
     skladniki.splice(Number(cel.dataset.i), 1);
+    zapiszRobocze(app, id);
+    zamknijArkusz();
     app.odswiez();
+    powiadom("Usunięte z Twojej wersji.");
   },
   wybierzZamiane(app, cel) {
+    skladniki = robocze(app, argumenty(app).id);
     wybor = { tryb: "zamien", i: Number(cel.dataset.i) };
     pokazWybor(app, kontekst(app.dane, tenTydzien()));
   },
   dodajSkladnik(app) {
+    skladniki = robocze(app, argumenty(app).id);
     wybor = { tryb: "dodaj" };
     pokazWybor(app, kontekst(app.dane, tenTydzien()));
   },
@@ -273,20 +301,14 @@ export const akcje = {
       skladniki.push({ produkt: nowy, ile: 1, jedn: zw.jedn, dopisek: "", gNaJedn: zw.gNaJedn, zmienione: true, dodany: true });
     }
     wybor = null;
+    const { id } = argumenty(app);
+    zapiszRobocze(app, id);
     zamknijArkusz();
     app.odswiez();
+    powiadom(wPlanieTegoTygodnia(app, id) ? "Zapisane. Lista zakupów tego tygodnia już to uwzględnia." : "Zapisane w Twojej wersji.");
   },
-  zapiszSkladniki(app) {
-    const { id } = argumenty(app);
-    if (!skladniki.length) {
-      powiadom("Przepis musi mieć choć jeden składnik.");
-      return;
-    }
-    zapiszWersjePrzepisu(app.dane, id, doZapisu(skladniki));
-    skladniki = null;
-    app.zapisz();
-    app.odswiez();
-    powiadom(wPlanieTegoTygodnia(app, id) ? "Zapisane. Lista zakupów tego tygodnia już to uwzględnia." : "Zapisane.");
+  arkuszDopisz(app) {
+    arkuszDopisz(app);
   },
   przywroc(app) {
     arkuszPrzywracania(app, argumenty(app).id, kontekst(app.dane, tenTydzien()));
@@ -300,6 +322,7 @@ export const akcje = {
   },
   edytujNotatke(app) {
     edytuje = true;
+    zamknijArkusz();
     app.odswiez();
   },
   anulujNotatke(app) {
@@ -324,6 +347,7 @@ export const akcje = {
   },
   // Link do przepisu: druga osoba otwiera go w Safari, bez instalowania planera.
   udostepnij(app, cel) {
+    zamknijArkusz();
     const url = `${location.origin}${location.pathname}#przepis/${encodeURIComponent(cel.dataset.id)}`;
     if (navigator.share) navigator.share({ title: cel.dataset.nazwa, url }).catch(() => {});
     else kopiujTekst(url).then(() => powiadom("Link do przepisu skopiowany."));
@@ -334,17 +358,18 @@ export const akcje = {
   },
   mniej(app) {
     porcjeDoZakupow = Math.max(1, porcjeDoZakupow - 1);
-    app.odswiez();
+    arkuszDopisz(app);
   },
   wiecej(app) {
     porcjeDoZakupow = Math.min(12, porcjeDoZakupow + 1);
-    app.odswiez();
+    arkuszDopisz(app);
   },
   dopisz(app) {
     const tydzien = tydzienDoZakupow(app);
     const { id } = argumenty(app);
     dopiszDoZakupow(app.dane, tydzien, id, porcjeDoZakupow);
     app.zapisz();
+    zamknijArkusz();
     powiadom(`Dopisane: ${porcjeTxt(porcjeDoZakupow)}. Zobaczysz je na liście zakupów.`);
   },
 };
