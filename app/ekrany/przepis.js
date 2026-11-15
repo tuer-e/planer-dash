@@ -2,9 +2,8 @@
 // Adres: #przepis/<id> albo #przepis/<id>/<liczba porcji> (np. z „Goście”).
 import { wartosciPorcji } from "../../silnik/katalog.js";
 import { doPodania, krokiDania } from "../harmonogram.js";
-import { zamienniki } from "../../silnik/zakupy.js";
 import {
-  dopiszDoZakupow, kontekst, MAKS_NOTATKI, notatka, opisZmian, planZDopisanymi, przepisOryginalny, przepisy, przywrocOryginal, tekstZamian, tenTydzien, ustawNotatke,
+  dopiszDoZakupow, kontekst, MAKS_NOTATKI, notatka, opisZmian, planZDopisanymi, przepisOryginalny, przepisy, podobneWSmaku, przywrocOryginal, smaki, tekstZamian, tenTydzien, ustawNotatke,
   wersjaPrzepisu, zapiszWersjePrzepisu,
 } from "../stan.js";
 import { czytajMiare, doSzukania, krokIlosci, nazwaProduktu, piszMiare, zwyklaMiara } from "../miary.js";
@@ -132,25 +131,24 @@ function rysujEdycje(app, id, p, ctx, wroc) {
     <p class="ciemny maly">Stuknij nazwę, żeby zamienić produkt. Zmiana od razu trafi do listy zakupów tego tygodnia.</p>`;
 }
 
-// Okienko wyboru produktu: najpierw podobne (zamienniki z katalogu), potem wyszukiwarka po całym katalogu.
+// Okienko wyboru produktu: najpierw podobne w smaku (grupy smakowe), potem wyszukiwarka po całym katalogu.
 function listaProduktow(ctx, szukaj) {
   const obecny = wybor?.tryb === "zamien" ? skladniki[wybor.i].produkt : null;
   const uzyte = new Set(skladniki.map((x) => x.produkt));
   const jedzenie = Object.values(ctx.produkty).filter((q) => q.dzial !== "chemia" && q.klasa !== "niewskazane" && !uzyte.has(q.id));
   const wiersz = (q) => `<button type="button" class="wiersz-produktu" data-akcja="wybierzProdukt" data-id="${esc(q.id)}">
-      <span>${esc(nazwaProduktu(q.nazwa))}</span><span class="ciemny maly">${q.cena_zl.toFixed(2).replace(".", ",")} zł</span></button>`;
+      <span>${esc(q.nazwa)}</span><span class="ciemny maly">${q.cena_zl.toFixed(2).replace(".", ",")} zł</span></button>`;
   const fraza = doSzukania(szukaj).trim();
   if (fraza) {
     const wyniki = jedzenie.filter((q) => doSzukania(q.nazwa).includes(fraza)).slice(0, 30);
     return wyniki.length ? wyniki.map(wiersz).join("") : `<p class="ciemny maly">Nie ma takiego produktu w katalogu planera.</p>`;
   }
-  const podobne = obecny ? zamienniki(obecny, ctx).map((z) => ctx.produkty[z.id]).filter((q) => q && !uzyte.has(q.id)) : [];
-  const dzial = obecny ? ctx.produkty[obecny]?.dzial : null;
-  const inne = jedzenie.filter((q) => !podobne.includes(q) && (!dzial || q.dzial === dzial))
-    .sort((a, b) => a.nazwa.localeCompare(b.nazwa, "pl")).slice(0, 15);
-  return `${podobne.length ? `<h2 class="ciemny maly">Podobne</h2>${podobne.map(wiersz).join("")}` : ""}
-    <h2 class="ciemny maly">${obecny ? "Inne z tego działu" : "Z katalogu planera"}</h2>${inne.map(wiersz).join("")}
-    <p class="ciemny maly">Szukaj, żeby zobaczyć cały katalog.</p>`;
+  // Bez wpisanej nazwy: produkty podobne w smaku (cytryna → limonka, ocet, ocet balsamiczny…).
+  const podobne = obecny ? podobneWSmaku(obecny, ctx.produkty).map((pid) => ctx.produkty[pid]).filter((q) => !uzyte.has(q.id) && q.dzial !== "chemia") : [];
+  const grupa = obecny ? smaki().grupy[smaki().produkty[obecny]?.[0]] : null;
+  return podobne.length
+    ? `<h2 class="ciemny maly">Podobne w smaku${grupa ? ` · ${esc(grupa)}` : ""}</h2>${podobne.slice(0, 15).map(wiersz).join("")}<p class="ciemny maly">Szukaj, żeby zobaczyć cały katalog.</p>`
+    : `<p class="ciemny maly">Wpisz nazwę produktu.</p>`;
 }
 
 function pokazWybor(app, ctx) {

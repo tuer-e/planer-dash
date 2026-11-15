@@ -74,8 +74,9 @@ let katalog = null;
 export async function wczytajKatalog() {
   if (katalog) return katalog;
   const pobierz = (plik) => fetch(`dane/${plik}`).then((r) => r.json());
-  const [produkty, przepisy, reguly] = await Promise.all([pobierz("produkty.json"), pobierz("przepisy.json"), pobierz("reguly-dash.json")]);
-  katalog = { produkty, przepisy, reguly };
+  const [produkty, przepisy, reguly, smaki] = await Promise.all([pobierz("produkty.json"), pobierz("przepisy.json"), pobierz("reguly-dash.json"),
+    pobierz("smaki.json").catch(() => ({ grupy: {}, produkty: {} }))]);
+  katalog = { produkty, przepisy, reguly, smaki };
   return katalog;
 }
 
@@ -83,6 +84,25 @@ export async function wczytajKatalog() {
 // lista zakupów, wartości porcji, gotowanie, Kuchnia. Oryginał zostaje w katalogu.
 // {idPrzepisu: {skladniki: [{produkt, gramy, miara, zamiast?, dodany?}], zmieniono}}
 let zmianyPrzepisow = {};
+
+// Grupy smakowe produktów: {id: ["kwasne", …]} — pierwsza grupa najważniejsza.
+export function smaki() {
+  return katalog?.smaki ?? { grupy: {}, produkty: {} };
+}
+
+// Zamienniki według smaku: najpierw ta sama pierwsza grupa, potem wspólna druga.
+export function podobneWSmaku(id, produkty) {
+  const s = smaki().produkty;
+  const moje = s[id] ?? [];
+  if (!moje.length) return [];
+  // Produkty bez grup (np. herbata) nie są zamiennikami składników.
+  // Ta sama pierwsza grupa najwyżej; wśród nich najpierw te o identycznym smaku (cytryna → ocet przed jogurtem).
+  const takieSame = (inne) => inne.length === moje.length && inne.every((g) => moje.includes(g));
+  const ocena = (inne) => (inne[0] === moje[0] ? 0 : inne.includes(moje[0]) ? 1 : moje[1] && inne.includes(moje[1]) ? 2 : 9) + (takieSame(inne) ? 0 : 0.5);
+  return Object.entries(s).filter(([pid, g]) => pid !== id && produkty[pid] && ocena(g) < 9.5)
+    .sort((a, b) => ocena(a[1]) - ocena(b[1]) || produkty[a[0]].nazwa.localeCompare(produkty[b[0]].nazwa, "pl"))
+    .map(([pid]) => pid);
+}
 
 export function przepisy() {
   const wynik = przepisyZKatalogu(katalog.przepisy);

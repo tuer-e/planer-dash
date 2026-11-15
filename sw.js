@@ -1,12 +1,12 @@
 // Planer działa bez internetu: przy instalacji zapisuje wszystkie swoje pliki w pamięci telefonu.
 // Nowa wersja planera = nowa nazwa pamięci (WERSJA); stara jest usuwana przy aktywacji.
-const WERSJA = "planer-dash-16";
+const WERSJA = "planer-dash-17";
 const PLIKI = [
   "./", "index.html", "styl.css", "manifest.webmanifest", "ikona.svg", "ikona-180.png", "ikona-512.png",
   "app/main.js", "app/stan.js", "app/narzedzia.js", "app/harmonogram.js", "app/wyjazdy.js", "app/razem.js", "app/kuchnia.js", "app/kalendarz.js", "app/miary.js",
   "app/ekrany/lodowka.js", "app/ekrany/gotowanie.js", "app/ekrany/tydzien.js", "app/ekrany/wiecej.js", "app/ekrany/przepis.js",
   "silnik/pomocnicze.js", "silnik/cele.js", "silnik/katalog.js", "silnik/generator.js", "silnik/zakupy.js",
-  "dane/produkty.json", "dane/przepisy.json", "dane/reguly-dash.json",
+  "dane/produkty.json", "dane/przepisy.json", "dane/reguly-dash.json", "dane/smaki.json",
 ];
 
 self.addEventListener("install", (e) => {

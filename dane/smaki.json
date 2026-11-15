@@ -1,0 +1,507 @@
+{
+  "_opis": "Grupy smakowe produktów: czym produkt jest w daniu (pierwsza grupa najważniejsza). Zamiana składnika w przepisie podpowiada najpierw produkty z tą samą pierwszą grupą, potem z tą samą drugą.",
+  "grupy": {
+    "kwasne": "kwaśne",
+    "slone": "słone",
+    "umami": "umami",
+    "slodkie": "słodkie",
+    "ostre": "ostre",
+    "ziolowe": "ziołowe i gorzkie",
+    "aksamitne": "aksamitne",
+    "chrupiace": "chrupiące",
+    "lagodne": "łagodne warzywa",
+    "skrobiowe": "skrobiowe (baza)",
+    "bialkowe": "białkowe"
+  },
+  "produkty": {
+    "pomidor": [
+      "umami",
+      "kwasne"
+    ],
+    "pomidorki": [
+      "umami",
+      "slodkie"
+    ],
+    "ogorek": [
+      "chrupiace",
+      "lagodne"
+    ],
+    "rzodkiewka": [
+      "chrupiace",
+      "ostre"
+    ],
+    "papryka": [
+      "slodkie",
+      "chrupiace"
+    ],
+    "marchew": [
+      "slodkie",
+      "chrupiace"
+    ],
+    "pietruszka": [
+      "slodkie",
+      "ziolowe"
+    ],
+    "buraki": [
+      "slodkie",
+      "lagodne"
+    ],
+    "cebula": [
+      "slodkie",
+      "ostre"
+    ],
+    "por": [
+      "lagodne",
+      "slodkie"
+    ],
+    "czosnek": [
+      "ostre",
+      "umami"
+    ],
+    "imbir": [
+      "ostre",
+      "ziolowe"
+    ],
+    "ziemniaki": [
+      "skrobiowe",
+      "lagodne"
+    ],
+    "dynia": [
+      "slodkie",
+      "aksamitne"
+    ],
+    "cukinia": [
+      "lagodne"
+    ],
+    "kalafior": [
+      "lagodne",
+      "chrupiace"
+    ],
+    "brokul": [
+      "lagodne",
+      "ziolowe"
+    ],
+    "kapusta_czerwona": [
+      "chrupiace",
+      "slodkie"
+    ],
+    "kapusta_pekinska": [
+      "chrupiace",
+      "lagodne"
+    ],
+    "pieczarki": [
+      "umami",
+      "lagodne"
+    ],
+    "mix_salat": [
+      "lagodne",
+      "chrupiace"
+    ],
+    "rukola": [
+      "ziolowe",
+      "ostre"
+    ],
+    "zielenina": [
+      "ziolowe"
+    ],
+    "ziola_doniczka": [
+      "ziolowe"
+    ],
+    "banan": [
+      "slodkie",
+      "aksamitne"
+    ],
+    "jablko": [
+      "slodkie",
+      "kwasne"
+    ],
+    "gruszka": [
+      "slodkie"
+    ],
+    "cytrusy": [
+      "slodkie",
+      "kwasne"
+    ],
+    "cytryna": [
+      "kwasne"
+    ],
+    "borowki": [
+      "slodkie",
+      "kwasne"
+    ],
+    "owoce_mrozone": [
+      "slodkie",
+      "kwasne"
+    ],
+    "awokado": [
+      "aksamitne",
+      "lagodne"
+    ],
+    "morele_suszone": [
+      "slodkie"
+    ],
+    "bakalie": [
+      "slodkie",
+      "chrupiace"
+    ],
+    "mleko": [
+      "aksamitne",
+      "lagodne"
+    ],
+    "maslanka": [
+      "kwasne",
+      "aksamitne"
+    ],
+    "kefir": [
+      "kwasne",
+      "aksamitne"
+    ],
+    "napoj_owsiany": [
+      "aksamitne",
+      "slodkie"
+    ],
+    "jogurt": [
+      "kwasne",
+      "aksamitne"
+    ],
+    "jogurt_kubeczek": [
+      "kwasne",
+      "aksamitne"
+    ],
+    "skyr": [
+      "bialkowe",
+      "kwasne"
+    ],
+    "twarog_chudy": [
+      "bialkowe",
+      "lagodne"
+    ],
+    "serek_wiejski": [
+      "bialkowe",
+      "slone"
+    ],
+    "twarog_poltlusty": [
+      "bialkowe",
+      "aksamitne"
+    ],
+    "mozzarella_light": [
+      "aksamitne",
+      "bialkowe"
+    ],
+    "mozzarella": [
+      "aksamitne",
+      "bialkowe"
+    ],
+    "ser_zolty": [
+      "slone",
+      "umami"
+    ],
+    "smietanka": [
+      "aksamitne"
+    ],
+    "maslo": [
+      "aksamitne"
+    ],
+    "jajo": [
+      "bialkowe",
+      "aksamitne"
+    ],
+    "bialko_jaja": [
+      "bialkowe"
+    ],
+    "piers_kurczaka": [
+      "bialkowe"
+    ],
+    "filet_indyka": [
+      "bialkowe"
+    ],
+    "mielone_indyk": [
+      "bialkowe"
+    ],
+    "udo_kurczaka": [
+      "bialkowe",
+      "umami"
+    ],
+    "perliczka": [
+      "bialkowe",
+      "umami"
+    ],
+    "krolik": [
+      "bialkowe"
+    ],
+    "wolowina": [
+      "bialkowe",
+      "umami"
+    ],
+    "mielone_wolowe": [
+      "bialkowe",
+      "umami"
+    ],
+    "mielone_wieprzowe": [
+      "bialkowe",
+      "umami"
+    ],
+    "losos": [
+      "bialkowe",
+      "aksamitne"
+    ],
+    "makrela_puszka": [
+      "bialkowe",
+      "umami"
+    ],
+    "sardynki": [
+      "bialkowe",
+      "slone"
+    ],
+    "mintaj": [
+      "bialkowe",
+      "lagodne"
+    ],
+    "tunczyk": [
+      "bialkowe",
+      "umami"
+    ],
+    "wedlina_drobiowa": [
+      "slone",
+      "bialkowe"
+    ],
+    "kabanosy": [
+      "slone",
+      "umami"
+    ],
+    "boczek": [
+      "slone",
+      "umami"
+    ],
+    "tofu": [
+      "bialkowe",
+      "lagodne"
+    ],
+    "tofu_wedzone": [
+      "bialkowe",
+      "umami"
+    ],
+    "ciecierzyca": [
+      "bialkowe",
+      "skrobiowe"
+    ],
+    "fasola": [
+      "bialkowe",
+      "skrobiowe"
+    ],
+    "soczewica": [
+      "bialkowe",
+      "skrobiowe"
+    ],
+    "edamame": [
+      "bialkowe",
+      "chrupiace"
+    ],
+    "fasolka_w_sosie": [
+      "bialkowe",
+      "slodkie"
+    ],
+    "makaron_straczkowy": [
+      "skrobiowe",
+      "bialkowe"
+    ],
+    "platki_owsiane": [
+      "skrobiowe"
+    ],
+    "musli": [
+      "skrobiowe",
+      "slodkie"
+    ],
+    "granola": [
+      "chrupiace",
+      "slodkie"
+    ],
+    "chleb": [
+      "skrobiowe"
+    ],
+    "tortilla": [
+      "skrobiowe"
+    ],
+    "bagietka": [
+      "skrobiowe",
+      "chrupiace"
+    ],
+    "makaron_pelnoziarnisty": [
+      "skrobiowe"
+    ],
+    "makaron_soba": [
+      "skrobiowe",
+      "umami"
+    ],
+    "kasza_gryczana": [
+      "skrobiowe",
+      "ziolowe"
+    ],
+    "peczak": [
+      "skrobiowe"
+    ],
+    "ryz_brazowy": [
+      "skrobiowe"
+    ],
+    "bulgur": [
+      "skrobiowe"
+    ],
+    "olej_rzepakowy": [
+      "aksamitne"
+    ],
+    "oliwa": [
+      "aksamitne"
+    ],
+    "orzechy_wloskie": [
+      "chrupiace",
+      "ziolowe"
+    ],
+    "migdaly": [
+      "chrupiace",
+      "slodkie"
+    ],
+    "pestki_slonecznika": [
+      "chrupiace"
+    ],
+    "siemie_lniane": [
+      "chrupiace"
+    ],
+    "sezam": [
+      "chrupiace",
+      "umami"
+    ],
+    "maslo_orzechowe": [
+      "aksamitne",
+      "slodkie"
+    ],
+    "orzechy_mieszanka": [
+      "chrupiace",
+      "slone"
+    ],
+    "oliwki": [
+      "slone",
+      "kwasne"
+    ],
+    "margaryna": [
+      "aksamitne"
+    ],
+    "pomidory_puszka": [
+      "umami",
+      "kwasne"
+    ],
+    "passata": [
+      "umami",
+      "kwasne"
+    ],
+    "koncentrat": [
+      "umami"
+    ],
+    "warzywa_mrozone": [
+      "lagodne"
+    ],
+    "szpinak_mrozony": [
+      "lagodne",
+      "ziolowe"
+    ],
+    "fasolka_szparagowa": [
+      "lagodne",
+      "chrupiace"
+    ],
+    "ajvar": [
+      "slodkie",
+      "ostre"
+    ],
+    "pomidory_suszone": [
+      "umami",
+      "slone"
+    ],
+    "ogorki_kiszone": [
+      "kwasne",
+      "slone"
+    ],
+    "majonez": [
+      "aksamitne",
+      "kwasne"
+    ],
+    "musztarda": [
+      "ostre",
+      "kwasne"
+    ],
+    "sos_sojowy": [
+      "slone",
+      "umami"
+    ],
+    "miso": [
+      "umami",
+      "slone"
+    ],
+    "miod": [
+      "slodkie"
+    ],
+    "czekolada": [
+      "slodkie",
+      "ziolowe"
+    ],
+    "slodycze_przemyslowe": [
+      "slodkie"
+    ],
+    "sok": [
+      "slodkie",
+      "kwasne"
+    ],
+    "herbata": [],
+    "wino": [
+      "kwasne",
+      "slodkie"
+    ],
+    "mleko_bialkowe": [
+      "aksamitne",
+      "bialkowe"
+    ],
+    "skyr_pitny": [
+      "bialkowe",
+      "kwasne"
+    ],
+    "chleb_ig": [
+      "skrobiowe"
+    ],
+    "kanapka_hert": [
+      "skrobiowe",
+      "bialkowe"
+    ],
+    "ciecierzyca_soczewica": [
+      "bialkowe",
+      "skrobiowe"
+    ],
+    "przyprawy": [
+      "ostre",
+      "ziolowe"
+    ],
+    "ocet": [
+      "kwasne"
+    ],
+    "maka_pelnoziarnista": [
+      "skrobiowe"
+    ],
+    "soczewica_brazowa": [
+      "bialkowe",
+      "skrobiowe"
+    ],
+    "sliwki_suszone": [
+      "slodkie",
+      "kwasne"
+    ],
+    "baklazan": [
+      "lagodne",
+      "aksamitne"
+    ],
+    "tahini": [
+      "aksamitne",
+      "umami"
+    ],
+    "ocet_balsamiczny": [
+      "kwasne",
+      "slodkie"
+    ]
+  }
+}
