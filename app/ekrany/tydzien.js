@@ -3,7 +3,12 @@ import { opcjePodmiany, porcje, slotyJedzone } from "../../silnik/generator.js";
 import { listaZakupow, tekstPozycji } from "../../silnik/zakupy.js";
 import { kontekst, planZDopisanymi, tenTydzien, ulozTydzien, usunDopisane, zamienDanie } from "../stan.js";
 import { arkuszOpcji, dodaj, dzis, esc, kopiujTekst, krotkaNazwa, odmiana, pokazArkusz, porcjeTxt, powiadom, przyciskWiecej, zakresTygodnia, zamknijArkusz, zl } from "../narzedzia.js";
-import { kafelDnia, przelacz, stanDnia, takieSame, zPlanu } from "../wyjazdy.js";
+import { kafelDnia, przelacz, stanDnia, takieSame as takieSameDni, zPlanu as zPlanuDni } from "../wyjazdy.js";
+
+// Szkic tygodnia przed ułożeniem: gdzie jesteś (dni, połówki) i ile osób je w danym dniu ({dzień: 2|3}).
+const zPlanu = (plan) => ({ ...zPlanuDni(plan), osoby: { ...(plan?.osoby_dni ?? {}) } });
+const takieSame = (a, b) => takieSameDni(a, b)
+  && JSON.stringify(Object.entries(a.osoby ?? {}).sort()) === JSON.stringify(Object.entries(b.osoby ?? {}).sort());
 import { usunProdukt } from "../kuchnia.js";
 import { DNI_ZAKUPOW, dzienSkrot, GODZINY_ZAKUPOW, kiedyZakupy, opisKiedy, podzielListe, wDzien } from "../zakupy-kiedy.js";
 import { adresSkrotu, NAZWA_KALENDARZA, NAZWA_LISTY, NAZWA_SKROTU, paczkaDlaSkrotu } from "../kalendarz.js";
@@ -28,11 +33,21 @@ function przelacznikTygodni(nastepny) {
 
 function dniWyjazdu(app, od, miejsca) {
   const { dom, wyjazd } = app.dane.profil;
+  const dni = [1, 2, 3, 4, 5, 6, 7];
+  const osoby = miejsca.osoby ?? {};
   return `<div class="sekcja">
     <h2>Gdzie jesteś</h2>
-    <div class="dni" style="grid-template-columns:repeat(7,minmax(0,1fr))">${[1, 2, 3, 4, 5, 6, 7].map((d) =>
+    <div class="dni" style="grid-template-columns:repeat(7,minmax(0,1fr))">${dni.map((d) =>
       kafelDnia(d, dodaj(od, d), stanDnia(miejsca, d), dom, wyjazd, "przelaczDzien")).join("")}</div>
     <p class="wyciszony maly">W poniedziałek zakupy i gotowanie. Stukaj dzień, żeby zmienić miejsce; przy połowie dnia górny napis to rano, dolny wieczór.</p>
+    <h2>Ile osób je</h2>
+    <div class="dni" style="grid-template-columns:repeat(7,minmax(0,1fr))">${dni.map((d) => {
+      const n = osoby[d] ?? 1;
+      const poza = stanDnia(miejsca, d) === "caly";
+      return `<button type="button" class="dzien osoby${n > 1 ? " wiecej-osob" : ""}" data-akcja="przelaczOsoby" data-dzien="${d}"${poza ? " disabled" : ""}
+        aria-label="${dzienSkrot(dodaj(od, d))}: ${poza ? "poza domem" : odmiana(n, "osoba", "osoby", "osób")}"><b>${dzienSkrot(dodaj(od, d))}</b><small>${poza ? "—" : `${n} os.`}</small></button>`;
+    }).join("")}</div>
+    <p class="wyciszony maly">Stuknij dzień: 1, 2 albo 3 osoby. Porcje i budżet liczą się na tyle osób.</p>
   </div>`;
 }
 
@@ -51,7 +66,7 @@ export function rysuj(app) {
   if (!plan) {
     if (wyjazdySzkic === null || wyjazdySzkic.od !== od) {
       const poprzedni = app.dane.tygodnie[dodaj(od, -7)];
-      wyjazdySzkic = { od, ...zPlanu(poprzedni) };
+      wyjazdySzkic = { od, ...zPlanuDni(poprzedni), osoby: {} };
     }
     czesci.push(dniWyjazdu(app, od, wyjazdySzkic));
     czesci.push(`<button type="button" class="przycisk glowny szeroki" data-akcja="uloz">Ułóż plan</button>
@@ -114,7 +129,9 @@ function opisMiejsc(app, miejsca) {
     czesci.push(`${KROTKO[d]}${k > d ? `–${KROTKO[k]}` : ""}${OPIS[st]}: ${wyjazd}`);
     d = k;
   }
-  return czesci.length ? czesci.join(" · ") : `Cały tydzień: ${dom}`;
+  const osoby = Object.entries(miejsca.osoby ?? {}).filter(([, n]) => n > 1).sort((a, b) => a[0] - b[0]);
+  const ludzie = osoby.length ? [`${osoby.map(([d, n]) => `${KROTKO[d]}: ${n} os.`).join(", ")}`] : [];
+  return [...(czesci.length ? czesci : [`Cały tydzień: ${dom}`]), ...ludzie].join(" · ");
 }
 
 function dniGrupy(g, od) {
@@ -125,7 +142,7 @@ function arkuszWyjazdow(app, od) {
   const plan = app.dane.tygodnie[od];
   const m = wyjazdySzkic && wyjazdySzkic.od === od ? wyjazdySzkic : zPlanu(plan);
   const zmienione = plan && !takieSame(m, zPlanu(plan));
-  pokazArkusz(`<h1>Dni wyjazdów</h1>${dniWyjazdu(app, od, m)}
+  pokazArkusz(`<h1>Dni i osoby</h1>${dniWyjazdu(app, od, m)}
     ${zmienione ? `<button type="button" class="przycisk glowny szeroki" data-akcja="uloz">Ułóż od nowa z tymi dniami</button>` : ""}
     <button type="button" class="link" data-akcja="zamknijWyjazdy" style="align-self:flex-start">${zmienione ? "zostaw na później" : "zamknij"}</button>`);
 }
@@ -136,7 +153,7 @@ function opcjeTygodnia(app, od, nastepny) {
     { nazwa: "Wyślij do Kalendarza i Przypomnień", opis: opisWyslania(plan), akcja: "wyslij" },
     { nazwa: "Dzień zakupów", opis: opisKiedy(od, kiedyZakupy(plan, app.dane.profil)), akcja: "zmienZakupy" },
     nastepny ? null : { nazwa: "Zacznij gotowanie", href: "#gotowanie" },
-    { nazwa: "Dni wyjazdów", opis: opisMiejsc(app, zPlanu(plan)), akcja: "wyjazdy" },
+    { nazwa: "Dni i osoby", opis: opisMiejsc(app, zPlanu(plan)), akcja: "wyjazdy" },
     { nazwa: "Ułóż tydzień od nowa", akcja: "ulozOdNowa" },
   ]);
 }
@@ -291,7 +308,19 @@ export const akcje = {
     const { od } = wybranyTydzien(app);
     const d = Number(cel.dataset.dzien);
     if (!wyjazdySzkic || wyjazdySzkic.od !== od) wyjazdySzkic = { od, ...zPlanu(app.dane.tygodnie[od]) };
-    wyjazdySzkic = { od, ...przelacz(wyjazdySzkic, d) };
+    wyjazdySzkic = { od, ...przelacz(wyjazdySzkic, d), osoby: wyjazdySzkic.osoby ?? {} };
+    app.odswiez();
+    if (app.dane.tygodnie[od]) arkuszWyjazdow(app, od);
+  },
+  przelaczOsoby(app, cel) {
+    const { od } = wybranyTydzien(app);
+    const d = Number(cel.dataset.dzien);
+    if (!wyjazdySzkic || wyjazdySzkic.od !== od) wyjazdySzkic = { od, ...zPlanu(app.dane.tygodnie[od]) };
+    const osoby = { ...(wyjazdySzkic.osoby ?? {}) };
+    const n = ((osoby[d] ?? 1) % 3) + 1;
+    if (n > 1) osoby[d] = n;
+    else delete osoby[d];
+    wyjazdySzkic = { ...wyjazdySzkic, osoby };
     app.odswiez();
     if (app.dane.tygodnie[od]) arkuszWyjazdow(app, od);
   },
@@ -324,7 +353,7 @@ export const akcje = {
     cel.textContent = "Układam…";
     setTimeout(() => {
       const m = wyjazdySzkic && wyjazdySzkic.od === od ? wyjazdySzkic : zPlanu(app.dane.tygodnie[od]);
-      ulozTydzien(app.dane, od, m.dni, m.pol);
+      ulozTydzien(app.dane, od, m.dni, m.pol, m.osoby ?? {});
       wyjazdySzkic = null;
       app.zapisz();
       app.odswiez();

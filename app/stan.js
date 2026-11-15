@@ -174,9 +174,9 @@ export function tenTydzien(dzisiaj = dzis()) {
   return poniedzialek(dzisiaj);
 }
 
-export function ulozTydzien(dane, od, poza, polowki = {}) {
+export function ulozTydzien(dane, od, poza, polowki = {}, osobyDni = {}) {
   const ctx = kontekst(dane, od);
-  const plan = generujTydzien(od, "sam", ctx, { poza, polowki, zamrazarka: wZamrazarce(dane, ctx) });
+  const plan = generujTydzien(od, "sam", ctx, { poza, polowki, osobyDni, zamrazarka: wZamrazarce(dane, ctx) });
   plan.zamiany_produktow = {};
   dane.tygodnie[od] = plan;
   delete dane.kupione[od];

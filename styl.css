@@ -463,3 +463,8 @@ textarea[name="notatka"] { width: 100%; min-height: 110px; resize: vertical; }
 /* Przytrzymanie palca nie zaznacza tekstu (jak w aplikacji); da się zaznaczać tylko w polach, krokach przepisu i notatkach. */
 body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 input, textarea, .kroki, .notatka-tekst { -webkit-user-select: text; user-select: text; }
+
+/* Ile osób je w danym dniu: więcej niż jedna — jaśniejszy kafelek */
+.dzien.osoby small { font-size: 13px; }
+.dzien.wiecej-osob { background: var(--sredni); color: var(--tekst); }
+.dzien:disabled { opacity: 0.4; }

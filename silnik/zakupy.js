@@ -77,7 +77,7 @@ export function listaZakupow(plan, ctx, zapasy = {}) {
     .map(([d, nazwa]) => ({ id: d, nazwa, pozycje: pozycjePosortowane.filter((x) => x.dzial === d) }));
   const rataRazem = Object.values(ctx.ratyZapasow).reduce((a, b) => a + b, 0);
   const kosztBudzet = kosztSwiezych + zuzycieZapasow + rataRazem;
-  ctx.ustawTryb(plan.tryb_weekendu, plan.grupy);
+  ctx.ustawTryb(plan.tryb_weekendu, plan.grupy, plan.osoby_dni);
   return {
     od: plan.od,
     dzialy,
