@@ -466,3 +466,10 @@ textarea[name="notatka"] { width: 100%; min-height: 110px; resize: vertical; }
 .wiersz .prawo { font-size: 15px; color: var(--ciemny); white-space: nowrap; }
 .ilosc-karty { display: flex; align-items: center; gap: 14px; padding: 6px 0; }
 .ilosc-karty b { min-width: 150px; text-align: center; color: var(--tekst); }
+
+/* Kuchnia: „⋯” w nagłówku (Goście, Zmieniam plany), karteczka z jasnym przyciskiem i „⋯” */
+.naglowek-kuchni { align-items: center; }
+.naglowek-kuchni p { margin: 0; }
+.naglowek-kuchni .przycisk.wiecej, .got-gora .przycisk.wiecej { min-height: 44px; min-width: 44px; background: none; color: var(--wyciszony); }
+.karteczka .rzad-glowny { margin-top: 12px; }
+.wiersz.pozycja-kuchni { align-items: center; }

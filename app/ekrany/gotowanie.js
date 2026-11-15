@@ -3,7 +3,7 @@
 import { slotyJedzone } from "../../silnik/generator.js";
 import { etykietaKroku, koniecPlanu, krokiDania, uloz } from "../harmonogram.js";
 import { kontekst, przepisy, tekstZamian, tenTydzien, wlozDoLodowki } from "../stan.js";
-import { esc, kopiujTekst, krotkaNazwa, odmiana, pokazArkusz, powiadom, zamknijArkusz } from "../narzedzia.js";
+import { arkuszOpcji, esc, kopiujTekst, krotkaNazwa, odmiana, pokazArkusz, powiadom, przyciskWiecej, zamknijArkusz } from "../narzedzia.js";
 import { adresZaproszenia, czytajKod, godzina, ileOsob, kodZaproszenia, MAKS_OSOB, NAZWY_OSOB, planOsoby, podzielDania } from "../razem.js";
 
 let zegar = null;
@@ -248,9 +248,8 @@ function rysujStart(app, ids) {
   const pierwszy = bloki.find((b) => b.start === 0) ?? bloki[0];
   const gora = `<div class="got-gora"><b>Ok. ${odmiana(razem, "minuta", "minuty", "minut")}</b><span class="wyciszony maly">${ids.length > 1 ? "dania gotują się równolegle" : "jeden przepis"}</span></div>`;
   const kartaHtml = `<p class="co">Na start · ${esc(dania[pierwszy.danie].nazwa)}</p><p class="krok-tekst">${esc(pierwszy.tekst)}</p>
-    <div class="rzad"><button type="button" class="przycisk glowny" data-akcja="zacznij" data-dania="${ids.join(",")}">Zaczynam</button></div>
-    <p class="ciemny maly">Ekran nie zgaśnie, dopóki gotujesz. Minutnik zadzwoni, gdy planer jest na ekranie.</p>
-    ${ids.length > 1 ? `<button type="button" class="link" data-akcja="razemOtworz">gotujemy razem — podziel dania między osoby</button>` : ""}`;
+    <div class="rzad-glowny"><button type="button" class="przycisk glowny" data-akcja="zacznij" data-dania="${ids.join(",")}">Zaczynam</button>${przyciskWiecej("opcjeStartu", { dania: ids.join(",") })}</div>
+    <p class="ciemny maly">Ekran nie zgaśnie, dopóki gotujesz. Minutnik zadzwoni, gdy planer jest na ekranie.</p>`;
   const os = gora + (poziomo() ? osPozioma(dania, bloki, 0, pierwszy) : osPionowa(dania, bloki, 0, pierwszy));
   return uloz2(os, kartaHtml);
 }
@@ -265,7 +264,7 @@ function rysujGotowanie(app, sesja) {
   const koniecWszystkich = z ? Math.max(koniec, ...z.grupy.map((g, k) => (k === z.ja ? 0 : planOsoby(g).koniec))) : koniec;
   let gora = sesja.koniecMin != null
     ? `<div class="got-gora"><b>${z ? "Twoja część gotowa" : "Gotowe"}</b><span class="wyciszony maly">w ${odmiana(Math.round(sesja.koniecMin), "minutę", "minuty", "minut")}</span></div>`
-    : `<div class="got-gora"><b>${m < 0 ? `Start za ${Math.ceil(-m)} min` : `Minuta ${Math.floor(m)}`}</b><span class="wyciszony maly">${z ? `${ileOsob(z.grupy.length)} · ` : ""}do końca ok. ${Math.max(0, Math.round(koniecWszystkich - Math.max(m, 0)))} min</span></div>`;
+    : `<div class="got-gora"><b>${m < 0 ? `Start za ${Math.ceil(-m)} min` : `Minuta ${Math.floor(m)}`}</b><span class="wyciszony maly">${z ? `${ileOsob(z.grupy.length)} · ` : ""}do końca ok. ${Math.max(0, Math.round(koniecWszystkich - Math.max(m, 0)))} min</span>${przyciskWiecej("opcjeGotowania")}</div>`;
   if (z) gora += `<div class="got-postep" aria-hidden="true"><span style="width:${Math.min(100, Math.max(0, m) / Math.max(1, koniecWszystkich) * 100).toFixed(1)}%"></span></div>`;
   const koniecGotowania = !wTrakcie.length && !przyszle.length;
   const pokazany = koniecGotowania ? null : coPokazac(bloki, sesja, dania, m);
@@ -278,12 +277,9 @@ function rysujGotowanie(app, sesja) {
   } else {
     kartaHtml = karta(pokazany, sesja, dania, bloki, m);
   }
-  if (z) {
-    kartaHtml += coRobiaInni(z, m);
-    if (z.ja === 0) kartaHtml += `<button type="button" class="link" data-akcja="razemUdostepnij">wyślij zaproszenie jeszcze raz</button>`;
-  }
+  if (z) kartaHtml += coRobiaInni(z, m);
   const os = gora + (poziomo() ? osPozioma(dania, bloki, m, pokazany) : z ? osRazem(sesja, dania, bloki, m, pokazany) : osPionowa(dania, bloki, m, pokazany));
-  return uloz2(os, kartaHtml) + (koniecGotowania ? "" : `<button type="button" class="link" data-akcja="przerwij">przerwij gotowanie</button>`);
+  return uloz2(os, kartaHtml);
 }
 
 // --- Gotowanie razem: zaproszenie, dołączanie i oś z kolumną dla każdej osoby ---
@@ -525,7 +521,30 @@ export function poOpuszczeniu() {
   blokada = null;
 }
 
+// „⋯” przy gotowaniu: przepisy dań, zaproszenie, przerwanie — rzadkie rzeczy poza kartą „Teraz”.
+function opcjeGotowania(app) {
+  const sesja = app.dane.gotowanie;
+  if (!sesja?.start) return;
+  const p = przepisy();
+  arkuszOpcji("Więcej", [
+    ...sesja.dania.map((id) => ({ nazwa: `Przepis: ${krotkaNazwa(p[id]?.nazwa ?? id)}`, href: `#przepis/${encodeURIComponent(id)}` })),
+    sesja.razem?.ja === 0 ? { nazwa: "Wyślij zaproszenie jeszcze raz", akcja: "razemUdostepnij" } : null,
+    sesja.koniecMin == null ? { nazwa: "Przerwij gotowanie", akcja: "przerwij" } : null,
+  ]);
+}
+
 export const akcje = {
+  opcjeGotowania(app) {
+    opcjeGotowania(app);
+  },
+  opcjeStartu(app, cel) {
+    const ids = cel.dataset.dania.split(",");
+    const p = przepisy();
+    arkuszOpcji("Więcej", [
+      ids.length > 1 ? { nazwa: "Gotujemy razem", opis: "podziel dania między osoby", akcja: "razemOtworz" } : null,
+      ...ids.map((id) => ({ nazwa: `Przepis: ${krotkaNazwa(p[id]?.nazwa ?? id)}`, href: `#przepis/${encodeURIComponent(id)}` })),
+    ]);
+  },
   wybierz(app, cel) {
     wybrany = wybrany === cel.dataset.klucz ? null : cel.dataset.klucz;
     app.odswiez();
@@ -535,6 +554,7 @@ export const akcje = {
     app.odswiez();
   },
   razemOtworz(app) {
+    zamknijArkusz();
     zaproszenie = { osoby: 2, za: 5 };
     app.odswiez();
   },
@@ -563,6 +583,7 @@ export const akcje = {
     app.idz(`#gotowanie/razem/${kod}`);
   },
   razemUdostepnij(app) {
+    zamknijArkusz();
     udostepnijZaproszenie(app.dane.gotowanie);
   },
   razemDolacz(app, cel) {
