@@ -19,6 +19,7 @@ const NAZWY = { sniadanie: "Śniadanie", przekaska: "Przekąska", obiad: "Obiad"
 const DNI_KROTKO = ["pon.", "wt.", "śr.", "czw.", "pt.", "sob.", "nd.", "nast. pon."];
 const CZAS_ZAKUPOW_MIN = 45;
 const CZAS_PRZYGOTOWAN_MIN = 15;
+const CZAS_DOKUPU_MIN = 20;
 
 export function znacznik(od) {
   return `[planer-dash ${od}]`;
@@ -99,20 +100,29 @@ function gotowanie(plan, ctx, g, od, dzien, adres) {
 
 // Wydarzenia tygodnia: [{tytul, start, koniec, notatka}], posortowane od najwcześniejszego.
 // `zakupy`: {pozycje, koszt_zl} do opisu zakupów; `adres`: adres planera (link do trybu gotowania).
-export function wydarzeniaTygodnia(plan, ctx, profil, { zakupy = null, adres = "" } = {}) {
+// `kiedy`: dzień (względem poniedziałku planu) i godzina zakupów; `dokup`: pozycje do dokupienia w dniu gotowania.
+export function wydarzeniaTygodnia(plan, ctx, profil, { zakupy = null, adres = "", kiedy = null, dokup = [] } = {}) {
   const g = godziny(profil);
   const od = plan.od;
   const grupy = plan.grupy;
   const wynik = [];
 
   const got = gotowanie(plan, ctx, g, od, 0, adres);
-  let startZakupow = czas(od, 0, g.zakupy);
-  if (got && minutyCzasu(startZakupow) >= minutyCzasu(got.start)) startZakupow = czas(od, 0, g[plan.poniedzialek?.gotowanie === "rano" ? "gotowanie_rano" : "gotowanie_wieczorem"], -(CZAS_ZAKUPOW_MIN + 15));
-  const [hz, mz] = startZakupow.slice(11).split(":");
+  const godzGotowania = g[plan.poniedzialek?.gotowanie === "rano" ? "gotowanie_rano" : "gotowanie_wieczorem"];
+  const dzienZakupow = kiedy?.dzien ?? 0;
+  let startZakupow = czas(od, dzienZakupow, kiedy?.godzina ?? g.zakupy);
+  if (dzienZakupow === 0 && got && minutyCzasu(startZakupow) >= minutyCzasu(got.start)) startZakupow = czas(od, 0, godzGotowania, -(CZAS_ZAKUPOW_MIN + 15));
+  const plus = (start, min) => czas(start.slice(0, 10) === od ? od : start.slice(0, 10), 0, start.slice(11), min);
   wynik.push({
-    tytul: "Zakupy na tydzień", start: startZakupow, koniec: czas(od, 0, `${hz}:${mz}`, CZAS_ZAKUPOW_MIN),
-    notatka: [`Lista: Przypomnienia → „${NAZWA_LISTY}”.`, zakupy ? `${zakupy.pozycje} pozycji, ok. ${Math.round(zakupy.koszt_zl)} zł.` : ""].filter(Boolean).join("\n"),
+    tytul: "Zakupy na tydzień", start: startZakupow, koniec: plus(startZakupow, CZAS_ZAKUPOW_MIN),
+    notatka: [`Lista: Przypomnienia → „${NAZWA_LISTY}”.`, zakupy ? `${zakupy.pozycje} pozycji, ok. ${Math.round(zakupy.koszt_zl)} zł.` : "",
+      dokup.length ? `Świeże dokupisz w dniu gotowania (${dokup.length}).` : ""].filter(Boolean).join("\n"),
   });
+  // Zakupy z wyprzedzeniem: krótkie „Dokup świeże” w dniu gotowania, przed gotowaniem.
+  if (dzienZakupow < 0 && dokup.length) {
+    const start = czas(od, 0, godzGotowania, -(CZAS_DOKUPU_MIN + 15));
+    wynik.push({ tytul: "Dokup świeże", start, koniec: plus(start, CZAS_DOKUPU_MIN), notatka: ["Przed gotowaniem:", ...dokup.map((x) => `• ${x}`)].join("\n") });
+  }
   if (got) wynik.push(got);
   for (let d = 1; d < 7; d++) {
     const inne = gotowanie(plan, ctx, g, od, d, adres);
@@ -148,13 +158,13 @@ export function wydarzeniaTygodnia(plan, ctx, profil, { zakupy = null, adres = "
 
 // Paczka dla skrótu: wydarzenia (opis kończy się znacznikiem tygodnia — po nim skrót znajduje i usuwa stare)
 // i lista zakupów, jedna pozycja na element.
-export function paczkaDlaSkrotu(plan, ctx, profil, { zakupy, pozycje, adres }) {
+export function paczkaDlaSkrotu(plan, ctx, profil, { zakupy, pozycje, adres, kiedy = null, dokup = [] }) {
   const zn = znacznik(plan.od);
   return {
     v: 1,
     tydzien: plan.od,
     znacznik: zn,
-    wydarzenia: wydarzeniaTygodnia(plan, ctx, profil, { zakupy, adres }).map((w) => ({ ...w, notatka: `${w.notatka}\n\n${zn}` })),
+    wydarzenia: wydarzeniaTygodnia(plan, ctx, profil, { zakupy, adres, kiedy, dokup }).map((w) => ({ ...w, notatka: `${w.notatka}\n\n${zn}` })),
     zakupy: pozycje,
   };
 }

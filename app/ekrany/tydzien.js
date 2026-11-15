@@ -1,10 +1,11 @@
 // Tydzień: gdzie jesteś, co gotujesz w poniedziałek (z „Zamień”), co bez gotowania i lista zakupów.
 import { opcjePodmiany, porcje, slotyJedzone } from "../../silnik/generator.js";
-import { listaZakupow } from "../../silnik/zakupy.js";
+import { listaZakupow, tekstPozycji } from "../../silnik/zakupy.js";
 import { kontekst, planZDopisanymi, tenTydzien, ulozTydzien, usunDopisane, zamienDanie } from "../stan.js";
 import { dodaj, dzis, esc, kopiujTekst, odmiana, pokazArkusz, porcjeTxt, powiadom, zakresTygodnia, zamknijArkusz, zl } from "../narzedzia.js";
 import { kafelDnia, przelacz, stanDnia, takieSame, zPlanu } from "../wyjazdy.js";
 import { usunProdukt } from "../kuchnia.js";
+import { DNI_ZAKUPOW, dzienSkrot, GODZINY_ZAKUPOW, kiedyZakupy, opisKiedy, podzielListe, wDzien } from "../zakupy-kiedy.js";
 import { adresSkrotu, NAZWA_KALENDARZA, NAZWA_LISTY, NAZWA_SKROTU, paczkaDlaSkrotu } from "../kalendarz.js";
 
 const WARIANTY_OPIS = { A: "pon–śr", B: "czw–pt", C: "sob–pon" };
@@ -104,6 +105,7 @@ export function rysuj(app) {
     <div class="rozsun"><h3>Zakupy</h3><b>ok. ${zl(lista.koszt.w_sklepie_zl)}</b></div>
     <p class="wyciszony maly">${odmiana(ile, "pozycja", "pozycje", "pozycji")} · budżet ${zl(lista.koszt.budzet_zl)}</p>
     <a class="przycisk${zmienioneDni ? "" : " glowny"} szeroki" href="${adres(nastepny, true)}">Lista zakupów</a>
+    ${linijkaKiedy(app, od, plan)}
     <div class="rzad">${nastepny ? "" : `<a class="link" href="#gotowanie">zacznij gotowanie</a>`}${linkWyslij(plan)}</div>
     ${opisWyslania(plan)}
   </section>
@@ -125,14 +127,10 @@ function opisWyslania(plan) {
 }
 
 function wyslijDoSkrotow(app, od) {
-  const plan = app.dane.tygodnie[od];
-  const ctx = kontekst(app.dane, od);
-  const lista = listaZakupow(planZDopisanymi(app.dane, od), ctx, app.dane.zapasy);
-  const zKuchni = (app.dane.dopisane_produkty?.[od] ?? []).map((id) => ctx.produkty[id]?.nazwa ?? id);
-  const pozycje = [...lista.tekst_przypomnienia.split("\n").filter(Boolean), ...zKuchni];
+  const { plan, ctx, lista, kiedy, dokup, linie } = linieZakupow(app, od);
   const paczka = paczkaDlaSkrotu(plan, ctx, app.dane.profil, {
-    zakupy: { pozycje: pozycje.length, koszt_zl: lista.koszt.w_sklepie_zl }, pozycje,
-    adres: `${location.origin}${location.pathname}`,
+    zakupy: { pozycje: linie.length, koszt_zl: lista.koszt.w_sklepie_zl }, pozycje: linie,
+    adres: `${location.origin}${location.pathname}`, kiedy, dokup: dokup.map((x) => tekstPozycji(x)),
   });
   plan.wyslano = new Date().toISOString();
   app.dane.skrot_uzyty = true;
@@ -152,16 +150,69 @@ function arkuszWysylki() {
     <button type="button" class="link" data-akcja="zamknij">anuluj</button>`);
 }
 
-function rysujZakupy(app, od, plan, nastepny) {
+// --- Kiedy zakupy (z wyprzedzeniem) ---
+
+// Lista zakupów tygodnia podzielona według dnia zakupów: teraz i „dokup” w dniu gotowania.
+function zakupyTygodnia(app, od) {
+  const plan = app.dane.tygodnie[od];
   const ctx = kontekst(app.dane, od);
   const lista = listaZakupow(planZDopisanymi(app.dane, od), ctx, app.dane.zapasy);
+  const kiedy = kiedyZakupy(plan, app.dane.profil);
+  const wszystkie = lista.dzialy.flatMap((d) => d.pozycje);
+  const { teraz, dokup } = podzielListe(wszystkie, planZDopisanymi(app.dane, od), ctx, kiedy);
+  return { plan, ctx, lista, kiedy, teraz, dokup, dzienDokupu: od };
+}
+
+// Linie do Przypomnień i do „Kopiuj listę”: najpierw zakupy, potem to, co dokupić, z dopiskiem kiedy.
+function linieZakupow(app, od) {
+  const z = zakupyTygodnia(app, od);
+  const zKuchni = (app.dane.dopisane_produkty?.[od] ?? []).map((id) => z.ctx.produkty[id]?.nazwa ?? id);
+  const kiedyDokup = `dokup ${wDzien(od).slice(0, 5)}.`; // „dokup w pon.”
+  return { ...z, linie: [...z.teraz.map(tekstPozycji), ...zKuchni, ...z.dokup.map((x) => `${tekstPozycji(x)} (${kiedyDokup})`)] };
+}
+
+function linijkaKiedy(app, od, plan) {
+  const z = zakupyTygodnia(app, od);
+  return `<p class="ciemny maly kiedy-zakupy">zakupy: ${opisKiedy(od, z.kiedy)} · <button type="button" class="link" data-akcja="zmienZakupy">zmień</button></p>
+    ${z.dokup.length ? `<p class="ciemny maly">${wDzien(od)} dokupisz: ${z.dokup.map((x) => esc(nazwaKrotka(x.nazwa))).join(", ")}</p>` : ""}`;
+}
+
+const nazwaKrotka = (n) => n.replace(/\s*\(.*?\)/g, "").replace(/\s+\d[\d,.]*(\s*[×x]\s*\d[\d,.]*)?\s*(g|kg|ml|l|szt\.?)(?=\s|$).*$/i, "").trim().toLowerCase();
+
+function arkuszZakupow(app, od) {
+  const z = zakupyTygodnia(app, od);
+  const wyb = (on) => `przycisk${on ? " wybrany-wybor" : ""}`;
+  pokazArkusz(`<h1>Kiedy robisz zakupy?</h1>
+    <div class="rzad" role="group" aria-label="Dzień zakupów">${DNI_ZAKUPOW.map((d) => {
+      const iso = dodaj(od, d);
+      return `<button type="button" class="${wyb(d === z.kiedy.dzien)} wybor-dnia" aria-pressed="${d === z.kiedy.dzien}" data-akcja="zakupyDzien" data-d="${d}">
+        <b>${dzienSkrot(iso)}</b><span class="maly">${Number(iso.slice(8))}.${iso.slice(5, 7)}</span></button>`;
+    }).join("")}</div>
+    <div class="rzad" role="group" aria-label="Godzina zakupów">${[...new Set([...GODZINY_ZAKUPOW, z.kiedy.godzina])].sort().map((g) => `
+      <button type="button" class="${wyb(g === z.kiedy.godzina)}" aria-pressed="${g === z.kiedy.godzina}" data-akcja="zakupyGodzina" data-g="${g}">${g}</button>`).join("")}</div>
+    <p class="wyciszony">${z.dokup.length
+      ? `Świeże, które by nie wytrzymały (${z.dokup.map((x) => esc(nazwaKrotka(x.nazwa))).join(", ")}), planer przeniesie na ${esc(wDzien(od).replace("w ", ""))} przed gotowaniem.`
+      : "Wszystko kupisz za jednym razem."}</p>
+    <button type="button" class="przycisk glowny szeroki" data-akcja="zakupyGotowe">Gotowe</button>`);
+}
+
+
+function rysujZakupy(app, od, plan, nastepny) {
+  const { ctx, lista, kiedy, teraz, dokup } = zakupyTygodnia(app, od);
   const kupione = app.dane.kupione[od] ?? {};
+  const wiersz = (x) => `
+      <label class="zakupy-pozycja${kupione[x.id] ? " kupione" : ""}">
+        <input type="checkbox" data-zmiana="kupione" data-id="${x.id}"${kupione[x.id] ? " checked" : ""}>
+        <span style="flex-grow:1"><b>${esc(x.nazwa)}</b><br><span class="wyciszony maly">${esc(x.ilosc)}${x.do_sprawdzenia ? " · sprawdź, czy masz" : ""}</span></span>
+        ${x.do_sprawdzenia ? `<button type="button" class="link" data-akcja="mam" data-id="${x.id}">mam</button>` : ""}
+      </label>`;
   const dopisane = app.dane.dodatkowe[od] ?? [];
   const produktyZKuchni = app.dane.dopisane_produkty?.[od] ?? [];
   const ile = lista.dzialy.reduce((s, d) => s + d.pozycje.length, 0);
   const ileKupione = lista.dzialy.reduce((s, d) => s + d.pozycje.filter((x) => kupione[x.id]).length, 0);
   return `<header class="naglowek"><a class="link" href="${adres(nastepny, false)}">‹ ${zakresTygodnia(od)}</a><h1>Lista zakupów</h1>
-      <p class="wyciszony">ok. ${zl(lista.koszt.w_sklepie_zl)} · ${ileKupione} z ${ile} w koszyku</p></header>
+      <p class="wyciszony">ok. ${zl(lista.koszt.w_sklepie_zl)} · ${ileKupione} z ${ile} w koszyku</p>
+      <p class="ciemny maly">zakupy: ${opisKiedy(od, kiedy)} · <button type="button" class="link" data-akcja="zmienZakupy">zmień</button></p></header>
     <div class="rzad"><button type="button" class="przycisk glowny" data-akcja="kopiujListe">Kopiuj listę</button>${linkWyslij(plan)}</div>
     ${opisWyslania(plan)}
     ${dopisane.length ? `<section class="sekcja"><h2>Dopisane spoza planu</h2>${dopisane.map((x) => `
@@ -174,12 +225,13 @@ function rysujZakupy(app, od, plan, nastepny) {
         <span style="flex-grow:1"><b>${esc(ctx.produkty[id]?.nazwa ?? id)}</b></span>
         <button type="button" class="link" data-akcja="usunProdukt" data-id="${esc(id)}">usuń</button>
       </label>`).join("")}</div></section>` : ""}
-    ${lista.dzialy.map((d) => `<section class="sekcja"><h2>${esc(d.nazwa)}</h2><div>${d.pozycje.map((x) => `
-      <label class="zakupy-pozycja${kupione[x.id] ? " kupione" : ""}">
-        <input type="checkbox" data-zmiana="kupione" data-id="${x.id}"${kupione[x.id] ? " checked" : ""}>
-        <span style="flex-grow:1"><b>${esc(x.nazwa)}</b><br><span class="wyciszony maly">${esc(x.ilosc)}${x.do_sprawdzenia ? " · sprawdź, czy masz" : ""}</span></span>
-        ${x.do_sprawdzenia ? `<button type="button" class="link" data-akcja="mam" data-id="${x.id}">mam</button>` : ""}
-      </label>`).join("")}</div></section>`).join("")}
+    ${dokup.length ? `<h2 class="czesc-zakupow">Kup ${esc(wDzien(dodaj(od, kiedy.dzien)))}</h2>
+      <p class="ciemny maly">Trwałe i to, co wytrzyma do użycia.</p>` : ""}
+    ${lista.dzialy.map((d) => ({ ...d, pozycje: d.pozycje.filter((x) => teraz.includes(x)) })).filter((d) => d.pozycje.length)
+      .map((d) => `<section class="sekcja"><h2>${esc(d.nazwa)}</h2><div>${d.pozycje.map(wiersz).join("")}</div></section>`).join("")}
+    ${dokup.length ? `<h2 class="czesc-zakupow">Dokup ${esc(wDzien(od))}</h2>
+      <p class="ciemny maly">Przed gotowaniem — świeże, które do tego czasu by nie wytrzymały.</p>
+      <section class="sekcja"><div>${dokup.map(wiersz).join("")}</div></section>` : ""}
     ${lista.przeglad_zapasow.some((x) => x.stan === "jest" && x.potrzebny) ? `<section class="sekcja"><h2>Masz w szafce</h2>${lista.przeglad_zapasow.filter((x) => x.stan === "jest" && x.potrzebny).map((x) => `
       <div class="rozsun"><span>${esc(x.nazwa)}</span><button type="button" class="link" data-akcja="konczySie" data-id="${x.id}">Kończy się</button></div>`).join("")}</section>` : ""}`;
 }
@@ -248,6 +300,27 @@ export const akcje = {
     app.zapisz();
     app.odswiez();
   },
+  zmienZakupy(app) {
+    arkuszZakupow(app, wybranyTydzien(app).od);
+  },
+  zakupyDzien(app, cel) {
+    const { od } = wybranyTydzien(app);
+    const plan = app.dane.tygodnie[od];
+    plan.zakupy = { ...kiedyZakupy(plan, app.dane.profil), dzien: Number(cel.dataset.d) };
+    app.zapisz();
+    arkuszZakupow(app, od);
+  },
+  zakupyGodzina(app, cel) {
+    const { od } = wybranyTydzien(app);
+    const plan = app.dane.tygodnie[od];
+    plan.zakupy = { ...kiedyZakupy(plan, app.dane.profil), godzina: cel.dataset.g };
+    app.zapisz();
+    arkuszZakupow(app, od);
+  },
+  zakupyGotowe(app) {
+    zamknijArkusz();
+    app.odswiez();
+  },
   usunProdukt(app, cel) {
     const { od } = wybranyTydzien(app);
     usunProdukt(app.dane, od, cel.dataset.id);
@@ -273,10 +346,7 @@ export const akcje = {
   },
   async kopiujListe(app) {
     const { od } = wybranyTydzien(app);
-    const lista = listaZakupow(planZDopisanymi(app.dane, od), kontekst(app.dane, od), app.dane.zapasy);
-    const ctx = kontekst(app.dane, od);
-    const zKuchni = (app.dane.dopisane_produkty?.[od] ?? []).map((id) => ctx.produkty[id]?.nazwa ?? id);
-    const tekst = [lista.tekst_przypomnienia, ...zKuchni].filter(Boolean).join("\n");
+    const tekst = linieZakupow(app, od).linie.join("\n");
     powiadom((await kopiujTekst(tekst)) ? "Skopiowane. Wklej do Przypomnień." : "Nie udało się skopiować.");
   },
 };

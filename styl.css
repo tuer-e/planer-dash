@@ -451,3 +451,8 @@ textarea[name="notatka"] { width: 100%; min-height: 110px; resize: vertical; }
 .lista-produktow h2 { margin: 8px 0 2px; font-weight: 600; }
 .wiersz-produktu { min-height: 48px; display: flex; justify-content: space-between; align-items: center; gap: 12px; border: none; background: none; padding: 6px 0; text-align: left; color: var(--tekst2); font-size: 17px; cursor: pointer; }
 .wiersz-produktu .ciemny { white-space: nowrap; }
+
+/* Zakupy z wyprzedzeniem */
+.czesc-zakupow { margin: 10px 0 -4px; font-size: 22px; color: var(--tekst); }
+.wybor-dnia { display: flex; flex-direction: column; align-items: center; min-width: 64px; line-height: 1.2; padding: 8px 12px; }
+.kiedy-zakupy { margin: 4px 0 0; }
