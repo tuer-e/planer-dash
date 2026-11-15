@@ -7,8 +7,8 @@ import {
 import { arkuszOpcji, dataSlownie, dniaDopelniacz, dodaj, doKiedy, dzis, esc, krotkaNazwa, nazwaDnia, odmiana, porcjeTxt, pokazArkusz, powiadom, przyciskWiecej, roznica, zamknijArkusz } from "../narzedzia.js";
 import { kafelDnia, przelacz, stanDnia, zPlanu } from "../wyjazdy.js";
 import {
-  coMasz, dopiszProdukt, godzinyPosilkow, krotkiProdukt, MIEJSCA, minuty, naBlacie, podpowiedz, produktyPrzepisu, propozycje,
-  wSpizarni, zPlanuNaDzien,
+  coMasz, dopiszProdukt, godzinyPosilkow, krotkiProdukt, MIEJSCA, minuty, podpowiedz, produktyPrzepisu, propozycje,
+  zPlanuNaDzien,
 } from "../kuchnia.js";
 
 let ostatnio = null; // ostatnio zjedzona porcja — „Cofnij” przy jej karcie
@@ -165,10 +165,6 @@ function panelBlat(app, pod, dzisiaj, maPorcje) {
       : `<span class="wyciszony maly">${etykieta}</span><h1>Śniadanie spoza planu</h1><span class="wyciszony">Coś z tego, co masz — poniżej.</span>`}</section>`);
     czesci.push(grupa("Z tego, co masz, zrobisz też", lista(propozycje(stan, { posilek: "sniadanie", pomin: sn ? [sn] : [] }))));
   }
-  const owoce = naBlacie(stan);
-  czesci.push(grupa("Owoce", owoce.length ? `<p class="wyciszony">${esc(owoce.join(", "))}</p>` : ""));
-  const spizarnia = wSpizarni(app.dane, stan);
-  czesci.push(grupa("W spiżarni", spizarnia.length ? `<p class="wyciszony">${esc(spizarnia.slice(0, 8).join(", "))}${spizarnia.length > 8 ? ` i ${spizarnia.length - 8} innych` : ""}</p>` : ""));
   return czesci.join("");
 }
 

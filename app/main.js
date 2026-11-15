@@ -13,7 +13,7 @@ let zakladka = "lodowka";
 const ekran = document.getElementById("ekran");
 
 export const app = {
-  wersja: "22",
+  wersja: "23",
   pomiar: "",
   dane: wczytaj(),
   ekran: "lodowka",

@@ -3,7 +3,7 @@
 import { slotyJedzone } from "../../silnik/generator.js";
 import { etykietaKroku, koniecPlanu, krokiDania, uloz } from "../harmonogram.js";
 import { kontekst, przepisy, tekstZamian, tenTydzien, wlozDoLodowki } from "../stan.js";
-import { arkuszOpcji, esc, kopiujTekst, krotkaNazwa, odmiana, pokazArkusz, powiadom, przyciskWiecej, zamknijArkusz } from "../narzedzia.js";
+import { arkuszOpcji, dodaj, esc, kopiujTekst, krotkaNazwa, odmiana, pokazArkusz, powiadom, przyciskWiecej, zamknijArkusz } from "../narzedzia.js";
 import { adresZaproszenia, czytajKod, godzina, ileOsob, kodZaproszenia, MAKS_OSOB, NAZWY_OSOB, planOsoby, podzielDania } from "../razem.js";
 
 let zegar = null;
@@ -222,7 +222,12 @@ export function rysuj(app) {
     if (przepisy()[id]) return rysujStart(app, [id]);
   }
   const sesja = app.dane.gotowanie;
-  if (!sesja?.start) return rysujStart(app, daniaPlanu(app));
+  if (!sesja?.start) {
+    // Po ugotowaniu na tydzień ekran jest czysty: bez planu gotowania, który już był.
+    const planTygodnia = app.dane.tygodnie[tenTydzien()];
+    if (planTygodnia?.ugotowano) return rysujUgotowane(planTygodnia);
+    return rysujStart(app, daniaPlanu(app));
+  }
   return rysujGotowanie(app, sesja);
 }
 
@@ -231,6 +236,13 @@ function uloz2(os, kartaHtml) {
   return poziomo()
     ? `<div class="got-poziomo"><div class="got">${os}</div><section class="got-karta">${kartaHtml}</section></div>`
     : `<div class="got">${os}<section class="got-karta">${kartaHtml}</section></div>`;
+}
+
+function rysujUgotowane(planTygodnia) {
+  document.body.classList.remove("gotowanie-poziomo");
+  const nastepne = dodaj(planTygodnia.od, 7);
+  return `<div class="najpierw"><h1>Ugotowane</h1>
+    <span class="wyciszony">Porcje z tego tygodnia są w lodówce i zamrażarce. Następne gotowanie w poniedziałek ${Number(nastepne.slice(8))}.${nastepne.slice(5, 7)}.</span></div>`;
 }
 
 function rysujStart(app, ids) {
