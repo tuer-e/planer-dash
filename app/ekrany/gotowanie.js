@@ -2,7 +2,7 @@
 // Plan przelicza się na bieżąco: gdy coś zajmie dłużej albo krócej, reszta przesuwa się sama.
 import { slotyJedzone } from "../../silnik/generator.js";
 import { etykietaKroku, koniecPlanu, krokiDania, uloz } from "../harmonogram.js";
-import { przepisy, tenTydzien, wlozDoLodowki } from "../stan.js";
+import { kontekst, przepisy, tekstZamian, tenTydzien, wlozDoLodowki } from "../stan.js";
 import { esc, kopiujTekst, krotkaNazwa, odmiana, pokazArkusz, powiadom, zamknijArkusz } from "../narzedzia.js";
 import { adresZaproszenia, czytajKod, godzina, ileOsob, kodZaproszenia, MAKS_OSOB, NAZWY_OSOB, planOsoby, podzielDania } from "../razem.js";
 
@@ -165,9 +165,26 @@ function doZaczecia(bloki, sesja, dania) {
 }
 
 let notatki = {}; // Twoje notatki do przepisów — krótko w karcie „Teraz”
+let zamiany = {}; // Twoje wersje przepisów: „ciecierzyca zamiast: fasola” (kroki są z oryginału)
+let zamianyKlucz = "";
 function notatkaKarty(b, dania) {
-  const t = notatki[dania[b.danie].id];
-  return t ? `<p class="notatka-karty"><span class="ciemny">Twoja notatka:</span> ${esc(t)}</p>` : "";
+  const id = dania[b.danie].id;
+  const t = notatki[id];
+  return (zamiany[id] ? `<p class="notatka-karty">${esc(zamiany[id])}</p>` : "")
+    + (t ? `<p class="notatka-karty"><span class="ciemny">Twoja notatka:</span> ${esc(t)}</p>` : "");
+}
+function ustawZamiany(app) {
+  const klucz = JSON.stringify(app.dane.przepisy_zmiany ?? {});
+  if (klucz === zamianyKlucz) return;
+  zamianyKlucz = klucz;
+  zamiany = {};
+  const ids = Object.keys(app.dane.przepisy_zmiany ?? {});
+  if (!ids.length) return;
+  const ctx = kontekst(app.dane, tenTydzien());
+  for (const id of ids) {
+    const t = tekstZamian(app.dane, id, ctx);
+    if (t) zamiany[id] = t;
+  }
 }
 
 function karta(b, sesja, dania, bloki, m) {
@@ -240,6 +257,7 @@ function rysujStart(app, ids) {
 
 function rysujGotowanie(app, sesja) {
   notatki = app.dane.notatki ?? {};
+  ustawZamiany(app);
   const { dania, m, przyszle, wTrakcie, zrobione } = plan(sesja);
   const bloki = uklad(wszystkieBloki(dania, m, przyszle, wTrakcie, zrobione));
   const koniec = Math.max(m, koniecPlanu(bloki));

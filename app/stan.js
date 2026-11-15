@@ -4,6 +4,7 @@
 import { Kontekst, generujTydzien, podmien, porcje, slotyJedzone, zZamrazarki } from "../silnik/generator.js";
 import { produktyZKatalogu, przepisyZKatalogu } from "../silnik/katalog.js";
 import { dodaj, dzis, poniedzialek, roznica } from "./narzedzia.js";
+import { nazwaProduktu } from "./miary.js";
 
 const KLUCZ = "planer-dash";
 const WERSJA_DANYCH = 1;
@@ -33,6 +34,7 @@ function puste() {
     dodatkowe: {},
     dopisane_produkty: {},
     notatki: {},
+    przepisy_zmiany: {},
     uwagi: [],
     ostatnia_kopia: null,
   };
@@ -45,10 +47,12 @@ export function wczytaj() {
   } catch { /* brak dostępu do pamięci — zaczynamy od zera */ }
   const wynik = { ...puste(), ...(dane || {}) };
   wynik.profil = { ...DOMYSLNY_PROFIL, ...wynik.profil };
+  zmianyPrzepisow = wynik.przepisy_zmiany ?? {};
   return wynik;
 }
 
 export function zapisz(dane) {
+  zmianyPrzepisow = dane.przepisy_zmiany ?? {};
   try {
     localStorage.setItem(KLUCZ, JSON.stringify(dane));
     return true;
@@ -75,8 +79,65 @@ export async function wczytajKatalog() {
   return katalog;
 }
 
+// Twoje wersje przepisów (zmienione składniki) nakładane na katalog — planer używa ich wszędzie:
+// lista zakupów, wartości porcji, gotowanie, Kuchnia. Oryginał zostaje w katalogu.
+// {idPrzepisu: {skladniki: [{produkt, gramy, miara, zamiast?, dodany?}], zmieniono}}
+let zmianyPrzepisow = {};
+
 export function przepisy() {
-  return przepisyZKatalogu(katalog.przepisy);
+  const wynik = przepisyZKatalogu(katalog.przepisy);
+  for (const [id, z] of Object.entries(zmianyPrzepisow)) {
+    if (!wynik[id] || !z?.skladniki?.length) continue;
+    wynik[id] = { ...wynik[id], skladniki: z.skladniki.map((x) => [x.produkt, x.gramy, x.miara]), twoja_wersja: z.zmieniono ?? true };
+  }
+  return wynik;
+}
+
+export function przepisOryginalny(id) {
+  return przepisyZKatalogu(katalog.przepisy)[id];
+}
+
+export function wersjaPrzepisu(dane, id) {
+  return dane.przepisy_zmiany?.[id] ?? null;
+}
+
+// Zapis Twojej wersji. Gdy składniki są takie jak w oryginale, wersja znika (nie ma czego pamiętać).
+export function zapiszWersjePrzepisu(dane, id, skladniki, dzien = dzis()) {
+  const oryg = przepisOryginalny(id);
+  const tak = (a, b) => a.length === b.length && a.every((x, i) => x.produkt === b[i][0] && Math.abs(x.gramy - b[i][1]) < 0.5 && x.miara === b[i][2]);
+  dane.przepisy_zmiany ??= {};
+  if (!oryg || tak(skladniki, oryg.skladniki)) delete dane.przepisy_zmiany[id];
+  else dane.przepisy_zmiany[id] = { skladniki: skladniki.map((x) => ({ ...x, gramy: Math.round(x.gramy * 10) / 10 })), zmieniono: dzien };
+  zmianyPrzepisow = dane.przepisy_zmiany;
+}
+
+// Kroki zostają z oryginału — przy zamianach krótka uwaga, czego użyć zamiast tego, co w nich napisane.
+export function tekstZamian(dane, id, ctx) {
+  const z = opisZmian(dane, id);
+  if (!z?.zamiany.length) return "";
+  const n = (pid) => nazwaProduktu(ctx.produkty[pid]?.nazwa ?? pid).toLowerCase();
+  return `W Twojej wersji: ${z.zamiany.map((x) => `${n(x.nowy)} zamiast: ${n(x.stary)}`).join("; ")}.`;
+}
+
+export function przywrocOryginal(dane, id) {
+  if (dane.przepisy_zmiany) delete dane.przepisy_zmiany[id];
+  zmianyPrzepisow = dane.przepisy_zmiany ?? {};
+}
+
+// Co różni Twoją wersję od oryginału: zamiany (nowy zamiast starego), dodane, usunięte i zmienione ilości.
+export function opisZmian(dane, id) {
+  const w = wersjaPrzepisu(dane, id);
+  const oryg = przepisOryginalny(id);
+  if (!w || !oryg) return null;
+  const zamiany = w.skladniki.filter((x) => x.zamiast).map((x) => ({ nowy: x.produkt, stary: x.zamiast }));
+  const dodane = w.skladniki.filter((x) => x.dodany).map((x) => x.produkt);
+  const obecne = new Set(w.skladniki.flatMap((x) => [x.produkt, x.zamiast].filter(Boolean)));
+  const usuniete = oryg.skladniki.map(([p]) => p).filter((p) => !obecne.has(p));
+  const ilosci = w.skladniki.filter((x) => !x.zamiast && !x.dodany).filter((x) => {
+    const o = oryg.skladniki.find(([p]) => p === x.produkt);
+    return o && o[2] !== x.miara;
+  }).map((x) => ({ produkt: x.produkt, bylo: oryg.skladniki.find(([p]) => p === x.produkt)[2], jest: x.miara }));
+  return { zamiany, dodane, usuniete, ilosci, zmieniono: w.zmieniono };
 }
 
 export function kontekst(dane, od) {
